@@ -1,0 +1,22 @@
+---
+title: "Daniellarium"
+description: 
+site: distill::distill_website
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+# Learn more about creating websites with Distill at:
+# https://rstudio.github.io/distill/website.html
+
+# Learn more about publishing to GitHub Pages at:
+# https://rstudio.github.io/distill/publish_website.html#github-pages
+
+```
+
+<img src="images/pdp4.JPG" style="border-radius: 50%;display: block; margin-left: auto; margin-right: auto; width:200px; height:200px">
+
+Je suis étudiante en Master Socio-Économie à l'[Université Toulouse - Jean Jaurès](https://www.univ-tlse2.fr/). 
+Ma recherche actuelle porte sur l'étude des relations entre l’usage de réseaux personnels ou professionnels dans le processus de recherche de stage et les inégalités d’obtention ainsi que la qualité des stages. 
+
