@@ -1,0 +1,8 @@
+variable,	class,	description
+gamename,	character,	Name of video games
+year,	double,	Year of measure
+month,	character,	Month of measure
+avg,	double,	Average number of players at the same time
+gain,	double,	Gain (or loss) Difference in average compared to the previous month (NA = 1st month)
+peak,	double,	Highest number of players at the same time
+avg_peak_perc,	character,	Share of the average in the maximum value (avg / peak) in %
