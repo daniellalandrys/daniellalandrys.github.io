@@ -3,7 +3,7 @@
     "path": "~/Desktop/M1_M2/Blog/Daniella/_posts/2022-02-21-my-first-post/my-first-post.Rmd",
     "project_path": "_posts/2022-02-21-my-first-post/my-first-post.Rmd",
     "type": "r_markdown",
-    "hash": "4113311350",
+    "hash": "2493670350",
     "contents": "",
     "dirty": false,
     "created": 1645419919062.0,
@@ -12,15 +12,15 @@
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "11,14",
+        "cursorPosition": "8,8",
         "scrollLine": "0"
     },
     "folds": "",
-    "lastKnownWriteTime": 1645420414,
+    "lastKnownWriteTime": 1645420584,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1645420414563,
+    "last_content_update": 1645420584462,
     "read_only": false,
     "read_only_alternatives": []
 }
