@@ -1,0 +1,27 @@
+---
+title: "Daniellarium"
+description: 
+site: distill::distill_website
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+# Learn more about creating websites with Distill at:
+# https://rstudio.github.io/distill/website.html
+
+# Learn more about publishing to GitHub Pages at:
+# https://rstudio.github.io/distill/publish_website.html#github-pages
+
+```
+
+<img src="images/pdp4.JPG" style="border-radius: 50%;display: block; margin-left: auto; margin-right: auto; width:200px; height:200px"> 
+
+Hello and welcome on my homepage <big>🙋🏾</big>!
+
+
+
+I am currently a PhD student at [UQAM](https://uqam.ca) in the [Sociology Department](https://sociologie.uqam.ca). I study internet studies, game studies, and gender. In particular, I am interested in female gamers who streams their games on plateforms like Twitch, and Facebook Gaming. I am actually working of how gender impacts games and game players. 
+
+
+
