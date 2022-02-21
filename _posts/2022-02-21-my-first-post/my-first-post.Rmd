@@ -6,7 +6,7 @@ preview: Gaming.jpg
 author:
   - name: Daniella Landrys
 date: 2022-02-21
-draft: true
+draft: True
 categories: 
   - Français
   - Gaming
