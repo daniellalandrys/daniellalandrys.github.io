@@ -1,7 +1,6 @@
 ---
-title: "My first post"
-description: |
-  In this post, I introduced myself and then I will share a small tutorial on ggplot!
+title: "Board Game"
+description: "Dans cet article, je vais analyser des données issues de [Tidy Tuesday](https://rpubs.com/thewiremonkey/476630) dénommé Board Games Database. Je vais tenter de répondre à la question de savoir quelle catégorie d'âge vote le plus un jeu vidéo."
 preview: Gaming.jpg
 author:
   - name: Daniella Landrys
@@ -21,6 +20,6 @@ output:
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-Gaming, what does it really mean? In this blog i will share with you what does the gaming is. I will work on a datast named Gaming.... 
+
 
 

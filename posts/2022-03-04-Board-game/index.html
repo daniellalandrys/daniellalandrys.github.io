@@ -1,0 +1,3770 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1"/>
+  <meta name="generator" content="distill" />
+
+  <style type="text/css">
+  /* Hide doc at startup (prevent jankiness while JS renders/transforms) */
+  body {
+    visibility: hidden;
+  }
+  </style>
+
+ <!--radix_placeholder_import_source-->
+ <!--/radix_placeholder_import_source-->
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ad0000; } /* Alert */
+code span.an { color: #5e5e5e; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bn { color: #ad0000; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007ba5; } /* ControlFlow */
+code span.ch { color: #20794d; } /* Char */
+code span.cn { color: #8f5902; } /* Constant */
+code span.co { color: #5e5e5e; } /* Comment */
+code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+code span.dt { color: #ad0000; } /* DataType */
+code span.dv { color: #ad0000; } /* DecVal */
+code span.er { color: #ad0000; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #ad0000; } /* Float */
+code span.fu { color: #4758ab; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #5e5e5e; } /* Information */
+code span.kw { color: #007ba5; } /* Keyword */
+code span.op { color: #5e5e5e; } /* Operator */
+code span.ot { color: #007ba5; } /* Other */
+code span.pp { color: #ad0000; } /* Preprocessor */
+code span.sc { color: #5e5e5e; } /* SpecialChar */
+code span.ss { color: #20794d; } /* SpecialString */
+code span.st { color: #20794d; } /* String */
+code span.va { color: #111111; } /* Variable */
+code span.vs { color: #20794d; } /* VerbatimString */
+code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+</style>
+
+
+  <!--radix_placeholder_meta_tags-->
+<title>Daniellarium: Board Game</title>
+
+<meta property="description" itemprop="description" content="Dans cet article, je vais analyser des données issues de Tidy Tuesday dénommé Board Games Database. Je vais tenter de répondre à la question de savoir est ce que le nombre de joueurs ainsi que le temps passé à jouer influencent-ils les notes données?"/>
+
+
+<!--  https://schema.org/Article -->
+<meta property="article:published" itemprop="datePublished" content="2022-02-21"/>
+<meta property="article:created" itemprop="dateCreated" content="2022-02-21"/>
+<meta name="article:author" content="Daniella Landrys"/>
+
+<!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
+<meta property="og:title" content="Daniellarium: Board Game"/>
+<meta property="og:type" content="article"/>
+<meta property="og:description" content="Dans cet article, je vais analyser des données issues de Tidy Tuesday dénommé Board Games Database. Je vais tenter de répondre à la question de savoir est ce que le nombre de joueurs ainsi que le temps passé à jouer influencent-ils les notes données?"/>
+<meta property="og:locale" content="en_US"/>
+<meta property="og:site_name" content="Daniellarium"/>
+
+<!--  https://dev.twitter.com/cards/types/summary -->
+<meta property="twitter:card" content="summary"/>
+<meta property="twitter:title" content="Daniellarium: Board Game"/>
+<meta property="twitter:description" content="Dans cet article, je vais analyser des données issues de Tidy Tuesday dénommé Board Games Database. Je vais tenter de répondre à la question de savoir est ce que le nombre de joueurs ainsi que le temps passé à jouer influencent-ils les notes données?"/>
+
+<!--/radix_placeholder_meta_tags-->
+  <!--radix_placeholder_rmarkdown_metadata-->
+
+<script type="text/json" id="radix-rmarkdown-metadata">
+{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","author","date","output","preview","draft","categories","description"]}},"value":[{"type":"character","attributes":{},"value":["Board Game"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name"]}},"value":[{"type":"character","attributes":{},"value":["Daniella Landrys"]}]}]},{"type":"character","attributes":{},"value":["2022-02-21"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["toc","toc_depth","self_contained"]}},"value":[{"type":"logical","attributes":{},"value":[true]},{"type":"integer","attributes":{},"value":[2]},{"type":"logical","attributes":{},"value":[false]}]}]},{"type":"character","attributes":{},"value":["Board.jpg"]},{"type":"logical","attributes":{},"value":[false]},{"type":"character","attributes":{},"value":["Français","Statistiques","Jeux vidéos"]},{"type":"character","attributes":{},"value":["Dans cet article, je vais analyser des données issues de Tidy Tuesday dénommé Board Games Database. Je vais tenter de répondre à la question de savoir est ce que le nombre de joueurs ainsi que le temps passé à jouer influencent-ils les notes données?"]}]}
+</script>
+<!--/radix_placeholder_rmarkdown_metadata-->
+  
+  <script type="text/json" id="radix-resource-manifest">
+  {"type":"character","attributes":{},"value":["Board_games_files/anchor-4.2.2/anchor.min.js","Board_games_files/bowser-1.9.3/bowser.min.js","Board_games_files/distill-2.2.21/template.v2.js","Board_games_files/figure-docx/unnamed-chunk-10-1.png","Board_games_files/figure-docx/unnamed-chunk-11-1.png","Board_games_files/figure-docx/unnamed-chunk-12-1.png","Board_games_files/figure-docx/unnamed-chunk-13-1.png","Board_games_files/figure-docx/unnamed-chunk-9-1.png","Board_games_files/figure-html5/unnamed-chunk-10-1.png","Board_games_files/figure-html5/unnamed-chunk-11-1.png","Board_games_files/figure-html5/unnamed-chunk-12-1.png","Board_games_files/figure-html5/unnamed-chunk-13-1.png","Board_games_files/figure-html5/unnamed-chunk-14-1.png","Board_games_files/figure-html5/unnamed-chunk-9-1.png","Board_games_files/header-attrs-2.11/header-attrs.js","Board_games_files/jquery-3.6.0/jquery-3.6.0.js","Board_games_files/jquery-3.6.0/jquery-3.6.0.min.js","Board_games_files/jquery-3.6.0/jquery-3.6.0.min.map","Board_games_files/kePrint-0.0.1/kePrint.js","Board_games_files/lightable-0.0.1/lightable.css","Board_games_files/popper-2.6.0/popper.min.js","Board_games_files/tippy-6.2.7/tippy-bundle.umd.min.js","Board_games_files/tippy-6.2.7/tippy-light-border.css","Board_games_files/tippy-6.2.7/tippy.css","Board_games_files/tippy-6.2.7/tippy.umd.min.js","Board_games_files/webcomponents-2.0.0/webcomponents.js","Board.jpg"]}
+  </script>
+  <!--radix_placeholder_navigation_in_header-->
+<meta name="distill:offset" content="../.."/>
+
+<script type="application/javascript">
+
+  window.headroom_prevent_pin = false;
+
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+
+    // initialize headroom for banner
+    var header = $('header').get(0);
+    var headerHeight = header.offsetHeight;
+    var headroom = new Headroom(header, {
+      tolerance: 5,
+      onPin : function() {
+        if (window.headroom_prevent_pin) {
+          window.headroom_prevent_pin = false;
+          headroom.unpin();
+        }
+      }
+    });
+    headroom.init();
+    if(window.location.hash)
+      headroom.unpin();
+    $(header).addClass('headroom--transition');
+
+    // offset scroll location for banner on hash change
+    // (see: https://github.com/WickyNilliams/headroom.js/issues/38)
+    window.addEventListener("hashchange", function(event) {
+      window.scrollTo(0, window.pageYOffset - (headerHeight + 25));
+    });
+
+    // responsive menu
+    $('.distill-site-header').each(function(i, val) {
+      var topnav = $(this);
+      var toggle = topnav.find('.nav-toggle');
+      toggle.on('click', function() {
+        topnav.toggleClass('responsive');
+      });
+    });
+
+    // nav dropdowns
+    $('.nav-dropbtn').click(function(e) {
+      $(this).next('.nav-dropdown-content').toggleClass('nav-dropdown-active');
+      $(this).parent().siblings('.nav-dropdown')
+         .children('.nav-dropdown-content').removeClass('nav-dropdown-active');
+    });
+    $("body").click(function(e){
+      $('.nav-dropdown-content').removeClass('nav-dropdown-active');
+    });
+    $(".nav-dropdown").click(function(e){
+      e.stopPropagation();
+    });
+  });
+</script>
+
+<style type="text/css">
+
+/* Theme (user-documented overrideables for nav appearance) */
+
+.distill-site-nav {
+  color: rgba(255, 255, 255, 0.8);
+  background-color: #0F2E3D;
+  font-size: 15px;
+  font-weight: 300;
+}
+
+.distill-site-nav a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.distill-site-nav a:hover {
+  color: white;
+}
+
+@media print {
+  .distill-site-nav {
+    display: none;
+  }
+}
+
+.distill-site-header {
+
+}
+
+.distill-site-footer {
+
+}
+
+
+/* Site Header */
+
+.distill-site-header {
+  width: 100%;
+  box-sizing: border-box;
+  z-index: 3;
+}
+
+.distill-site-header .nav-left {
+  display: inline-block;
+  margin-left: 8px;
+}
+
+@media screen and (max-width: 768px) {
+  .distill-site-header .nav-left {
+    margin-left: 0;
+  }
+}
+
+
+.distill-site-header .nav-right {
+  float: right;
+  margin-right: 8px;
+}
+
+.distill-site-header a,
+.distill-site-header .title {
+  display: inline-block;
+  text-align: center;
+  padding: 14px 10px 14px 10px;
+}
+
+.distill-site-header .title {
+  font-size: 18px;
+  min-width: 150px;
+}
+
+.distill-site-header .logo {
+  padding: 0;
+}
+
+.distill-site-header .logo img {
+  display: none;
+  max-height: 20px;
+  width: auto;
+  margin-bottom: -4px;
+}
+
+.distill-site-header .nav-image img {
+  max-height: 18px;
+  width: auto;
+  display: inline-block;
+  margin-bottom: -3px;
+}
+
+
+
+@media screen and (min-width: 1000px) {
+  .distill-site-header .logo img {
+    display: inline-block;
+  }
+  .distill-site-header .nav-left {
+    margin-left: 20px;
+  }
+  .distill-site-header .nav-right {
+    margin-right: 20px;
+  }
+  .distill-site-header .title {
+    padding-left: 12px;
+  }
+}
+
+
+.distill-site-header .nav-toggle {
+  display: none;
+}
+
+.nav-dropdown {
+  display: inline-block;
+  position: relative;
+}
+
+.nav-dropdown .nav-dropbtn {
+  border: none;
+  outline: none;
+  color: rgba(255, 255, 255, 0.8);
+  padding: 16px 10px;
+  background-color: transparent;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  margin: 0;
+  margin-top: 1px;
+  z-index: 2;
+}
+
+.nav-dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: white;
+  min-width: 200px;
+  border: 1px solid rgba(0,0,0,0.15);
+  border-radius: 4px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.1);
+  z-index: 1;
+  margin-top: 2px;
+  white-space: nowrap;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.nav-dropdown-content hr {
+  margin-top: 4px;
+  margin-bottom: 4px;
+  border: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.nav-dropdown-active {
+  display: block;
+}
+
+.nav-dropdown-content a, .nav-dropdown-content .nav-dropdown-header {
+  color: black;
+  padding: 6px 24px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.nav-dropdown-content .nav-dropdown-header {
+  display: block;
+  padding: 5px 24px;
+  padding-bottom: 0;
+  text-transform: uppercase;
+  font-size: 14px;
+  color: #999999;
+  white-space: nowrap;
+}
+
+.nav-dropdown:hover .nav-dropbtn {
+  color: white;
+}
+
+.nav-dropdown-content a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.nav-right .nav-dropdown-content {
+  margin-left: -45%;
+  right: 0;
+}
+
+@media screen and (max-width: 768px) {
+  .distill-site-header a, .distill-site-header .nav-dropdown  {display: none;}
+  .distill-site-header a.nav-toggle {
+    float: right;
+    display: block;
+  }
+  .distill-site-header .title {
+    margin-left: 0;
+  }
+  .distill-site-header .nav-right {
+    margin-right: 0;
+  }
+  .distill-site-header {
+    overflow: hidden;
+  }
+  .nav-right .nav-dropdown-content {
+    margin-left: 0;
+  }
+}
+
+
+@media screen and (max-width: 768px) {
+  .distill-site-header.responsive {position: relative; min-height: 500px; }
+  .distill-site-header.responsive a.nav-toggle {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  .distill-site-header.responsive a,
+  .distill-site-header.responsive .nav-dropdown {
+    display: block;
+    text-align: left;
+  }
+  .distill-site-header.responsive .nav-left,
+  .distill-site-header.responsive .nav-right {
+    width: 100%;
+  }
+  .distill-site-header.responsive .nav-dropdown {float: none;}
+  .distill-site-header.responsive .nav-dropdown-content {position: relative;}
+  .distill-site-header.responsive .nav-dropdown .nav-dropbtn {
+    display: block;
+    width: 100%;
+    text-align: left;
+  }
+}
+
+/* Site Footer */
+
+.distill-site-footer {
+  width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+  z-index: 3;
+  margin-top: 30px;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  text-align: center;
+}
+
+/* Headroom */
+
+d-title {
+  padding-top: 6rem;
+}
+
+@media print {
+  d-title {
+    padding-top: 4rem;
+  }
+}
+
+.headroom {
+  z-index: 1000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.headroom--transition {
+  transition: all .4s ease-in-out;
+}
+
+.headroom--unpinned {
+  top: -100px;
+}
+
+.headroom--pinned {
+  top: 0;
+}
+
+/* adjust viewport for navbar height */
+/* helps vertically center bootstrap (non-distill) content */
+.min-vh-100 {
+  min-height: calc(100vh - 100px) !important;
+}
+
+</style>
+
+<script src="../../site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<link href="../../site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet"/>
+<link href="../../site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet"/>
+<script src="../../site_libs/headroom-0.9.4/headroom.min.js"></script>
+<script src="../../site_libs/autocomplete-0.37.1/autocomplete.min.js"></script>
+<script src="../../site_libs/fuse-6.4.1/fuse.min.js"></script>
+
+<script type="application/javascript">
+
+function getMeta(metaName) {
+  var metas = document.getElementsByTagName('meta');
+  for (let i = 0; i < metas.length; i++) {
+    if (metas[i].getAttribute('name') === metaName) {
+      return metas[i].getAttribute('content');
+    }
+  }
+  return '';
+}
+
+function offsetURL(url) {
+  var offset = getMeta('distill:offset');
+  return offset ? offset + '/' + url : url;
+}
+
+function createFuseIndex() {
+
+  // create fuse index
+  var options = {
+    keys: [
+      { name: 'title', weight: 20 },
+      { name: 'categories', weight: 15 },
+      { name: 'description', weight: 10 },
+      { name: 'contents', weight: 5 },
+    ],
+    ignoreLocation: true,
+    threshold: 0
+  };
+  var fuse = new window.Fuse([], options);
+
+  // fetch the main search.json
+  return fetch(offsetURL('search.json'))
+    .then(function(response) {
+      if (response.status == 200) {
+        return response.json().then(function(json) {
+          // index main articles
+          json.articles.forEach(function(article) {
+            fuse.add(article);
+          });
+          // download collections and index their articles
+          return Promise.all(json.collections.map(function(collection) {
+            return fetch(offsetURL(collection)).then(function(response) {
+              if (response.status === 200) {
+                return response.json().then(function(articles) {
+                  articles.forEach(function(article) {
+                    fuse.add(article);
+                  });
+                })
+              } else {
+                return Promise.reject(
+                  new Error('Unexpected status from search index request: ' +
+                            response.status)
+                );
+              }
+            });
+          })).then(function() {
+            return fuse;
+          });
+        });
+
+      } else {
+        return Promise.reject(
+          new Error('Unexpected status from search index request: ' +
+                      response.status)
+        );
+      }
+    });
+}
+
+window.document.addEventListener("DOMContentLoaded", function (event) {
+
+  // get search element (bail if we don't have one)
+  var searchEl = window.document.getElementById('distill-search');
+  if (!searchEl)
+    return;
+
+  createFuseIndex()
+    .then(function(fuse) {
+
+      // make search box visible
+      searchEl.classList.remove('hidden');
+
+      // initialize autocomplete
+      var options = {
+        autoselect: true,
+        hint: false,
+        minLength: 2,
+      };
+      window.autocomplete(searchEl, options, [{
+        source: function(query, callback) {
+          const searchOptions = {
+            isCaseSensitive: false,
+            shouldSort: true,
+            minMatchCharLength: 2,
+            limit: 10,
+          };
+          var results = fuse.search(query, searchOptions);
+          callback(results
+            .map(function(result) { return result.item; })
+          );
+        },
+        templates: {
+          suggestion: function(suggestion) {
+            var img = suggestion.preview && Object.keys(suggestion.preview).length > 0
+              ? `<img src="${offsetURL(suggestion.preview)}"</img>`
+              : '';
+            var html = `
+              <div class="search-item">
+                <h3>${suggestion.title}</h3>
+                <div class="search-item-description">
+                  ${suggestion.description || ''}
+                </div>
+                <div class="search-item-preview">
+                  ${img}
+                </div>
+              </div>
+            `;
+            return html;
+          }
+        }
+      }]).on('autocomplete:selected', function(event, suggestion) {
+        window.location.href = offsetURL(suggestion.path);
+      });
+      // remove inline display style on autocompleter (we want to
+      // manage responsive display via css)
+      $('.algolia-autocomplete').css("display", "");
+    })
+    .catch(function(error) {
+      console.log(error);
+    });
+
+});
+
+</script>
+
+<style type="text/css">
+
+.nav-search {
+  font-size: x-small;
+}
+
+/* Algolioa Autocomplete */
+
+.algolia-autocomplete {
+  display: inline-block;
+  margin-left: 10px;
+  vertical-align: sub;
+  background-color: white;
+  color: black;
+  padding: 6px;
+  padding-top: 8px;
+  padding-bottom: 0;
+  border-radius: 6px;
+  border: 1px #0F2E3D solid;
+  width: 180px;
+}
+
+
+@media screen and (max-width: 768px) {
+  .distill-site-nav .algolia-autocomplete {
+    display: none;
+    visibility: hidden;
+  }
+  .distill-site-nav.responsive .algolia-autocomplete {
+    display: inline-block;
+    visibility: visible;
+  }
+  .distill-site-nav.responsive .algolia-autocomplete .aa-dropdown-menu {
+    margin-left: 0;
+    width: 400px;
+    max-height: 400px;
+  }
+}
+
+.algolia-autocomplete .aa-input, .algolia-autocomplete .aa-hint {
+  width: 90%;
+  outline: none;
+  border: none;
+}
+
+.algolia-autocomplete .aa-hint {
+  color: #999;
+}
+.algolia-autocomplete .aa-dropdown-menu {
+  width: 550px;
+  max-height: 70vh;
+  overflow-x: visible;
+  overflow-y: scroll;
+  padding: 5px;
+  margin-top: 3px;
+  margin-left: -150px;
+  background-color: #fff;
+  border-radius: 5px;
+  border: 1px solid #999;
+  border-top: none;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion {
+  cursor: pointer;
+  padding: 5px 4px;
+  border-bottom: 1px solid #eee;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion:last-of-type {
+  border-bottom: none;
+  margin-bottom: 2px;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item {
+  overflow: hidden;
+  font-size: 0.8em;
+  line-height: 1.4em;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item h3 {
+  font-size: 1rem;
+  margin-block-start: 0;
+  margin-block-end: 5px;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item-description {
+  display: inline-block;
+  overflow: hidden;
+  height: 2.8em;
+  width: 80%;
+  margin-right: 4%;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item-preview {
+  display: inline-block;
+  width: 15%;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item-preview img {
+  height: 3em;
+  width: auto;
+  display: none;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item-preview img[src] {
+  display: initial;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion.aa-cursor {
+  background-color: #eee;
+}
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion em {
+  font-weight: bold;
+  font-style: normal;
+}
+
+</style>
+
+
+<!--/radix_placeholder_navigation_in_header-->
+  <!--radix_placeholder_distill-->
+
+<style type="text/css">
+
+body {
+  background-color: white;
+}
+
+.pandoc-table {
+  width: 100%;
+}
+
+.pandoc-table>caption {
+  margin-bottom: 10px;
+}
+
+.pandoc-table th:not([align]) {
+  text-align: left;
+}
+
+.pagedtable-footer {
+  font-size: 15px;
+}
+
+d-byline .byline {
+  grid-template-columns: 2fr 2fr;
+}
+
+d-byline .byline h3 {
+  margin-block-start: 1.5em;
+}
+
+d-byline .byline .authors-affiliations h3 {
+  margin-block-start: 0.5em;
+}
+
+.authors-affiliations .orcid-id {
+  width: 16px;
+  height:16px;
+  margin-left: 4px;
+  margin-right: 4px;
+  vertical-align: middle;
+  padding-bottom: 2px;
+}
+
+d-title .dt-tags {
+  margin-top: 1em;
+  grid-column: text;
+}
+
+.dt-tags .dt-tag {
+  text-decoration: none;
+  display: inline-block;
+  color: rgba(0,0,0,0.6);
+  padding: 0em 0.4em;
+  margin-right: 0.5em;
+  margin-bottom: 0.4em;
+  font-size: 70%;
+  border: 1px solid rgba(0,0,0,0.2);
+  border-radius: 3px;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+d-article table.gt_table td,
+d-article table.gt_table th {
+  border-bottom: none;
+}
+
+.html-widget {
+  margin-bottom: 2.0em;
+}
+
+.l-screen-inset {
+  padding-right: 16px;
+}
+
+.l-screen .caption {
+  margin-left: 10px;
+}
+
+.shaded {
+  background: rgb(247, 247, 247);
+  padding-top: 20px;
+  padding-bottom: 20px;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.shaded .html-widget {
+  margin-bottom: 0;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.shaded .shaded-content {
+  background: white;
+}
+
+.text-output {
+  margin-top: 0;
+  line-height: 1.5em;
+}
+
+.hidden {
+  display: none !important;
+}
+
+d-article {
+  padding-top: 2.5rem;
+  padding-bottom: 30px;
+}
+
+d-appendix {
+  padding-top: 30px;
+}
+
+d-article>p>img {
+  width: 100%;
+}
+
+d-article h2 {
+  margin: 1rem 0 1.5rem 0;
+}
+
+d-article h3 {
+  margin-top: 1.5rem;
+}
+
+d-article iframe {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  margin-bottom: 2.0em;
+  width: 100%;
+}
+
+/* Tweak code blocks */
+
+d-article div.sourceCode code,
+d-article pre code {
+  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+}
+
+d-article pre,
+d-article div.sourceCode,
+d-article div.sourceCode pre {
+  overflow: auto;
+}
+
+d-article div.sourceCode {
+  background-color: white;
+}
+
+d-article div.sourceCode pre {
+  padding-left: 10px;
+  font-size: 12px;
+  border-left: 2px solid rgba(0,0,0,0.1);
+}
+
+d-article pre {
+  font-size: 12px;
+  color: black;
+  background: none;
+  margin-top: 0;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  line-height: 1.5;
+
+  -moz-tab-size: 4;
+  -o-tab-size: 4;
+  tab-size: 4;
+
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
+}
+
+d-article pre a {
+  border-bottom: none;
+}
+
+d-article pre a:hover {
+  border-bottom: none;
+  text-decoration: underline;
+}
+
+d-article details {
+  grid-column: text;
+  margin-bottom: 0.8em;
+}
+
+@media(min-width: 768px) {
+
+d-article pre,
+d-article div.sourceCode,
+d-article div.sourceCode pre {
+  overflow: visible !important;
+}
+
+d-article div.sourceCode pre {
+  padding-left: 18px;
+  font-size: 14px;
+}
+
+d-article pre {
+  font-size: 14px;
+}
+
+}
+
+figure img.external {
+  background: white;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+  padding: 18px;
+  box-sizing: border-box;
+}
+
+/* CSS for d-contents */
+
+.d-contents {
+  grid-column: text;
+  color: rgba(0,0,0,0.8);
+  font-size: 0.9em;
+  padding-bottom: 1em;
+  margin-bottom: 1em;
+  padding-bottom: 0.5em;
+  margin-bottom: 1em;
+  padding-left: 0.25em;
+  justify-self: start;
+}
+
+@media(min-width: 1000px) {
+  .d-contents.d-contents-float {
+    height: 0;
+    grid-column-start: 1;
+    grid-column-end: 4;
+    justify-self: center;
+    padding-right: 3em;
+    padding-left: 2em;
+  }
+}
+
+.d-contents nav h3 {
+  font-size: 18px;
+  margin-top: 0;
+  margin-bottom: 1em;
+}
+
+.d-contents li {
+  list-style-type: none
+}
+
+.d-contents nav > ul {
+  padding-left: 0;
+}
+
+.d-contents ul {
+  padding-left: 1em
+}
+
+.d-contents nav ul li {
+  margin-top: 0.6em;
+  margin-bottom: 0.2em;
+}
+
+.d-contents nav a {
+  font-size: 13px;
+  border-bottom: none;
+  text-decoration: none
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.d-contents nav a:hover {
+  text-decoration: underline solid rgba(0, 0, 0, 0.6)
+}
+
+.d-contents nav > ul > li > a {
+  font-weight: 600;
+}
+
+.d-contents nav > ul > li > ul {
+  font-weight: inherit;
+}
+
+.d-contents nav > ul > li > ul > li {
+  margin-top: 0.2em;
+}
+
+
+.d-contents nav ul {
+  margin-top: 0;
+  margin-bottom: 0.25em;
+}
+
+.d-article-with-toc h2:nth-child(2) {
+  margin-top: 0;
+}
+
+
+/* Figure */
+
+.figure {
+  position: relative;
+  margin-bottom: 2.5em;
+  margin-top: 1.5em;
+}
+
+.figure img {
+  width: 100%;
+}
+
+.figure .caption {
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 12px;
+  line-height: 1.5em;
+}
+
+.figure img.external {
+  background: white;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+  padding: 18px;
+  box-sizing: border-box;
+}
+
+.figure .caption a {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.figure .caption b,
+.figure .caption strong, {
+  font-weight: 600;
+  color: rgba(0, 0, 0, 1.0);
+}
+
+/* Citations */
+
+d-article .citation {
+  color: inherit;
+  cursor: inherit;
+}
+
+div.hanging-indent{
+  margin-left: 1em; text-indent: -1em;
+}
+
+/* Citation hover box */
+
+.tippy-box[data-theme~=light-border] {
+  background-color: rgba(250, 250, 250, 0.95);
+}
+
+.tippy-content > p {
+  margin-bottom: 0;
+  padding: 2px;
+}
+
+
+/* Tweak 1000px media break to show more text */
+
+@media(min-width: 1000px) {
+  .base-grid,
+  distill-header,
+  d-title,
+  d-abstract,
+  d-article,
+  d-appendix,
+  distill-appendix,
+  d-byline,
+  d-footnote-list,
+  d-citation-list,
+  distill-footer {
+    grid-template-columns: [screen-start] 1fr [page-start kicker-start] 80px [middle-start] 50px [text-start kicker-end] 65px 65px 65px 65px 65px 65px 65px 65px [text-end gutter-start] 65px [middle-end] 65px [page-end gutter-end] 1fr [screen-end];
+    grid-column-gap: 16px;
+  }
+
+  .grid {
+    grid-column-gap: 16px;
+  }
+
+  d-article {
+    font-size: 1.06rem;
+    line-height: 1.7em;
+  }
+  figure .caption, .figure .caption, figure figcaption {
+    font-size: 13px;
+  }
+}
+
+@media(min-width: 1180px) {
+  .base-grid,
+  distill-header,
+  d-title,
+  d-abstract,
+  d-article,
+  d-appendix,
+  distill-appendix,
+  d-byline,
+  d-footnote-list,
+  d-citation-list,
+  distill-footer {
+    grid-template-columns: [screen-start] 1fr [page-start kicker-start] 60px [middle-start] 60px [text-start kicker-end] 60px 60px 60px 60px 60px 60px 60px 60px [text-end gutter-start] 60px [middle-end] 60px [page-end gutter-end] 1fr [screen-end];
+    grid-column-gap: 32px;
+  }
+
+  .grid {
+    grid-column-gap: 32px;
+  }
+}
+
+
+/* Get the citation styles for the appendix (not auto-injected on render since
+   we do our own rendering of the citation appendix) */
+
+d-appendix .citation-appendix,
+.d-appendix .citation-appendix {
+  font-size: 11px;
+  line-height: 15px;
+  border-left: 1px solid rgba(0, 0, 0, 0.1);
+  padding-left: 18px;
+  border: 1px solid rgba(0,0,0,0.1);
+  background: rgba(0, 0, 0, 0.02);
+  padding: 10px 18px;
+  border-radius: 3px;
+  color: rgba(150, 150, 150, 1);
+  overflow: hidden;
+  margin-top: -12px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+/* Include appendix styles here so they can be overridden */
+
+d-appendix {
+  contain: layout style;
+  font-size: 0.8em;
+  line-height: 1.7em;
+  margin-top: 60px;
+  margin-bottom: 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  color: rgba(0,0,0,0.5);
+  padding-top: 60px;
+  padding-bottom: 48px;
+}
+
+d-appendix h3 {
+  grid-column: page-start / text-start;
+  font-size: 15px;
+  font-weight: 500;
+  margin-top: 1em;
+  margin-bottom: 0;
+  color: rgba(0,0,0,0.65);
+}
+
+d-appendix h3 + * {
+  margin-top: 1em;
+}
+
+d-appendix ol {
+  padding: 0 0 0 15px;
+}
+
+@media (min-width: 768px) {
+  d-appendix ol {
+    padding: 0 0 0 30px;
+    margin-left: -30px;
+  }
+}
+
+d-appendix li {
+  margin-bottom: 1em;
+}
+
+d-appendix a {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+d-appendix > * {
+  grid-column: text;
+}
+
+d-appendix > d-footnote-list,
+d-appendix > d-citation-list,
+d-appendix > distill-appendix {
+  grid-column: screen;
+}
+
+/* Include footnote styles here so they can be overridden */
+
+d-footnote-list {
+  contain: layout style;
+}
+
+d-footnote-list > * {
+  grid-column: text;
+}
+
+d-footnote-list a.footnote-backlink {
+  color: rgba(0,0,0,0.3);
+  padding-left: 0.5em;
+}
+
+
+
+/* Anchor.js */
+
+.anchorjs-link {
+  /*transition: all .25s linear; */
+  text-decoration: none;
+  border-bottom: none;
+}
+*:hover > .anchorjs-link {
+  margin-left: -1.125em !important;
+  text-decoration: none;
+  border-bottom: none;
+}
+
+/* Social footer */
+
+.social_footer {
+  margin-top: 30px;
+  margin-bottom: 0;
+  color: rgba(0,0,0,0.67);
+}
+
+.disqus-comments {
+  margin-right: 30px;
+}
+
+.disqus-comment-count {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+}
+
+#disqus_thread {
+  margin-top: 30px;
+}
+
+.article-sharing a {
+  border-bottom: none;
+  margin-right: 8px;
+}
+
+.article-sharing a:hover {
+  border-bottom: none;
+}
+
+.sidebar-section.subscribe {
+  font-size: 12px;
+  line-height: 1.6em;
+}
+
+.subscribe p {
+  margin-bottom: 0.5em;
+}
+
+
+.article-footer .subscribe {
+  font-size: 15px;
+  margin-top: 45px;
+}
+
+
+.sidebar-section.custom {
+  font-size: 12px;
+  line-height: 1.6em;
+}
+
+.custom p {
+  margin-bottom: 0.5em;
+}
+
+/* Styles for listing layout (hide title) */
+.layout-listing d-title, .layout-listing .d-title {
+  display: none;
+}
+
+/* Styles for posts lists (not auto-injected) */
+
+
+.posts-with-sidebar {
+  padding-left: 45px;
+  padding-right: 45px;
+}
+
+.posts-list .description h2,
+.posts-list .description p {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
+}
+
+.posts-list .description h2 {
+  font-weight: 700;
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.posts-list h2.post-tag {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  padding-bottom: 12px;
+}
+.posts-list {
+  margin-top: 60px;
+  margin-bottom: 24px;
+}
+
+.posts-list .post-preview {
+  text-decoration: none;
+  overflow: hidden;
+  display: block;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 24px 0;
+}
+
+.post-preview-last {
+  border-bottom: none !important;
+}
+
+.posts-list .posts-list-caption {
+  grid-column: screen;
+  font-weight: 400;
+}
+
+.posts-list .post-preview h2 {
+  margin: 0 0 6px 0;
+  line-height: 1.2em;
+  font-style: normal;
+  font-size: 24px;
+}
+
+.posts-list .post-preview p {
+  margin: 0 0 12px 0;
+  line-height: 1.4em;
+  font-size: 16px;
+}
+
+.posts-list .post-preview .thumbnail {
+  box-sizing: border-box;
+  margin-bottom: 24px;
+  position: relative;
+  max-width: 500px;
+}
+.posts-list .post-preview img {
+  width: 100%;
+  display: block;
+}
+
+.posts-list .metadata {
+  font-size: 12px;
+  line-height: 1.4em;
+  margin-bottom: 18px;
+}
+
+.posts-list .metadata > * {
+  display: inline-block;
+}
+
+.posts-list .metadata .publishedDate {
+  margin-right: 2em;
+}
+
+.posts-list .metadata .dt-authors {
+  display: block;
+  margin-top: 0.3em;
+  margin-right: 2em;
+}
+
+.posts-list .dt-tags {
+  display: block;
+  line-height: 1em;
+}
+
+.posts-list .dt-tags .dt-tag {
+  display: inline-block;
+  color: rgba(0,0,0,0.6);
+  padding: 0.3em 0.4em;
+  margin-right: 0.2em;
+  margin-bottom: 0.4em;
+  font-size: 60%;
+  border: 1px solid rgba(0,0,0,0.2);
+  border-radius: 3px;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.posts-list img {
+  opacity: 1;
+}
+
+.posts-list img[data-src] {
+  opacity: 0;
+}
+
+.posts-more {
+  clear: both;
+}
+
+
+.posts-sidebar {
+  font-size: 16px;
+}
+
+.posts-sidebar h3 {
+  font-size: 16px;
+  margin-top: 0;
+  margin-bottom: 0.5em;
+  font-weight: 400;
+  text-transform: uppercase;
+}
+
+.sidebar-section {
+  margin-bottom: 30px;
+}
+
+.categories ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.categories li {
+  color: rgba(0, 0, 0, 0.8);
+  margin-bottom: 0;
+}
+
+.categories li>a {
+  border-bottom: none;
+}
+
+.categories li>a:hover {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+}
+
+.categories .active {
+  font-weight: 600;
+}
+
+.categories .category-count {
+  color: rgba(0, 0, 0, 0.4);
+}
+
+
+@media(min-width: 768px) {
+  .posts-list .post-preview h2 {
+    font-size: 26px;
+  }
+  .posts-list .post-preview .thumbnail {
+    float: right;
+    width: 30%;
+    margin-bottom: 0;
+  }
+  .posts-list .post-preview .description {
+    float: left;
+    width: 45%;
+  }
+  .posts-list .post-preview .metadata {
+    float: left;
+    width: 20%;
+    margin-top: 8px;
+  }
+  .posts-list .post-preview p {
+    margin: 0 0 12px 0;
+    line-height: 1.5em;
+    font-size: 16px;
+  }
+  .posts-with-sidebar .posts-list {
+    float: left;
+    width: 75%;
+  }
+  .posts-with-sidebar .posts-sidebar {
+    float: right;
+    width: 20%;
+    margin-top: 60px;
+    padding-top: 24px;
+    padding-bottom: 24px;
+  }
+}
+
+
+/* Improve display for browsers without grid (IE/Edge <= 15) */
+
+.downlevel {
+  line-height: 1.6em;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
+  margin: 0;
+}
+
+.downlevel .d-title {
+  padding-top: 6rem;
+  padding-bottom: 1.5rem;
+}
+
+.downlevel .d-title h1 {
+  font-size: 50px;
+  font-weight: 700;
+  line-height: 1.1em;
+  margin: 0 0 0.5rem;
+}
+
+.downlevel .d-title p {
+  font-weight: 300;
+  font-size: 1.2rem;
+  line-height: 1.55em;
+  margin-top: 0;
+}
+
+.downlevel .d-byline {
+  padding-top: 0.8em;
+  padding-bottom: 0.8em;
+  font-size: 0.8rem;
+  line-height: 1.8em;
+}
+
+.downlevel .section-separator {
+  border: none;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.downlevel .d-article {
+  font-size: 1.06rem;
+  line-height: 1.7em;
+  padding-top: 1rem;
+  padding-bottom: 2rem;
+}
+
+
+.downlevel .d-appendix {
+  padding-left: 0;
+  padding-right: 0;
+  max-width: none;
+  font-size: 0.8em;
+  line-height: 1.7em;
+  margin-bottom: 0;
+  color: rgba(0,0,0,0.5);
+  padding-top: 40px;
+  padding-bottom: 48px;
+}
+
+.downlevel .footnotes ol {
+  padding-left: 13px;
+}
+
+.downlevel .base-grid,
+.downlevel .distill-header,
+.downlevel .d-title,
+.downlevel .d-abstract,
+.downlevel .d-article,
+.downlevel .d-appendix,
+.downlevel .distill-appendix,
+.downlevel .d-byline,
+.downlevel .d-footnote-list,
+.downlevel .d-citation-list,
+.downlevel .distill-footer,
+.downlevel .appendix-bottom,
+.downlevel .posts-container {
+  padding-left: 40px;
+  padding-right: 40px;
+}
+
+@media(min-width: 768px) {
+  .downlevel .base-grid,
+  .downlevel .distill-header,
+  .downlevel .d-title,
+  .downlevel .d-abstract,
+  .downlevel .d-article,
+  .downlevel .d-appendix,
+  .downlevel .distill-appendix,
+  .downlevel .d-byline,
+  .downlevel .d-footnote-list,
+  .downlevel .d-citation-list,
+  .downlevel .distill-footer,
+  .downlevel .appendix-bottom,
+  .downlevel .posts-container {
+  padding-left: 150px;
+  padding-right: 150px;
+  max-width: 900px;
+}
+}
+
+.downlevel pre code {
+  display: block;
+  border-left: 2px solid rgba(0, 0, 0, .1);
+  padding: 0 0 0 20px;
+  font-size: 14px;
+}
+
+.downlevel code, .downlevel pre {
+  color: black;
+  background: none;
+  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  line-height: 1.5;
+
+  -moz-tab-size: 4;
+  -o-tab-size: 4;
+  tab-size: 4;
+
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
+}
+
+.downlevel .posts-list .post-preview {
+  color: inherit;
+}
+
+
+
+</style>
+
+<script type="application/javascript">
+
+function is_downlevel_browser() {
+  if (bowser.isUnsupportedBrowser({ msie: "12", msedge: "16"},
+                                 window.navigator.userAgent)) {
+    return true;
+  } else {
+    return window.load_distill_framework === undefined;
+  }
+}
+
+// show body when load is complete
+function on_load_complete() {
+
+  // add anchors
+  if (window.anchors) {
+    window.anchors.options.placement = 'left';
+    window.anchors.add('d-article > h2, d-article > h3, d-article > h4, d-article > h5');
+  }
+
+
+  // set body to visible
+  document.body.style.visibility = 'visible';
+
+  // force redraw for leaflet widgets
+  if (window.HTMLWidgets) {
+    var maps = window.HTMLWidgets.findAll(".leaflet");
+    $.each(maps, function(i, el) {
+      var map = this.getMap();
+      map.invalidateSize();
+      map.eachLayer(function(layer) {
+        if (layer instanceof L.TileLayer)
+          layer.redraw();
+      });
+    });
+  }
+
+  // trigger 'shown' so htmlwidgets resize
+  $('d-article').trigger('shown');
+}
+
+function init_distill() {
+
+  init_common();
+
+  // create front matter
+  var front_matter = $('<d-front-matter></d-front-matter>');
+  $('#distill-front-matter').wrap(front_matter);
+
+  // create d-title
+  $('.d-title').changeElementType('d-title');
+
+  // create d-byline
+  var byline = $('<d-byline></d-byline>');
+  $('.d-byline').replaceWith(byline);
+
+  // create d-article
+  var article = $('<d-article></d-article>');
+  $('.d-article').wrap(article).children().unwrap();
+
+  // move posts container into article
+  $('.posts-container').appendTo($('d-article'));
+
+  // create d-appendix
+  $('.d-appendix').changeElementType('d-appendix');
+
+  // flag indicating that we have appendix items
+  var appendix = $('.appendix-bottom').children('h3').length > 0;
+
+  // replace footnotes with <d-footnote>
+  $('.footnote-ref').each(function(i, val) {
+    appendix = true;
+    var href = $(this).attr('href');
+    var id = href.replace('#', '');
+    var fn = $('#' + id);
+    var fn_p = $('#' + id + '>p');
+    fn_p.find('.footnote-back').remove();
+    var text = fn_p.html();
+    var dtfn = $('<d-footnote></d-footnote>');
+    dtfn.html(text);
+    $(this).replaceWith(dtfn);
+  });
+  // remove footnotes
+  $('.footnotes').remove();
+
+  // move refs into #references-listing
+  $('#references-listing').replaceWith($('#refs'));
+
+  $('h1.appendix, h2.appendix').each(function(i, val) {
+    $(this).changeElementType('h3');
+  });
+  $('h3.appendix').each(function(i, val) {
+    var id = $(this).attr('id');
+    $('.d-contents a[href="#' + id + '"]').parent().remove();
+    appendix = true;
+    $(this).nextUntil($('h1, h2, h3')).addBack().appendTo($('d-appendix'));
+  });
+
+  // show d-appendix if we have appendix content
+  $("d-appendix").css('display', appendix ? 'grid' : 'none');
+
+  // localize layout chunks to just output
+  $('.layout-chunk').each(function(i, val) {
+
+    // capture layout
+    var layout = $(this).attr('data-layout');
+
+    // apply layout to markdown level block elements
+    var elements = $(this).children().not('details, div.sourceCode, pre, script');
+    elements.each(function(i, el) {
+      var layout_div = $('<div class="' + layout + '"></div>');
+      if (layout_div.hasClass('shaded')) {
+        var shaded_content = $('<div class="shaded-content"></div>');
+        $(this).wrap(shaded_content);
+        $(this).parent().wrap(layout_div);
+      } else {
+        $(this).wrap(layout_div);
+      }
+    });
+
+
+    // unwrap the layout-chunk div
+    $(this).children().unwrap();
+  });
+
+  // remove code block used to force  highlighting css
+  $('.distill-force-highlighting-css').parent().remove();
+
+  // remove empty line numbers inserted by pandoc when using a
+  // custom syntax highlighting theme
+  $('code.sourceCode a:empty').remove();
+
+  // load distill framework
+  load_distill_framework();
+
+  // wait for window.distillRunlevel == 4 to do post processing
+  function distill_post_process() {
+
+    if (!window.distillRunlevel || window.distillRunlevel < 4)
+      return;
+
+    // hide author/affiliations entirely if we have no authors
+    var front_matter = JSON.parse($("#distill-front-matter").html());
+    var have_authors = front_matter.authors && front_matter.authors.length > 0;
+    if (!have_authors)
+      $('d-byline').addClass('hidden');
+
+    // article with toc class
+    $('.d-contents').parent().addClass('d-article-with-toc');
+
+    // strip links that point to #
+    $('.authors-affiliations').find('a[href="#"]').removeAttr('href');
+
+    // add orcid ids
+    $('.authors-affiliations').find('.author').each(function(i, el) {
+      var orcid_id = front_matter.authors[i].orcidID;
+      if (orcid_id) {
+        var a = $('<a></a>');
+        a.attr('href', 'https://orcid.org/' + orcid_id);
+        var img = $('<img></img>');
+        img.addClass('orcid-id');
+        img.attr('alt', 'ORCID ID');
+        img.attr('src','data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg==');
+        a.append(img);
+        $(this).append(a);
+      }
+    });
+
+    // hide elements of author/affiliations grid that have no value
+    function hide_byline_column(caption) {
+      $('d-byline').find('h3:contains("' + caption + '")').parent().css('visibility', 'hidden');
+    }
+
+    // affiliations
+    var have_affiliations = false;
+    for (var i = 0; i<front_matter.authors.length; ++i) {
+      var author = front_matter.authors[i];
+      if (author.affiliation !== "&nbsp;") {
+        have_affiliations = true;
+        break;
+      }
+    }
+    if (!have_affiliations)
+      $('d-byline').find('h3:contains("Affiliations")').css('visibility', 'hidden');
+
+    // published date
+    if (!front_matter.publishedDate)
+      hide_byline_column("Published");
+
+    // document object identifier
+    var doi = $('d-byline').find('h3:contains("DOI")');
+    var doi_p = doi.next().empty();
+    if (!front_matter.doi) {
+      // if we have a citation and valid citationText then link to that
+      if ($('#citation').length > 0 && front_matter.citationText) {
+        doi.html('Citation');
+        $('<a href="#citation"></a>')
+          .text(front_matter.citationText)
+          .appendTo(doi_p);
+      } else {
+        hide_byline_column("DOI");
+      }
+    } else {
+      $('<a></a>')
+         .attr('href', "https://doi.org/" + front_matter.doi)
+         .html(front_matter.doi)
+         .appendTo(doi_p);
+    }
+
+     // change plural form of authors/affiliations
+    if (front_matter.authors.length === 1) {
+      var grid = $('.authors-affiliations');
+      grid.children('h3:contains("Authors")').text('Author');
+      grid.children('h3:contains("Affiliations")').text('Affiliation');
+    }
+
+    // remove d-appendix and d-footnote-list local styles
+    $('d-appendix > style:first-child').remove();
+    $('d-footnote-list > style:first-child').remove();
+
+    // move appendix-bottom entries to the bottom
+    $('.appendix-bottom').appendTo('d-appendix').children().unwrap();
+    $('.appendix-bottom').remove();
+
+    // hoverable references
+    $('span.citation[data-cites]').each(function() {
+      var refs = $(this).attr('data-cites').split(" ");
+      var refHtml = refs.map(function(ref) {
+        return "<p>" + $('#ref-' + ref).html() + "</p>";
+      }).join("\n");
+      window.tippy(this, {
+        allowHTML: true,
+        content: refHtml,
+        maxWidth: 500,
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'light-border',
+        placement: 'bottom-start'
+      });
+    });
+
+    // clear polling timer
+    clearInterval(tid);
+
+    // show body now that everything is ready
+    on_load_complete();
+  }
+
+  var tid = setInterval(distill_post_process, 50);
+  distill_post_process();
+
+}
+
+function init_downlevel() {
+
+  init_common();
+
+   // insert hr after d-title
+  $('.d-title').after($('<hr class="section-separator"/>'));
+
+  // check if we have authors
+  var front_matter = JSON.parse($("#distill-front-matter").html());
+  var have_authors = front_matter.authors && front_matter.authors.length > 0;
+
+  // manage byline/border
+  if (!have_authors)
+    $('.d-byline').remove();
+  $('.d-byline').after($('<hr class="section-separator"/>'));
+  $('.d-byline a').remove();
+
+  // remove toc
+  $('.d-contents').remove();
+
+  // move appendix elements
+  $('h1.appendix, h2.appendix').each(function(i, val) {
+    $(this).changeElementType('h3');
+  });
+  $('h3.appendix').each(function(i, val) {
+    $(this).nextUntil($('h1, h2, h3')).addBack().appendTo($('.d-appendix'));
+  });
+
+
+  // inject headers into references and footnotes
+  var refs_header = $('<h3></h3>');
+  refs_header.text('References');
+  $('#refs').prepend(refs_header);
+
+  var footnotes_header = $('<h3></h3');
+  footnotes_header.text('Footnotes');
+  $('.footnotes').children('hr').first().replaceWith(footnotes_header);
+
+  // move appendix-bottom entries to the bottom
+  $('.appendix-bottom').appendTo('.d-appendix').children().unwrap();
+  $('.appendix-bottom').remove();
+
+  // remove appendix if it's empty
+  if ($('.d-appendix').children().length === 0)
+    $('.d-appendix').remove();
+
+  // prepend separator above appendix
+  $('.d-appendix').before($('<hr class="section-separator" style="clear: both"/>'));
+
+  // trim code
+  $('pre>code').each(function(i, val) {
+    $(this).html($.trim($(this).html()));
+  });
+
+  // move posts-container right before article
+  $('.posts-container').insertBefore($('.d-article'));
+
+  $('body').addClass('downlevel');
+
+  on_load_complete();
+}
+
+
+function init_common() {
+
+  // jquery plugin to change element types
+  (function($) {
+    $.fn.changeElementType = function(newType) {
+      var attrs = {};
+
+      $.each(this[0].attributes, function(idx, attr) {
+        attrs[attr.nodeName] = attr.nodeValue;
+      });
+
+      this.replaceWith(function() {
+        return $("<" + newType + "/>", attrs).append($(this).contents());
+      });
+    };
+  })(jQuery);
+
+  // prevent underline for linked images
+  $('a > img').parent().css({'border-bottom' : 'none'});
+
+  // mark non-body figures created by knitr chunks as 100% width
+  $('.layout-chunk').each(function(i, val) {
+    var figures = $(this).find('img, .html-widget');
+    if ($(this).attr('data-layout') !== "l-body") {
+      figures.css('width', '100%');
+    } else {
+      figures.css('max-width', '100%');
+      figures.filter("[width]").each(function(i, val) {
+        var fig = $(this);
+        fig.css('width', fig.attr('width') + 'px');
+      });
+
+    }
+  });
+
+  // auto-append index.html to post-preview links in file: protocol
+  // and in rstudio ide preview
+  $('.post-preview').each(function(i, val) {
+    if (window.location.protocol === "file:")
+      $(this).attr('href', $(this).attr('href') + "index.html");
+  });
+
+  // get rid of index.html references in header
+  if (window.location.protocol !== "file:") {
+    $('.distill-site-header a[href]').each(function(i,val) {
+      $(this).attr('href', $(this).attr('href').replace("index.html", "./"));
+    });
+  }
+
+  // add class to pandoc style tables
+  $('tr.header').parent('thead').parent('table').addClass('pandoc-table');
+  $('.kable-table').children('table').addClass('pandoc-table');
+
+  // add figcaption style to table captions
+  $('caption').parent('table').addClass("figcaption");
+
+  // initialize posts list
+  if (window.init_posts_list)
+    window.init_posts_list();
+
+  // implmement disqus comment link
+  $('.disqus-comment-count').click(function() {
+    window.headroom_prevent_pin = true;
+    $('#disqus_thread').toggleClass('hidden');
+    if (!$('#disqus_thread').hasClass('hidden')) {
+      var offset = $(this).offset();
+      $(window).resize();
+      $('html, body').animate({
+        scrollTop: offset.top - 35
+      });
+    }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  if (is_downlevel_browser())
+    init_downlevel();
+  else
+    window.addEventListener('WebComponentsReady', init_distill);
+});
+
+</script>
+
+<!--/radix_placeholder_distill-->
+  <script src="../../site_libs/header-attrs-2.11/header-attrs.js"></script>
+  <script src="../../site_libs/kePrint-0.0.1/kePrint.js"></script>
+  <link href="../../site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+  <script src="../../site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+  <script src="../../site_libs/popper-2.6.0/popper.min.js"></script>
+  <link href="../../site_libs/tippy-6.2.7/tippy.css" rel="stylesheet" />
+  <link href="../../site_libs/tippy-6.2.7/tippy-light-border.css" rel="stylesheet" />
+  <script src="../../site_libs/tippy-6.2.7/tippy.umd.min.js"></script>
+  <script src="../../site_libs/anchor-4.2.2/anchor.min.js"></script>
+  <script src="../../site_libs/bowser-1.9.3/bowser.min.js"></script>
+  <script src="../../site_libs/webcomponents-2.0.0/webcomponents.js"></script>
+  <script src="../../site_libs/distill-2.2.21/template.v2.js"></script>
+  <!--radix_placeholder_site_in_header-->
+<!--/radix_placeholder_site_in_header-->
+
+
+</head>
+
+<body>
+
+<!--radix_placeholder_front_matter-->
+
+<script id="distill-front-matter" type="text/json">
+{"title":"Board Game","description":"Dans cet article, je vais analyser des données issues de Tidy Tuesday dénommé Board Games Database. Je vais tenter de répondre à la question de savoir est ce que le nombre de joueurs ainsi que le temps passé à jouer influencent-ils les notes données?","authors":[{"author":"Daniella Landrys","authorURL":"#","affiliation":"&nbsp;","affiliationURL":"#","orcidID":""}],"publishedDate":"2022-02-21T00:00:00.000-05:00","citationText":"Landrys, 2022"}
+</script>
+
+<!--/radix_placeholder_front_matter-->
+<!--radix_placeholder_navigation_before_body-->
+<header class="header header--fixed" role="banner">
+<nav class="distill-site-nav distill-site-header">
+<div class="nav-left">
+<a href="../../index.html" class="title">Daniellarium</a>
+<input id="distill-search" class="nav-search hidden" type="text" placeholder="Search..."/>
+</div>
+<div class="nav-right">
+<a href="../../index.html">Home</a>
+<a href="../../blog.html">Blog</a>
+<a href="https://github.com/daniellalandrys">
+<i class="fa fa-github" aria-hidden="true"></i>
+</a>
+<a href="https://www.linkedin.com/in/daniellalandrys/">
+<i class="fa fa-linkedin" aria-hidden="true"></i>
+</a>
+<a href="https://twitter.com/danhye_landrys">
+<i class="fa fa-twitter" aria-hidden="true"></i>
+</a>
+<a href="../../index.xml">
+<i class="fa fa-rss" aria-hidden="true"></i>
+</a>
+<a href="javascript:void(0);" class="nav-toggle">&#9776;</a>
+</div>
+</nav>
+</header>
+<!--/radix_placeholder_navigation_before_body-->
+<!--radix_placeholder_site_before_body-->
+<!--/radix_placeholder_site_before_body-->
+
+<div class="d-title">
+<h1>Board Game</h1>
+<!--radix_placeholder_categories-->
+<div class="dt-tags">
+  <a href="../../blog.html#category:Français" class="dt-tag">Français</a>
+  <a href="../../blog.html#category:Statistiques" class="dt-tag">Statistiques</a>
+  <a href="../../blog.html#category:Jeux_vidéos" class="dt-tag">Jeux vidéos</a>
+</div>
+<!--/radix_placeholder_categories-->
+<p>Dans cet article, je vais analyser des données issues de Tidy Tuesday
+dénommé Board Games Database. Je vais tenter de répondre à la question
+de savoir est ce que le nombre de joueurs ainsi que le temps passé à
+jouer influencent-ils les notes données?</p>
+</div>
+
+<div class="d-byline">
+  Daniella Landrys  
+  
+<br/>2022-02-21
+</div>
+
+<div class="d-article">
+<div class="d-contents d-contents-float">
+<nav class="l-text toc figcaption" id="TOC">
+<h3>Contents</h3>
+<ul>
+<li><a href="#les-données">Les données</a>
+<ul>
+<li><a href="#visualisation-des-données">Visualisation des
+données</a></li>
+<li><a href="#importer-le-dataset">Importer le dataset</a></li>
+<li><a href="#nettoyage-des-données">Nettoyage des données</a></li>
+</ul></li>
+<li><a href="#statistiques">Statistiques</a></li>
+<li><a href="#corrélation">Corrélation</a></li>
+<li><a href="#conclusion">Conclusion</a></li>
+</ul>
+</nav>
+</div>
+<p>Dans cet article, je vais analyser des données issues de <a
+href="https://rpubs.com/thewiremonkey/476630">Tidy Tuesday</a> dénommé
+Board Games Database. Je vais tenter de répondre à la question de savoir
+est ce que le nombre de joueurs ainsi que le temps passé à jouer
+influencent-ils les notes données?</p>
+<p>Pour y parvenir, je vais commencer par faire une visualisation des
+données pour ensuite faire des statistiques.</p>
+<h1 id="les-données">Les données</h1>
+<p>Les données sont issues de tydituesday. Plus précisément, il s’agit
+des données datées du 25-01-2022 provenant de Kaggle et concerne les
+Board Games.</p>
+<h2 id="visualisation-des-données">Visualisation des données</h2>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://juba.github.io/questionr/'>questionr</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://haozhu233.github.io/kableExtra/'>kableExtra</a></span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<h2 id="importer-le-dataset">Importer le dataset</h2>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>ratings</span> <span class='op'>&lt;-</span> <span class='fu'>readr</span><span class='fu'>::</span><span class='fu'><a href='https://readr.tidyverse.org/reference/read_delim.html'>read_csv</a></span><span class='op'>(</span><span class='st'>'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-01-25/ratings.csv'</span><span class='op'>)</span>
+<span class='va'>details</span> <span class='op'>&lt;-</span> <span class='fu'>readr</span><span class='fu'>::</span><span class='fu'><a href='https://readr.tidyverse.org/reference/read_delim.html'>read_csv</a></span><span class='op'>(</span><span class='st'>'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-01-25/details.csv'</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<p>Étant donné que les données contiennent deux tableurs, il est donc
+nécessaire de les joindre les deux afin de faciliter l’analyse.</p>
+<div class="layout-chunk" data-layout="l-center">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'>#ratings </span>
+<span class='va'>df</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>ratings</span><span class='op'>)</span> 
+<span class='va'>urls</span> <span class='op'>&lt;-</span> <span class='va'>df</span><span class='op'>$</span><span class='va'>thumbnail</span> 
+<span class='va'>df</span> <span class='op'>&lt;-</span> <span class='va'>df</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>thumbnail <span class='op'>=</span> <span class='st'>""</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/pkg/kableExtra/man/kbl.html'>kbl</a></span><span class='op'>(</span><span class='va'>df</span>, digits <span class='op'>=</span> <span class='fl'>2</span>, format <span class='op'>=</span> <span class='st'>"html"</span>, row.names <span class='op'>=</span> <span class='cn'>TRUE</span>, align <span class='op'>=</span> <span class='st'>'l'</span>, caption <span class='op'>=</span> <span class='st'>"Notes des jeux vidéos"</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://rdrr.io/pkg/kableExtra/man/kable_classic.html'>kable_paper</a></span><span class='op'>(</span>full_width <span class='op'>=</span> <span class='cn'>F</span>, html_font <span class='op'>=</span> <span class='st'>"Cambria"</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'>kableExtra</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/kableExtra/man/kable_styling.html'>kable_styling</a></span><span class='op'>(</span>position <span class='op'>=</span> <span class='st'>"center"</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://rdrr.io/pkg/kableExtra/man/column_spec.html'>column_spec</a></span><span class='op'>(</span><span class='fl'>11</span>, image <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/kableExtra/man/spec_image.html'>spec_image</a></span><span class='op'>(</span><span class='va'>urls</span>, width <span class='op'>=</span> <span class='fl'>300</span>, height <span class='op'>=</span> <span class='fl'>300</span><span class='op'>)</span><span class='op'>)</span> 
+</code></pre>
+</div>
+<table class=" lightable-paper table" style="font-family: Cambria; width: auto !important; margin-left: auto; margin-right: auto; margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:unnamed-chunk-3">Table 1: </span>Notes des jeux vidéos
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:left;">
+num
+</th>
+<th style="text-align:left;">
+id
+</th>
+<th style="text-align:left;">
+name
+</th>
+<th style="text-align:left;">
+year
+</th>
+<th style="text-align:left;">
+rank
+</th>
+<th style="text-align:left;">
+average
+</th>
+<th style="text-align:left;">
+bayes_average
+</th>
+<th style="text-align:left;">
+users_rated
+</th>
+<th style="text-align:left;">
+url
+</th>
+<th style="text-align:left;">
+thumbnail
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:left;">
+105
+</td>
+<td style="text-align:left;">
+30549
+</td>
+<td style="text-align:left;">
+Pandemic
+</td>
+<td style="text-align:left;">
+2008
+</td>
+<td style="text-align:left;">
+106
+</td>
+<td style="text-align:left;">
+7.59
+</td>
+<td style="text-align:left;">
+7.49
+</td>
+<td style="text-align:left;">
+108975
+</td>
+<td style="text-align:left;">
+/boardgame/30549/pandemic
+</td>
+<td style="text-align:left;">
+<html>
+<body>
+<img src="https://cf.geekdo-images.com/S3ybV1LAp-8SnHIXLLjVqA__micro/img/S4tXI3Yo7BtqmBoKINLLVUFsaJ0=/fit-in/64x64/filters:strip_icc()/pic1534148.jpg" width="96" height="96">
+</body>
+</html>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:left;">
+189
+</td>
+<td style="text-align:left;">
+822
+</td>
+<td style="text-align:left;">
+Carcassonne
+</td>
+<td style="text-align:left;">
+2000
+</td>
+<td style="text-align:left;">
+190
+</td>
+<td style="text-align:left;">
+7.42
+</td>
+<td style="text-align:left;">
+7.31
+</td>
+<td style="text-align:left;">
+108738
+</td>
+<td style="text-align:left;">
+/boardgame/822/carcassonne
+</td>
+<td style="text-align:left;">
+<html>
+<body>
+<img src="https://cf.geekdo-images.com/okM0dq_bEXnbyQTOvHfwRA__micro/img/VfLoKzfk3xj26ArmDu55qZ4sysw=/fit-in/64x64/filters:strip_icc()/pic6544250.png" width="96" height="96">
+</body>
+</html>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+3
+</td>
+<td style="text-align:left;">
+428
+</td>
+<td style="text-align:left;">
+13
+</td>
+<td style="text-align:left;">
+Catan
+</td>
+<td style="text-align:left;">
+1995
+</td>
+<td style="text-align:left;">
+429
+</td>
+<td style="text-align:left;">
+7.14
+</td>
+<td style="text-align:left;">
+6.97
+</td>
+<td style="text-align:left;">
+108024
+</td>
+<td style="text-align:left;">
+/boardgame/13/catan
+</td>
+<td style="text-align:left;">
+<html>
+<body>
+<img src="https://cf.geekdo-images.com/W3Bsga_uLP9kO91gZ7H8yw__micro/img/LA4OvGfQ_TXQ-2mhaIFZp2ITWpc=/fit-in/64x64/filters:strip_icc()/pic2419375.jpg" width="96" height="96">
+</body>
+</html>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+4
+</td>
+<td style="text-align:left;">
+72
+</td>
+<td style="text-align:left;">
+68448
+</td>
+<td style="text-align:left;">
+7 Wonders
+</td>
+<td style="text-align:left;">
+2010
+</td>
+<td style="text-align:left;">
+73
+</td>
+<td style="text-align:left;">
+7.74
+</td>
+<td style="text-align:left;">
+7.63
+</td>
+<td style="text-align:left;">
+89982
+</td>
+<td style="text-align:left;">
+/boardgame/68448/7-wonders
+</td>
+<td style="text-align:left;">
+<html>
+<body>
+<img src="https://cf.geekdo-images.com/RvFVTEpnbb4NM7k0IF8V7A__micro/img/9glsOs7zoTbkVpfDt5SHWJm-kRA=/fit-in/64x64/filters:strip_icc()/pic860217.jpg" width="96" height="96">
+</body>
+</html>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+5
+</td>
+<td style="text-align:left;">
+103
+</td>
+<td style="text-align:left;">
+36218
+</td>
+<td style="text-align:left;">
+Dominion
+</td>
+<td style="text-align:left;">
+2008
+</td>
+<td style="text-align:left;">
+104
+</td>
+<td style="text-align:left;">
+7.61
+</td>
+<td style="text-align:left;">
+7.50
+</td>
+<td style="text-align:left;">
+81561
+</td>
+<td style="text-align:left;">
+/boardgame/36218/dominion
+</td>
+<td style="text-align:left;">
+<html>
+<body>
+<img src="https://cf.geekdo-images.com/j6iQpZ4XkemZP07HNCODBA__micro/img/PVxqHWOLTb3n-4xe62LJadr_M0I=/fit-in/64x64/filters:strip_icc()/pic394356.jpg" width="96" height="96">
+</body>
+</html>
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+6
+</td>
+<td style="text-align:left;">
+191
+</td>
+<td style="text-align:left;">
+9209
+</td>
+<td style="text-align:left;">
+Ticket to Ride
+</td>
+<td style="text-align:left;">
+2004
+</td>
+<td style="text-align:left;">
+192
+</td>
+<td style="text-align:left;">
+7.41
+</td>
+<td style="text-align:left;">
+7.30
+</td>
+<td style="text-align:left;">
+76171
+</td>
+<td style="text-align:left;">
+/boardgame/9209/ticket-ride
+</td>
+<td style="text-align:left;">
+<html>
+<body>
+<img src="https://cf.geekdo-images.com/ZWJg0dCdrWHxVnc0eFXK8w__micro/img/79tvkijvf1wFKrKz-FWt77XdIbw=/fit-in/64x64/filters:strip_icc()/pic38668.jpg" width="96" height="96">
+</body>
+</html>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'>#details </span>
+<span class='fu'><a href='https://rdrr.io/pkg/kableExtra/man/kbl.html'>kbl</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>details</span><span class='op'>)</span>, digits <span class='op'>=</span> <span class='fl'>2</span>, format <span class='op'>=</span> <span class='st'>"html"</span>, row.names <span class='op'>=</span> <span class='cn'>TRUE</span>, align <span class='op'>=</span> <span class='st'>'l'</span>, caption <span class='op'>=</span> <span class='st'>"Details des jeux vidéos"</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://rdrr.io/pkg/kableExtra/man/kable_classic.html'>kable_paper</a></span><span class='op'>(</span>full_width <span class='op'>=</span> <span class='cn'>F</span>, html_font <span class='op'>=</span> <span class='st'>"Cambria"</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://rdrr.io/pkg/kableExtra/man/scroll_box.html'>scroll_box</a></span><span class='op'>(</span>width <span class='op'>=</span> <span class='st'>"1000px"</span>, height <span class='op'>=</span> <span class='st'>"400px"</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'>kableExtra</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/kableExtra/man/kable_styling.html'>kable_styling</a></span><span class='op'>(</span>position <span class='op'>=</span> <span class='st'>"center"</span>, bootstrap_options <span class='op'>=</span> <span class='st'>"striped"</span><span class='op'>)</span>
+</code></pre>
+</div>
+<div class="table table-striped"
+style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:400px; overflow-x: scroll; width:1000px;  margin-left: auto; margin-right: auto;">
+<table class=" lightable-paper" style="font-family: Cambria; width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:unnamed-chunk-4">Table 2: </span>Details des jeux vidéos
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+num
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+id
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+primary
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+description
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+yearpublished
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+minplayers
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+maxplayers
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+playingtime
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+minplaytime
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+maxplaytime
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+minage
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+boardgamecategory
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+boardgamemechanic
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+boardgamefamily
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+boardgameexpansion
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+boardgameimplementation
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+boardgamedesigner
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+boardgameartist
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+boardgamepublisher
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+owned
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+trading
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+wanting
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+wishing
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+30549
+</td>
+<td style="text-align:left;">
+Pandemic
+</td>
+<td style="text-align:left;">
+In Pandemic, several virulent diseases have broken out simultaneously
+all over the world! The players are disease-fighting specialists whose
+mission is to treat disease hotspots while researching cures for each of
+four plagues before they get out of hand.&amp;#10;&amp;#10;The game
+board depicts several major population centers on Earth. On each turn, a
+player can use up to four actions to travel between cities, treat
+infected populaces, discover a cure, or build a research station. A deck
+of cards provides the players with these abilities, but sprinkled
+throughout this deck are Epidemic! cards that accelerate and intensify
+the diseases’ activity. A second, separate deck of cards controls the
+&amp;quot;normal&amp;quot; spread of the
+infections.&amp;#10;&amp;#10;Taking a unique role within the team,
+players must plan their strategy to mesh with their specialists’
+strengths in order to conquer the diseases. For example, the Operations
+Expert can build research stations which are needed to find cures for
+the diseases and which allow for greater mobility between cities; the
+Scientist needs only four cards of a particular disease to cure it
+instead of the normal five&amp;mdash;but the diseases are spreading
+quickly and time is running out. If one or more diseases spreads beyond
+recovery or if too much time elapses, the players all lose. If they cure
+the four diseases, they all win!&amp;#10;&amp;#10;The 2013 edition of
+Pandemic includes two new characters&amp;mdash;the Contingency Planner
+and the Quarantine Specialist&amp;mdash;not available in earlier
+editions of the game.&amp;#10;&amp;#10;Pandemic is the first game in the
+Pandemic series.&amp;#10;&amp;#10;
+</td>
+<td style="text-align:left;">
+2008
+</td>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:left;">
+4
+</td>
+<td style="text-align:left;">
+45
+</td>
+<td style="text-align:left;">
+45
+</td>
+<td style="text-align:left;">
+45
+</td>
+<td style="text-align:left;">
+8
+</td>
+<td style="text-align:left;">
+[‘Medical’]
+</td>
+<td style="text-align:left;">
+[‘Action Points’, ‘Cooperative Game’, ‘Hand Management’, ‘Point to Point
+Movement’, ‘Set Collection’, ‘Trading’, ‘Variable Player Powers’]
+</td>
+<td style="text-align:left;">
+[‘Components: Map (Global Scale)’, ‘Components: Multi-Use Cards’,
+‘Digital Implementations: Board Game Arena’, ‘Game: Pandemic’, ‘Medical:
+Diseases’, ‘Occupation: Dispatcher’, ‘Occupation: Medic / Doctor /
+Nurses’, ‘Occupation: Researcher / Scientist’, ‘Region: The World’]
+</td>
+<td style="text-align:left;">
+[‘Pandemic: Gen Con 2016 Promos – Z-Force Team Member/Game Convention’,
+‘Pandemic: In the Lab’, ‘Pandemic: On the Brink’, ‘Pandemic: Promo
+Roles’, ‘Pandemic: State of Emergency’, ‘Pandemic: Survival Promos –
+Crisis Mitigator/Relocation Specialist’, ‘Pandemie: Uitbreiding “De
+Generalist”’]
+</td>
+<td style="text-align:left;">
+[‘Pandemic Legacy: Season 0’, ‘Pandemic Legacy: Season 1’, ‘Pandemic
+Legacy: Season 2’, ‘Pandemic: Fall of Rome’, ‘Pandemic: Hot Zone –
+Europe’, ‘Pandemic: Hot Zone – North America’, ‘Pandemic: Iberia’,
+‘Pandemic: Reign of Cthulhu’, ‘Pandemic: Rising Tide’, ‘Pandemic: The
+Cure’, ‘World of Warcraft: Wrath of the Lich King’]
+</td>
+<td style="text-align:left;">
+[‘Matt Leacock’]
+</td>
+<td style="text-align:left;">
+[‘Josh Cappel’, ‘Christian Hanisch’, ‘Régis Moulun’, ‘Chris Quilliams’,
+‘Tom Thiel’]
+</td>
+<td style="text-align:left;">
+[‘Z-Man Games’, ‘Albi’, ‘Asmodee’, ‘Asmodee Italia’, ‘Asterion Press’,
+‘Bergsala Enigma (Enigma)’, ‘Brain Games’, ‘Devir’, ‘Filosofia
+Éditions’, ‘Galápagos Jogos’, ‘Gém Klub Kft.’, ‘HaKubia’, ‘Hobby Japan’,
+‘HomoLudicus’, ‘Jolly Thinkers’, ‘Kaissa Chess &amp; Games’, ‘Korea
+Boardgames Co., Ltd.’, ‘Lacerta’, ‘Lautapelit.fi’, ‘Lifestyle Boardgames
+Ltd’, ‘MINDOK’, ‘Nordic Games GmbH’, ‘Paladium Games’, ‘Pegasus Spiele’,
+‘Quined White Goblin Games’, ‘Rebel Sp. z o.o.’, ‘Siam Board Games’,
+‘Stratelibri’, ‘Wargames Club Publishing’, ‘White Goblin Games’,
+‘Zhiyanjia’, ‘Ігромаг’, ‘Взрослые дети’]
+</td>
+<td style="text-align:left;">
+168364
+</td>
+<td style="text-align:left;">
+2508
+</td>
+<td style="text-align:left;">
+625
+</td>
+<td style="text-align:left;">
+9344
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:left;">
+822
+</td>
+<td style="text-align:left;">
+Carcassonne
+</td>
+<td style="text-align:left;">
+Carcassonne is a tile-placement game in which the players draw and place
+a tile with a piece of southern French landscape on it. The tile might
+feature a city, a road, a cloister, grassland or some combination
+thereof, and it must be placed adjacent to tiles that have already been
+played, in such a way that cities are connected to cities, roads to
+roads, etcetera. Having placed a tile, the player can then decide to
+place one of their meeples on one of the areas on it: on the city as a
+knight, on the road as a robber, on a cloister as a monk, or on the
+grass as a farmer. When that area is complete, that meeple scores points
+for its owner.&amp;#10;&amp;#10;During a game of Carcassonne, players
+are faced with decisions like: &amp;quot;Is it really worth putting my
+last meeple there?&amp;quot; or &amp;quot;Should I use this tile to
+expand my city, or should I place it near my opponent instead, giving
+him a hard time to complete their project and score points?&amp;quot;
+Since players place only one tile and have the option to place one
+meeple on it, turns proceed quickly even if it is a game full of options
+and possibilities.&amp;#10;&amp;#10;First game in the Carcassonne
+series.&amp;#10;&amp;#10;
+</td>
+<td style="text-align:left;">
+2000
+</td>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:left;">
+5
+</td>
+<td style="text-align:left;">
+45
+</td>
+<td style="text-align:left;">
+30
+</td>
+<td style="text-align:left;">
+45
+</td>
+<td style="text-align:left;">
+7
+</td>
+<td style="text-align:left;">
+[‘City Building’, ‘Medieval’, ‘Territory Building’]
+</td>
+<td style="text-align:left;">
+[‘Area Majority / Influence’, ‘Map Addition’, ‘Tile Placement’]
+</td>
+<td style="text-align:left;">
+[‘Cities: Carcassonne (France)’, ‘Components: Meeples (Black)’,
+‘Components: Meeples (Blue)’, ‘Components: Meeples (Green)’,
+‘Components: Meeples (Red)’, ‘Components: Meeples (Yellow)’,
+‘Components: Wooden pieces &amp; boards’, ‘Country: France’, ‘Digital
+Implementations: Board Game Arena’, ‘Game: Carcassonne’, ‘Region:
+Languedoc (France)’]
+</td>
+<td style="text-align:left;">
+[‘20 Jahre Darmstadt Spielt’, ‘Apothecaries (fan expansion for
+Carcassonne)’, ‘Apothecaries and Tithes (fan expansion for
+Carcassonne)’, ‘Die Bettler (Fan-Erweiterung für Carcassonne)’, ‘The Big
+Black Pig Escape (Fan expansion to Carcassonne)’, ‘Breweries (fan
+expansion for Carcassonne)’, ‘Carcassonne Maps: Benelux’, ‘Carcassonne
+Maps: Deutschland’, ‘Carcassonne Maps: France’, ‘Carcassonne Maps: Great
+Britain’, ‘Carcassonne Maps: Península Ibérica’, ‘Carcassonne Maps:
+Taiwan’, ‘Carcassonne Maps: USA East’, ‘Carcassonne Maps: USA West’,
+‘Carcassonne: Bonusplättchen Spiel 2014’, ‘Carcassonne: Bonusplättchen
+Spiel 2015’, ‘Carcassonne: Bonusplättchen Spiel 2016’, ‘Carcassonne:
+Bonusplättchen Spiel 2017’, ‘Carcassonne: Bonusplättchen Spiel 2018’,
+‘Carcassonne: Bonusplättchen Spiel 2019’, ‘Carcassonne: Bonusplättchen
+Spiel 2020’, ‘Carcassonne: Bonusplättchen Spiel 2021’, ‘Carcassonne:
+Castles in Germany’, ‘Carcassonne: Corn Circles II’, ‘Carcassonne: Cult,
+Siege &amp; Creativity’, ‘Carcassonne: CutCassonne’, ‘Carcassonne:
+Darmstadt’, ‘Carcassonne: Das Labyrinth’, ‘Carcassonne: Der Tunnel’,
+‘Carcassonne: Die Belagerer’, ‘Carcassonne: Die Katharer’, ‘Carcassonne:
+Die Kornkreise’, ‘Carcassonne: Die Märkte zu Leipzig’, ‘Carcassonne: Die
+Wahrsagerin’, ‘Carcassonne: Die Windrosen’, ‘Carcassonne: Easter in
+Carcassonne’, ‘Carcassonne: Expansion 1 – Inns &amp; Cathedrals’,
+‘Carcassonne: Expansion 10 – Under the Big Top’, ‘Carcassonne: Expansion
+2 – Traders &amp; Builders’, ‘Carcassonne: Expansion 3 – The Princess
+&amp; The Dragon’, ‘Carcassonne: Expansion 4 – The Tower’, ‘Carcassonne:
+Expansion 5 – Abbey &amp; Mayor’, ‘Carcassonne: Expansion 6 – Count,
+King &amp; Robber’, ‘Carcassonne: Expansion 7 – The Catapult’,
+‘Carcassonne: Expansion 8 – Bridges, Castles and Bazaars’, ‘Carcassonne:
+Expansion 9 – Hills &amp; Sheep’, ‘Carcassonne: German Cathedrals’,
+‘Carcassonne: GQ Promo Tiles’, ‘Carcassonne: Halb so Wild’,
+‘Carcassonne: Halb so wild I’, ‘Carcassonne: Halb so wild II’,
+‘Carcassonne: King &amp; Scout’, ‘Carcassonne: Klöster in Deutschland’,
+‘Carcassonne: Kreivi ja Kuningas’, ‘Carcassonne: La Porxada’,
+‘Carcassonne: Little Buildings’, ‘Carcassonne: Mage &amp; Witch’,
+‘Carcassonne: Nikolaus-Zählleiste’, ‘Carcassonne: Spiel Doch Mini
+Expansion’, ‘Carcassonne: Spiel Doch! Expansion’, ‘Carcassonne: The
+Barber-Surgeons’, ‘Carcassonne: The City Gates’, ‘Carcassonne: The Count
+of Carcassonne’, ‘Carcassonne: The Cult’, ‘Carcassonne: The Ferries’,
+‘Carcassonne: The Festival’, ‘Carcassonne: The Flying Machines’,
+‘Carcassonne: The Fruit-Bearing Trees’, ‘Carcassonne: The Gifts’,
+‘Carcassonne: The Gold Mines’, ‘Carcassonne: The Land Surveyors’,
+‘Carcassonne: The Messengers’, ‘Carcassonne: The Peasant Revolts’,
+‘Carcassonne: The Phantom’, ‘Carcassonne: The Plague’, ‘Carcassonne: The
+River’, ‘Carcassonne: The River II’, ‘Carcassonne: The Robbers’,
+‘Carcassonne: The School’, ‘Carcassonne: The Signposts’, ‘Carcassonne:
+The Tollkeepers’, ‘Carcassonne: Watchtowers’, ‘Castles in Hungary (fan
+expansion to Carcassonne)’, ‘Circles in the Forest (fan expansion for
+Carcassonne)’, ‘Cleric And Serf (fan expansion to Carcassonne)’, ‘The
+Coast (fan expansion for Carcassonne)’, ‘Corn Circles 3 (fan expansion
+to Carcassonne)’, ‘Divided Cities (fan expansion for Carcassonne)’,
+‘Dragon Hunters (fan expansion to Carcassonne)’, ‘Dragon Killers (fan
+expansion for Carcassonne)’, ‘Dragon Rider Slayer (fan expansion for
+Carcassonne: The Princess &amp; The Dragon)’, ‘Drought and Pestilence
+(fan expansion for Carcassonne)’, ‘Eisenbahn (fan expansion for
+Carcassonne)’, ‘Die Eroberer (fan Expansion to Carcassonne)’, ‘Evergreen
+Forest (fan expansion to Carcassonne)’, ‘Family Feud (fan expansion to
+Carcassonne)’, ‘Fields and Vineyards (fan expansion for Carcassonne)’,
+‘Fischerhütte (Fan-Erweiterung für Carcassonne)’, ‘Fisherman: Angler
+&amp; Fish Farm (fan expansion for Carcassonne)’, ‘Fisherman: Swan Lake
+(fan expansion for Carcassonne)’, ‘Fisherman: Waterfalls (fan expansion
+for Carcassonne)’, ‘Fishing Boats (fan expansion to Carcassonne)’,
+‘Forests (fan expansion for Carcassonne)’, ‘Forests: An Apple a Day (fan
+expansion for Carcassonne)’, ‘Forests: Fairy Tales (fan expansion for
+Carcassonne)’, ‘Forests: The Forest Fire (fan expansion for
+Carcassonne)’, ‘Forests: Timber! (fan expansion for Carcassonne)’,
+‘Friar &amp; Farmhand (fan expansion for Carcassonne)’, ‘Fruit Trader
+(fan expansion to Carcassonne)’, ‘The Gallows (fan expansion for
+Carcassonne)’, ‘Gold Mines (fan expansion for Carcassonne)’, ‘The Grim
+Reaple (fan expansion for Carcassonne)’, ‘Holzfäller &amp; Müller (Fan
+Erweiterung für Carcassonne)’, ‘In the Stocks (fan expansion for
+Carcassonne)’, ‘Inn &amp; Stable Owners (fan expansion to Carcassonne)’,
+‘The Jester and the Minstrel (fan expansion to Carcassonne)’, ‘Jousting
+Tournament (fan expansion for Carcassonne)’, ‘Kettle of Fish (fan
+expansion to Carcassonne)’, ‘Lakelands (fan expansion for Carcassonne)’,
+‘The Land Surveyors 2 (fan expansion for Carcassonne)’,
+‘Landschaftskarten die Dritte (Fan-Erweiterung für Carcassonne)’,
+‘Lavender Fields (fan expansion to Carcassonne)’, ‘Lord of the Manor
+(fan expansion for Carcassonne)’, ‘The Medieval Expansion (fan expansion
+for Carcassonne)’, ‘Merry Men (fan expansion to Carcassonne)’, ‘Mills
+and Bakeries (fan expansion for Carcassonne)’, ‘More River (fan
+expansion for Carcassonne)’, ‘The Mount of the Duke (fan expansion for
+Carcassonne)’, ‘Mountains (fan expansion for Carcassonne)’, ‘Nochmal
+neue Landschaftskarten (Fan-Erweiterung für Carcassonne)’, ‘The Ocean
+(fan expansion for Carcassonne)’, ‘The Orders of Chivalry (fan expansion
+for Carcassonne)’, ‘Outposts (fan expansion to Carcassonne)’, ‘Pirate
+Coast (fan expansion for Carcassonne)’, ‘The Pope of Avignon (fan
+expansion for Carcassonne)’, ‘Ramparts (fan expansion for Carcassonne)’,
+‘River System (fan expansion for Carcassonne)’, ‘Spielbox-Almanach 25
+Jahre Hans im Glück Beilage’, ‘Tithe barns (fan expansion to
+Carcassonne)’, ‘Troubadours (fan expansion for Carcassonne)’,
+‘Truppenaufmarsch (Fan-Erweiterung für Carcassonne)’, ‘Upper Carcassonne
+(fan expansion for Carcassonne)’, ‘Wald (Fan Erweiterung für
+Carcassonne)’, ‘Die Wälder von Carcassonne V2 (Fan Erweiterung für
+Carcassonne)’, ‘Weg durch die Stadt (Fan-Erweiterung für Carcassonne)’,
+‘Wells (fan expansion for Carcassonne)’, ‘Wells: Fountain of Youth (fan
+expansion for Carcassonne)’, ‘Wells: Wishing Wells (fan expansion for
+Carcassonne)’, ‘Wheat Fields (fan expansion for Carcassonne)’, ‘Wine
+Merchant (fan expansion to Carcassonne)’, ‘Каркассон: Дворяне и Башни’,
+‘Каркассон: Наука и магия’, ‘Каркассон: Предместья и обитатели’,
+‘Каркассон: Солове́й-Разбо́йник &amp; Водяной’, ‘Каркассон: тайл Избушка’]
+</td>
+<td style="text-align:left;">
+[‘The Ark of the Covenant’, ‘Carcassonne für 2’, ‘Carcassonne Junior’,
+‘Carcassonne: Amazonas’, ‘Carcassonne: Demonstration’, ‘Carcassonne:
+Gold Rush’, ‘Carcassonne: Hunters and Gatherers’, ‘Carcassonne: Over
+Hill and Dale’, ‘Carcassonne: Safari’, ‘Carcassonne: South Seas’,
+‘Carcassonne: Star Wars’, ‘Carcassonne: The Castle’, ‘Carcassonne: The
+City’, ‘Carcassonne: The Discovery’, ‘Carcassonne: Winter Edition’, ‘New
+World: A Carcassonne Game’, ‘Travel Carcassonne’]
+</td>
+<td style="text-align:left;">
+[‘Klaus-Jürgen Wrede’]
+</td>
+<td style="text-align:left;">
+[‘Doris Matthäus’, ‘Anne Pätzke’, ‘Chris Quilliams’, ‘Klaus-Jürgen
+Wrede’]
+</td>
+<td style="text-align:left;">
+[‘Hans im Glück’, ‘999 Games’, ‘Albi’, ‘Bard Centrum Gier’, ‘Bergsala
+Enigma (Enigma)’, ‘Brain Games’, ‘cutia.ro’, ‘Devir’, ‘Fantasmagoria’,
+‘Filosofia Éditions’, ‘Giochi Uniti’, ‘Grow Jogos e Brinquedos’, ‘Hobby
+World’, ‘Ísöld ehf.’, ‘Kaissa Chess &amp; Games’, ‘Korea Boardgames Co.,
+Ltd.’, ‘Lautapelit.fi’, ‘Midgaard Games’, ‘MINDOK’, ‘Möbius Games’,
+‘Monkey Time’, ‘NeoTroy Games’, ‘Nordic Games ehf’, ‘Paper Iyagi’,
+‘Piatnik’, ‘Ponva d.o.o.’, ‘Rio Grande Games’, ‘Schmidt Spiele’, ‘Smart
+Ltd’, ‘Stupor Mundi’, ‘SuperHeated Neurons’, ‘Swan Panasia Co., Ltd.’,
+‘Venice Connection’, ‘Ventura Games’, ‘Z-Man Games’]
+</td>
+<td style="text-align:left;">
+161299
+</td>
+<td style="text-align:left;">
+1716
+</td>
+<td style="text-align:left;">
+582
+</td>
+<td style="text-align:left;">
+7383
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+3
+</td>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:left;">
+13
+</td>
+<td style="text-align:left;">
+Catan
+</td>
+<td style="text-align:left;">
+In CATAN (formerly The Settlers of Catan), players try to be the
+dominant force on the island of Catan by building settlements, cities,
+and roads. On each turn dice are rolled to determine what resources the
+island produces. Players build by spending resources (sheep, wheat,
+wood, brick and ore) that are depicted by these resource cards; each
+land type, with the exception of the unproductive desert, produces a
+specific resource: hills produce brick, forests produce wood, mountains
+produce ore, fields produce wheat, and pastures produce
+sheep.&amp;#10;&amp;#10;Setup includes randomly placing large hexagonal
+tiles (each showing a resource or the desert) in a honeycomb shape and
+surrounding them with water tiles, some of which contain ports of
+exchange. Number disks, which will correspond to die rolls (two 6-sided
+dice are used), are placed on each resource tile. Each player is given
+two settlements (think: houses) and roads (sticks) which are, in turn,
+placed on intersections and borders of the resource tiles. Players
+collect a hand of resource cards based on which hex tiles their
+last-placed house is adjacent to. A robber pawn is placed on the desert
+tile.&amp;#10;&amp;#10;A turn consists of possibly playing a development
+card, rolling the dice, everyone (perhaps) collecting resource cards
+based on the roll and position of houses (or upgraded
+cities&amp;mdash;think: hotels) unless a 7 is rolled, turning in
+resource cards (if possible and desired) for improvements, trading cards
+at a port, and trading resource cards with other players. If a 7 is
+rolled, the active player moves the robber to a new hex tile and steals
+resource cards from other players who have built structures adjacent to
+that tile.&amp;#10;&amp;#10;Points are accumulated by building
+settlements and cities, having the longest road and the largest army
+(from some of the development cards), and gathering certain development
+cards that simply award victory points. When a player has gathered 10
+points (some of which may be held in secret), he announces his total and
+claims the win.&amp;#10;&amp;#10;CATAN has won multiple awards and is
+one of the most popular games in recent history due to its amazing
+ability to appeal to experienced gamers as well as those new to the
+hobby.&amp;#10;&amp;#10;Die Siedler von Catan was originally published
+by KOSMOS and has gone through multiple editions. It was licensed by
+Mayfair and has undergone four editions as The Settlers of Catan. In
+2015, it was formally renamed CATAN to better represent itself as the
+core and base game of the CATAN series. It has been re-published in two
+travel editions, portable edition and compact edition, as a special
+gallery edition (replaced in 2009 with a family edition), as an
+anniversary wooden edition, as a deluxe 3D collector’s edition, in the
+basic Simply Catan, as a beginner version, and with an entirely new
+theme in Japan and Asia as Settlers of Catan: Rockman Edition. Numerous
+spin-offs and expansions have also been made for the
+game.&amp;#10;&amp;#10;
+</td>
+<td style="text-align:left;">
+1995
+</td>
+<td style="text-align:left;">
+3
+</td>
+<td style="text-align:left;">
+4
+</td>
+<td style="text-align:left;">
+120
+</td>
+<td style="text-align:left;">
+60
+</td>
+<td style="text-align:left;">
+120
+</td>
+<td style="text-align:left;">
+10
+</td>
+<td style="text-align:left;">
+[‘Economic’, ‘Negotiation’]
+</td>
+<td style="text-align:left;">
+[‘Dice Rolling’, ‘Hexagon Grid’, ‘Income’, ‘Modular Board’, ‘Network and
+Route Building’, ‘Race’, ‘Random Production’, ‘Trading’, ‘Variable
+Set-up’]
+</td>
+<td style="text-align:left;">
+[‘Animals: Sheep’, ‘Components: Hexagonal Tiles’, ‘Components: Wooden
+pieces &amp; boards’, ‘Game: Catan’, ‘Promotional: Promo Board Games’]
+</td>
+<td style="text-align:left;">
+[‘20 Jahre Darmstadt Spielt’, ‘Brettspiel Adventskalender 2015’, ‘Catan
+Austria / Wien meets Catan’, ‘Catan Geographies: Austria’, ‘Catan
+Geographies: Bayern Edition’, ‘Catan Geographies: Corsica’, ‘Catan
+Geographies: Georgia’, ‘Catan Geographies: Kennessee’, ‘Catan
+Geographies: Mallorca’, ‘Catan Geographies: North Rhine – Westphalia’,
+‘Catan Geographies: Rickshaw Run’, ‘Catan Geographies: Settlers of
+Hesse’, ‘Catan Geographies: The Carolinas’, ‘Catan Länderszenarien:
+Polen’, ‘Catan Rhein-Main-Neckar’, ‘Catan Scenario: Crop Trust’, ‘Catan
+Scenario: Durango’, ‘Catan Scenarios: Easter Bunny’, ‘Catan Scenarios:
+#WeStayHome’, ‘Catan Scenarios: Big Game Big Honor’, ‘Catan Scenarios:
+Catanimals’, ‘Catan Scenarios: Frenemies’, ‘Catan Scenarios: Global
+Warming’, ‘Catan Scenarios: Helpers of Catan’, ‘Catan Scenarios: Oil
+Springs’, ‘Catan World Championship Berlin 2014 Special’, ‘Catan: 5-6
+Player Extension’, ‘Catan: 999 Games 25 jaar Expansion’, ‘Catan:
+Catakatoa’, ‘Catan: Catan Day 2015 Exclusive Expansion’, ‘Catan: Cities
+&amp; Knights’, ‘Catan: Cities &amp; Knights – 5-6 Player Extension’,
+‘Catan: Cities &amp; Knights – Legend of the Conquerors’, ‘Catan:
+Delmarva’, ‘Catan: Die Stoffräuber’, ‘Catan: Event Cards’, ‘Catan:
+Explorers &amp; Pirates’, ‘Catan: Explorers &amp; Pirates – 5-6 Player
+Extension’, ‘Catan: Hawaii (Szenario für Seefahrer)’, ‘Catan: High
+Priests of the Inkas’, ‘Catan: Indiana &amp; Ohio’, ‘Catan: New
+England’, ‘Catan: New York’, ‘Catan: Penn-Jersey’, ‘Catan: Playmat
+Desert’, ‘Catan: Playmat Gold’, ‘Catan: Seafarers’, ‘Catan: Seafarers
+Scenario – Legend of the Sea Robbers’, ‘Catan: Seafarers – 5-6 Player
+Extension’, ‘Catan: Seefahrer – 20 Jahre Jubiläums-Edition’, ‘Catan:
+Szenario Der Kölner Dom’, ‘Catan: Traders &amp; Barbarians’, ‘Catan:
+Traders &amp; Barbarians – 5-6 Player Extension’, ‘Catan: Treasures,
+Dragons &amp; Adventurers’, ‘Der Hafenmeister’, ‘Heroes &amp; Capitols
+(fan expansion for Settlers of Catan)’, ‘Hexen, Zauberer &amp; Drachen
+(fan expansion for Catan: Cities and Knights)’, ‘Katani pankur’,
+‘Kirche, Glaube &amp; Reformation (fan expansion for Catan: Cities and
+Knights)’, ‘De Kolonisten van Catan: De Diamanten’, ‘De Kolonisten van
+Catan: De drie Handelsteden van Noord-Nederland’, ‘De Kolonisten van
+Catan: De Koloniën’, ‘De Kolonisten van Catan: De Specialisten’, ‘De
+Kolonisten van Catan: De Wereldwonderen’, ‘De Kolonisten van Catan: De
+Woestijnruiters’, ‘De Kolonisten van Catan: Het Grote Kanaal’, ‘Mayfair
+Game Variants &amp; Mini-Expansions Set #1’, ‘Die Pioniere (fan
+expansion for The Settlers of Catan)’, “Saggsen-Gadan: De säggs’schn
+Siedler / Catan-OFFENSIVE in Chemnitz”, ‘Settlers of Catan Scenario: The
+Jungle’, ‘Settlers of Catan Scenario: The Volcano’, ‘The Settlers of
+Catan: The Fishermen of Catan’, ‘The Settlers of Catan: The Great
+River’, ‘Settlers of New Catan (and extra modules)’, ‘Die Siedler von
+Catan: Atlantis – Szenarien &amp; Varianten’, ‘Die Siedler von Catan:
+Das Buch zum Spielen’, ‘Die Siedler von Catan: Der Schokoladenmarkt’,
+‘Die Siedler von Catan: Die große Karawane’, ‘Die Siedler von Catan:
+Hispania Edition’, ‘Die Siedler von Catan: Historische Szenarien’, ‘Die
+Siedler von Catan: Historische Szenarien II’, ‘Die Siedler von Catan:
+Hochzeitsturm’, ‘Die Siedler von Catan: Renaissance in der Steiermark
+&amp; Burgbau auf Chaffenberch’, ‘Die Siedler von Catan: Rincewind und
+der Tourist / Die Gilden von Ankh-Morpork’, ‘Die Siedler von Catan:
+Thüringen Edition’, ‘Die Siedler von Luxemburg’, ‘World Wonders (fan
+expansion for Catan)’]
+</td>
+<td style="text-align:left;">
+[‘Baden-Württemberg Catan’, ‘Catan Geographies: Germany’, ‘Catan
+Histories: Merchants of Europe’, ‘Catan Histories: Rise of the Inkas’,
+‘Catan Histories: Settlers of America – Trails to Rails’, ‘Catan
+Histories: Struggle for Rome’, ‘Catan: Ancient Egypt’, ‘Catan: Big Game
+Event Kit’, ‘Catan: Core + China Map’, ‘Catan: Family Edition’, ‘Catan:
+Portable Edition’, ‘Catan: Starfarers’, ‘Catan: Traveler – Compact
+Edition’, ‘The Communication in Catan’, ‘A Game of Thrones: Catan –
+Brotherhood of the Watch’, ‘The Kids of Catan’, ‘De Kolonisten van de
+Lage Landen’, ‘The Settlers of Canaan’, ‘Settlers of Catan: Gallery
+Edition’, ‘Settlers of Catan: Rockman Edition’, ‘The Settlers of the
+Stone Age’, ‘The Settlers of Zarahemla’, ‘Die Siedler von Catan:
+Junior’, ‘Die Siedler von Nürnberg’, ‘Simply Catan’, ‘Star Trek: Catan’,
+‘The Starfarers of Catan’, ‘Das Wasser des Lebens’, ‘Wien Catan’]
+</td>
+<td style="text-align:left;">
+[‘Klaus Teuber’]
+</td>
+<td style="text-align:left;">
+[‘Volkan Baga’, ‘Tanja Donner’, ‘Pete Fenlon’, ‘Jason Hawkins’,
+‘Michaela Kienle’, ‘Harald Lieske’, ‘Michael Menzel’, ‘Marion Pott’,
+‘Matt Schwabel’, ‘Franz Vohwinkel’, ‘Stephen Graham Walsh’]
+</td>
+<td style="text-align:left;">
+[‘KOSMOS’, ‘999 Games’, ‘Albi’, ‘Asmodee’, ‘Astrel Games’, ‘Bergsala
+Enigma (Enigma)’, ‘Brädspel.se’, ‘Brain Games’, ‘Broadway Toys LTD’,
+‘Capcom Co., Ltd.’, ‘Catan Studio’, ‘Competo / Marektoy’, ‘danspil’,
+‘Descartes Editeur’, ‘Devir’, ‘Dexy Co’, ‘Eurogames’, ‘Filosofia
+Éditions’, ‘Galakta’, ‘Giochi Uniti’, ‘GP Games’, ‘Grow Jogos e
+Brinquedos’, ‘HaKubia’, ‘Hanayama’, ‘Hobby World’, ‘Ideal Board Games’,
+‘Igroljub’, ‘IntelliGames.BG’, ‘Ísöld ehf.’, ‘Kaissa Chess &amp; Games’,
+‘Korea Boardgames Co., Ltd.’, ‘L&amp;M Games’, ‘Laser plus’,
+‘Lautapelit.fi’, ‘Logojogos’, ‘Mayfair Games’, ‘Ninive Games’, ‘Paper
+Iyagi’, ‘Piatnik’, ‘Smart Ltd’, ‘Spilbræt.dk’, ‘Stupor Mundi’,
+‘SuperHeated Neurons’, ‘Swan Panasia Co., Ltd.’, ‘Tilsit’, ‘Top Toys’,
+‘TRY SOFT’, ‘Vennerød Forlag AS’]
+</td>
+<td style="text-align:left;">
+167733
+</td>
+<td style="text-align:left;">
+2018
+</td>
+<td style="text-align:left;">
+485
+</td>
+<td style="text-align:left;">
+5890
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+4
+</td>
+<td style="text-align:left;">
+3
+</td>
+<td style="text-align:left;">
+68448
+</td>
+<td style="text-align:left;">
+7 Wonders
+</td>
+<td style="text-align:left;">
+You are the leader of one of the 7 great cities of the Ancient World.
+Gather resources, develop commercial routes, and affirm your military
+supremacy. Build your city and erect an architectural wonder which will
+transcend future times.&amp;#10;&amp;#10;7 Wonders lasts three ages. In
+each age, players receive seven cards from a particular deck, choose one
+of those cards, then pass the remainder to an adjacent player. Players
+reveal their cards simultaneously, paying resources if needed or
+collecting resources or interacting with other players in various ways.
+(Players have individual boards with special powers on which to organize
+their cards, and the boards are double-sided). Each player then chooses
+another card from the deck they were passed, and the process repeats
+until players have six cards in play from that age. After three ages,
+the game ends.&amp;#10;&amp;#10;In essence, 7 Wonders is a card
+development game. Some cards have immediate effects, while others
+provide bonuses or upgrades later in the game. Some cards provide
+discounts on future purchases. Some provide military strength to
+overpower your neighbors and others give nothing but victory points.
+Each card is played immediately after being drafted, so you’ll know
+which cards your neighbor is receiving and how her choices might affect
+what you’ve already built up. Cards are passed left-right-left over the
+three ages, so you need to keep an eye on the neighbors in both
+directions.&amp;#10;&amp;#10;Though the box of earlier editions is
+listed as being for 3&amp;ndash;7 players, there is an official 2-player
+variant included in the instructions.&amp;#10;&amp;#10;
+</td>
+<td style="text-align:left;">
+2010
+</td>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:left;">
+7
+</td>
+<td style="text-align:left;">
+30
+</td>
+<td style="text-align:left;">
+30
+</td>
+<td style="text-align:left;">
+30
+</td>
+<td style="text-align:left;">
+10
+</td>
+<td style="text-align:left;">
+[‘Ancient’, ‘Card Game’, ‘City Building’, ‘Civilization’, ‘Economic’]
+</td>
+<td style="text-align:left;">
+[‘Drafting’, ‘Hand Management’, ‘Set Collection’, ‘Simultaneous Action
+Selection’, ‘Variable Player Powers’]
+</td>
+<td style="text-align:left;">
+[‘Ancient: Babylon’, ‘Ancient: Egypt’, ‘Ancient: Greece’, ‘Digital
+Implementations: Board Game Arena’, ‘Game: 7 Wonders’, ‘Mechanism:
+Artificial Player’, ‘Mechanism: Tableau Building’]
+</td>
+<td style="text-align:left;">
+[‘7 Wonders: Armada’, ‘7 Wonders: Babel’, ‘7 Wonders: Catan’, ‘7
+Wonders: Cities’, ‘7 Wonders: Leaders’, ‘7 Wonders: Manneken Pis’, ‘7
+Wonders: Wonder Pack’, ‘Collection (fan expansion for 7 Wonders)’,
+‘Empires (fan expansion for 7 Wonders)’, ‘Game Wonders (fan expansion
+for 7 Wonders)’, ‘Lost Wonders (fan expansion for 7 Wonders)’, ‘Modern
+Wonders (fan expansion for 7 Wonders)’, ‘More Wonders… (fan expansion
+for 7 Wonders)’, ‘Myths (fan expansion for 7 Wonders)’, ‘Ruins (fan
+expansion for 7 Wonders)’, ‘Sailors (fan expansion for 7 Wonders)’]
+</td>
+<td style="text-align:left;">
+[‘7 Wonders (Second Edition)’, ‘7 Wonders Duel’, ‘7 Wonders:
+Architects’]
+</td>
+<td style="text-align:left;">
+[‘Antoine Bauza’]
+</td>
+<td style="text-align:left;">
+[‘Dimitri Chappuis’, ‘Miguel Coimbra’, ‘Etienne Hebinger’, ‘Cyril
+Nouvel’]
+</td>
+<td style="text-align:left;">
+[‘Repos Production’, ‘ADC Blackfire Entertainment’, ‘Asmodee’, ‘Asterion
+Press’, ‘Galápagos Jogos’, ‘Gém Klub Kft.’, ‘Hobby Japan’, ‘Kaissa Chess
+&amp; Games’, ‘Korea Boardgames Co., Ltd.’, ‘Lautapelit.fi’, ‘Lifestyle
+Boardgames Ltd’, ‘NeoTroy Games’, ‘Rebel Sp. z o.o.’, ‘Siam Board
+Games’]
+</td>
+<td style="text-align:left;">
+120466
+</td>
+<td style="text-align:left;">
+1567
+</td>
+<td style="text-align:left;">
+1010
+</td>
+<td style="text-align:left;">
+12105
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+5
+</td>
+<td style="text-align:left;">
+4
+</td>
+<td style="text-align:left;">
+36218
+</td>
+<td style="text-align:left;">
+Dominion
+</td>
+<td style="text-align:left;">
+&amp;quot;You are a monarch, like your parents before you, a ruler of a
+small pleasant kingdom of rivers and evergreens. Unlike your parents,
+however, you have hopes and dreams! You want a bigger and more pleasant
+kingdom, with more rivers and a wider variety of trees. You want a
+Dominion! In all directions lie fiefs, freeholds, and feodums. All are
+small bits of land, controlled by petty lords and verging on anarchy.
+You will bring civilization to these people, uniting them under your
+banner.&amp;#10;&amp;#10;But wait! It must be something in the air;
+several other monarchs have had the exact same idea. You must race to
+get as much of the unclaimed land as possible, fending them off along
+the way. To do this you will hire minions, construct buildings, spruce
+up your castle, and fill the coffers of your treasury. Your parents
+wouldn’t be proud, but your grandparents, on your mother’s side, would
+be delighted.&amp;quot;&amp;#10;&amp;#10;&amp;mdash;description from the
+back of the box&amp;#10;&amp;#10;In Dominion, each player starts with an
+identical, very small deck of cards. In the center of the table is a
+selection of other cards the players can &amp;quot;buy&amp;quot; as they
+can afford them. Through their selection of cards to buy, and how they
+play their hands as they draw them, the players construct their deck on
+the fly, striving for the most efficient path to the precious victory
+points by game end.&amp;#10;&amp;#10;Dominion is not a CCG, but the play
+of the game is similar to the construction and play of a CCG deck. The
+game comes with 500 cards. You select 10 of the 25 Kingdom card types to
+include in any given play&amp;mdash;leading to immense
+variety.&amp;#10;&amp;#10;&amp;mdash;user summary&amp;#10;&amp;#10;Part
+of the Dominion series.&amp;#10;&amp;#10;
+</td>
+<td style="text-align:left;">
+2008
+</td>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:left;">
+4
+</td>
+<td style="text-align:left;">
+30
+</td>
+<td style="text-align:left;">
+30
+</td>
+<td style="text-align:left;">
+30
+</td>
+<td style="text-align:left;">
+13
+</td>
+<td style="text-align:left;">
+[‘Card Game’, ‘Medieval’]
+</td>
+<td style="text-align:left;">
+[‘Deck, Bag, and Pool Building’, ‘Delayed Purchase’, ‘Hand Management’,
+‘Take That’, ‘Variable Set-up’]
+</td>
+<td style="text-align:left;">
+[‘Crowdfunding: Wspieram’, ‘Game: Dominion’, ‘Misc: Mensa Select’]
+</td>
+<td style="text-align:left;">
+[‘Ancient Times (fan expansion for Dominion)’, ‘Animals (fan expansion
+for Dominion)’, ‘The Books of Magic (fan expansion for Dominion)’,
+‘Dominion: Adventures’, ‘Dominion: Alchemisten &amp; Reiche Ernte –
+Mixbox’, ‘Dominion: Alchemy’, ‘Dominion: Allies’, ‘Dominion: Black
+Market Promo Card’, ‘Dominion: Captain Promo Card’, ‘Dominion: Church
+Promo Card’, ‘Dominion: Cornucopia’, ‘Dominion: Dark Ages’, ‘Dominion:
+Die Intrige – Erweiterung’, ‘Dominion: Dismantle Promo Card’, ‘Dominion:
+Empires’, ‘Dominion: Envoy Promo Card’, ‘Dominion: Erweiterung –
+Basisspiel &amp; Die Intrige’, ‘Dominion: Fan-Edition I’, ‘Dominion:
+Governor Promo Card’, ‘Dominion: Guilds’, ‘Dominion: Guilds &amp;
+Cornucopia’, ‘Dominion: Hinterlands’, ‘Dominion: Höflinge Promo Card’,
+‘Dominion: Intrigue (Second Edition)’, ‘Dominion: Intrigue – Update
+Pack’, ‘Dominion: Menagerie’, ‘Dominion: Nocturne’, ‘Dominion: Prince
+Promo Card’, ‘Dominion: Prosperity’, ‘Dominion: Renaissance’, ‘Dominion:
+Sauna / Avanto Promo Card’, ‘Dominion: Seaside’, ‘Dominion: Stash Promo
+Card’, ‘Dominion: Summon Promo Card’, ‘Dominion: Update Pack’,
+‘Dominion: Walled Village Promo Card’, ‘Duel (fan expansion for
+Dominion)’, ‘Fairy Tale (fan expansion for Dominion)’, ‘Paradox (fan
+expansion for Dominion)’, “Pirate’s Life (fan expansion for Dominion)”,
+‘Royal Court (fan expansion for Dominion)’, ‘Salvation (fan expansion
+for Dominion)’, ‘The Scrolls of Power (fan expansion for Dominion)’,
+‘Stadt Land Spielt Limitierte Sonderdrucke 2015’, ‘Stadt Land Spielt
+Minierweiterungen 2016’, ‘Warmonger (fan expansion for Dominion)’]
+</td>
+<td style="text-align:left;">
+[‘Dominion (Second Edition)’, ‘Het Koninkrijk Dominion’]
+</td>
+<td style="text-align:left;">
+[‘Donald X. Vaccarino’]
+</td>
+<td style="text-align:left;">
+[‘Matthias Catrein’, ‘Julien Delval’, ‘Tomasz Jedruszek’, ‘Ryan Laukat’,
+‘Harald Lieske’, ‘Michael Menzel’, ‘Marcel-André Casasola Merkle’,
+‘Claus Stephan’, ‘Christof Tisch’]
+</td>
+<td style="text-align:left;">
+[‘Rio Grande Games’, ‘999 Games’, ‘Albi’, ‘Bard Centrum Gier’, ‘Conclave
+Editora’, ‘cutia.ro’, ‘Devir’, ‘Filosofia Éditions’, ‘Games Factory
+Publishing’, ‘Gém Klub Kft.’, ‘Hans im Glück’, ‘Hobby Japan’, ‘Hobby
+World’, ‘Kaissa Chess &amp; Games’, ‘Korea Boardgames Co., Ltd.’,
+‘Lautapelit.fi’, ‘Martinex’, ‘Runadrake’, ‘Smart Ltd’, ‘Stupor Mundi’,
+‘Swan Panasia Co., Ltd.’, ‘Vennerød Forlag AS’, ‘Ystari Games’]
+</td>
+<td style="text-align:left;">
+106956
+</td>
+<td style="text-align:left;">
+2009
+</td>
+<td style="text-align:left;">
+655
+</td>
+<td style="text-align:left;">
+8621
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+6
+</td>
+<td style="text-align:left;">
+5
+</td>
+<td style="text-align:left;">
+9209
+</td>
+<td style="text-align:left;">
+Ticket to Ride
+</td>
+<td style="text-align:left;">
+With elegantly simple gameplay, Ticket to Ride can be learned in under
+15 minutes. Players collect cards of various types of train cars they
+then use to claim railway routes in North America. The longer the
+routes, the more points they earn. Additional points come to those who
+fulfill Destination Tickets &amp;ndash; goal cards that connect distant
+cities; and to the player who builds the longest continuous
+route.&amp;#10;&amp;#10;&amp;quot;The rules are simple enough to write
+on a train ticket &amp;ndash; each turn you either draw more cards,
+claim a route, or get additional Destination Tickets,&amp;quot; says
+Ticket to Ride author, Alan R. Moon. &amp;quot;The tension comes from
+being forced to balance greed &amp;ndash; adding more cards to your
+hand, and fear &amp;ndash; losing a critical route to a
+competitor.&amp;quot;&amp;#10;&amp;#10;Ticket to Ride continues in the
+tradition of Days of Wonder’s big format board games featuring
+high-quality illustrations and components including: an oversize board
+map of North America, 225 custom-molded train cars, 144 illustrated
+cards, and wooden scoring markers.&amp;#10;&amp;#10;Since its
+introduction and numerous subsequent awards, Ticket to Ride has become
+the BoardGameGeek epitome of a &amp;quot;gateway game&amp;quot; – simple
+enough to be taught in a few minutes, and with enough action and tension
+to keep new players involved and in the game for the
+duration.&amp;#10;&amp;#10;Part of the Ticket to Ride
+series.&amp;#10;&amp;#10;
+</td>
+<td style="text-align:left;">
+2004
+</td>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:left;">
+5
+</td>
+<td style="text-align:left;">
+60
+</td>
+<td style="text-align:left;">
+30
+</td>
+<td style="text-align:left;">
+60
+</td>
+<td style="text-align:left;">
+8
+</td>
+<td style="text-align:left;">
+[‘Trains’]
+</td>
+<td style="text-align:left;">
+[‘Card Drafting’, ‘Contracts’, ‘End Game Bonuses’, ‘Hand Management’,
+‘Network and Route Building’, ‘Push Your Luck’, ‘Set Collection’]
+</td>
+<td style="text-align:left;">
+[‘Components: Map (Continental / National scale)’, ‘Continents: North
+America’, ‘Country: USA’, ‘Game: Ticket to Ride (Official)’]
+</td>
+<td style="text-align:left;">
+[‘Alaska (fan expansion for Ticket to Ride)’, ‘Alice in Wonderland (fan
+expansion for Ticket to Ride)’, ‘Alsace (fan expansion for Ticket to
+Ride)’, ‘Ancient Greece (fan expansion for Ticket to Ride)’, ‘Ancient
+Sicily (fan expansion for Ticket to Ride)’, ‘Antarctica (fan expansion
+for Ticket to Ride)’, ‘Antarctica (fan expansion for Ticket to Ride)’,
+‘Les Aventuriers du Rail: à Lyon (fan expansion for Ticket to Ride)’,
+‘Les Aventuriers du Rail: en Belgique (fan expansion to Ticket to
+Ride)’, ‘Barsoom (fan expansion for Ticket to Ride)’, ‘Belarus (fan
+expansion for Ticket to Ride)’, ‘Biblical Israel (fan expansion for
+Ticket to Ride)’, ‘Borneo (fan expansion for Ticket to Ride)’, ‘Bretagne
+(fan expansion for Ticket to Ride)’, ‘Britain &amp; Ireland (fan
+expansion for Ticket to Ride: Europe)’, ‘Bulgaria (fan expansion for
+Ticket to Ride)’, ‘Cambodia (fan expansion for Ticket to Ride)’, ‘Canada
+(fan expansion for Ticket to Ride)’, ‘Canada 2017 (fan expansion for
+Ticket to Ride)’, ‘Canary Islands (fan expansion for Ticket to Ride)’,
+‘Castilla y León (fan expansion for Ticket to Ride)’, ‘Channel Islands
+(fan expansion for Ticket to Ride)’, ‘China (fan expansion for Ticket to
+Ride)’, ‘Corsica (fan expansion for Ticket to Ride)’, ‘Cuba (fan
+expansion for Ticket to Ride)’, ‘Cuba: Region Occidental (fan expansion
+for Ticket to Ride)’, ‘Cyprus (fan expansion for Ticket to Ride)’,
+‘Czech Republic (fan expansion for Ticket to Ride)’, ‘Czech Republic
+(fan expansion for Ticket to Ride)’, ‘Denmark (fan expansion for Ticket
+to Ride)’, ‘Dickensian Intrigue (fan expansion for Ticket to Ride)’,
+‘East Africa (fan expansion for Ticket to Ride)’, ‘East Indies (fan
+expansion for Ticket to Ride)’, ‘Eastern Europe (fan expansion for
+Ticket to Ride)’, ‘Egypt (fan expansion for Ticket to Ride)’, ‘The
+Emerald City (fan expansion for Ticket to Ride)’, ‘Estonia (fan
+expansion for Ticket to Ride)’, ‘Eurasia (fan expansion for Ticket to
+Ride)’, ‘Extension France (fan expansion for Ticket to Ride)’, ‘Falkland
+Islands (fan expansion for Ticket to Ride)’, ‘France (fan expansion for
+Ticket to Ride)’, ‘The Grand Duchy of Luxembourg (fan expansion for
+Ticket to Ride)’, ‘Greece (fan expansion for Ticket to Ride)’,
+‘Greenland (fan expansion for Ticket to Ride)’, ‘Gulf States (fan
+expansion for Ticket to Ride)’, “Hallowe’en (fan expansion for Ticket to
+Ride)”, ‘Hawaii (fan expansion for Ticket to Ride)’, ‘Hispaniola (fan
+expansion for Ticket to Ride)’, ‘Hokkaido (fan expansion for Ticket to
+Ride)’, ‘Holland (fan expansion for Ticket to Ride)’, ‘Holland Express
+(fan expansion for Ticket to Ride)’, ‘Hong Kong (fan expansion for
+Ticket to Ride)’, ‘Hungary (fan expansion for Ticket to Ride)’, ‘Iberia
+(fan expansion for Ticket to Ride)’, ‘Iceland (fan expansion for Ticket
+to Ride)’, ‘India (fan expansion for Ticket to Ride)’, ‘Indiana (fan
+expansion for Ticket to Ride)’, ‘Indochina (fan expansion for Ticket to
+Ride)’, ‘Ireland (fan expansion for Ticket to Ride)’, ‘Isle of Man (fan
+expansion for Ticket to Ride)’, ‘Italy (fan expansion for Ticket to
+Ride)’, ‘Italy (fan expansion for Ticket to Ride)’, ‘Italy (fan
+expansion for Ticket to Ride)’, ‘Jamaica (fan expansion for Ticket to
+Ride)’, ‘Japan (fan expansion for Ticket To Ride)’, ‘Komorów (fan
+expansion for Ticket to Ride)’, ‘Korean Peninsula (fan expansion for
+Ticket to Ride)’, ‘Kosovo (fan expansion for Ticket to Ride)’, ‘Latvia
+(fan expansion for Ticket to Ride)’, ‘Liechtenstein (fan expansion for
+Ticket to Ride)’, ‘Lietuva (fan expansion for Ticket to Ride)’, ‘London
+Underground (fan expansion for Ticket to Ride)’, ‘Macedonia (fan
+expansion for Ticket to Ride)’, ‘Madagascar (fan expansion for Ticket to
+Ride)’, ‘Madeira (fan expansion for Ticket to Ride)’, ‘Mars (fan
+expansion for Ticket to Ride)’, ‘Mascarene Islands (fan expansion for
+Ticket to Ride)’, ‘Mauritius &amp; Réunion (fan expansion for Ticket to
+Ride)’, ‘Mauritius (fan expansion for Ticket to Ride)’, ‘Moldova (fan
+expansion of Ticket to Ride)’, ‘Montenegro (fan expansion for Ticket to
+Ride)’, ‘Myanmar (fan expansion of Ticket to Ride)’, ‘Nepal (fan
+expansion for Ticket to Ride)’, ‘New China (fan expansion for Ticket to
+Ride)’, ‘New York (fan expansion for Ticket to Ride)’, ‘New York State
+(fan expansion for Ticket to Ride)’, ‘New Zealand (fan expansion for
+Ticket to Ride)’, ‘Niagara (fan expansion for Ticket to Ride)’,
+‘North-Africa (fan expansion for Ticket to Ride)’, ‘Northamptonshire
+(fan expansion for Ticket to Ride)’, ‘Ohio (fan expansion for Ticket to
+Ride)’, “Östergötland in the 1930’s (fan expansion for Ticket to Ride)”,
+‘Österreich Karte: Zug um Zug (fan expansion for Ticket to Ride)’,
+‘Poland (fan expansion for Ticket to Ride)’, ‘Portugal (fan expansion
+for Ticket to Ride)’, “Québec et l’Est du Canada (fan expansion to
+Ticket to Ride)”, ‘Quebec Province (fan expansion for Ticket to Ride)’,
+‘Reise durch Ägypten (fan expansion for Ticket to Ride)’, ‘Réunion &amp;
+Mauritius (fan expansion for Ticket to Ride)’, ‘Rivers of Africa (fan
+expansion for Ticket to Ride)’, ‘Rodrigues &amp; Mauritius (fan
+expansion of Ticket to Ride)’, ‘Roman Italy (fan expansion for Ticket to
+Ride)’, ‘Russian Empire 1912 (fan expansion for Ticket to Ride)’,
+‘Sardinia (fan expansion for Ticket to Ride)’, ‘Scandinavia (fan
+expansion for Ticket to Ride)’, ‘Scandinavia (fan expansion for Ticket
+to Ride)’, ‘Scilly Isles (fan expansion for Ticket to Ride)’, ‘Seattle
+(fan expansion for Ticket to Ride)’, ‘Serbia (fan expansion for Ticket
+to Ride)’, ‘Skåne (fan expansion for Ticket to Ride)’, ‘Slovakia (fan
+expansion for Ticket to Ride)’, ‘Slovenia (fan expansion of Ticket to
+Ride)’, ‘South America (fan expansion for Ticket to Ride)’, ‘South Korea
+(fan expansion for Ticket to Ride)’, ‘South-East Sweden 1925 (fan
+expansion for Ticket to Ride)’, ‘Sri Lanka (fan expansion for Ticket to
+Ride)’, ‘Sweden (fan expansion for Ticket to Ride)’, ‘Texas (fan
+expansion for Ticket to Ride)’, ‘Thailand (fan expansion for Ticket to
+Ride)’, ‘Ticket to Finland (fan expansion for Ticket to Ride)’, ‘Ticket
+to Fly (fan expansion for Ticket to Ride)’, ‘Ticket to Ride Map
+Collection: Volume 1 – Team Asia &amp; Legendary Asia’, ‘Ticket to Ride
+Map Collection: Volume 2 – India &amp; Switzerland’, ‘Ticket to Ride Map
+Collection: Volume 3 – The Heart of Africa’, ‘Ticket to Ride Map
+Collection: Volume 4 – Nederland’, ‘Ticket to Ride Map Collection:
+Volume 5 – United Kingdom &amp; Pennsylvania’, ‘Ticket to Ride Map
+Collection: Volume 6 – France &amp; Old West’, ‘Ticket to Ride Map
+Collection: Volume 7 – Japan &amp; Italy’, ‘Ticket to Ride: Alvin &amp;
+Dexter’, ‘Ticket to Ride: Europa 1912’, ‘Ticket to Ride: Mystery Train
+Expansion’, ‘Ticket to Ride: Stay at Home’, ‘Ticket to Ride:
+Switzerland’, ‘Ticket to Ride: The Dice Expansion’, ‘Ticket to Ride: USA
+1910’, ‘Ticket to Ryde: The Game (fan expansion for Ticket to Ride)’,
+‘Transylvania (fan expansion for Ticket to Ride)’, ‘Triveneto (fan
+expansion for Ticket to Ride)’, ‘Turkey (fan expansion for Ticket to
+Ride)’, ‘UK (fan expansion for Ticket to Ride)’, ‘UK (fan expansion for
+Ticket to Ride)’, ‘UK Cynical Edition (fan expansion for Ticket to
+Ride)’, ‘UK version 2.0 (fan expansion for Ticket to Ride)’, ‘Ukraine
+(fan expansion for Ticket to Ride)’, ‘Ukraine (fan expansion for Ticket
+to Ride)’, ‘USSR (fan expansion for Ticket to Ride)’, ‘Wales (fan
+expansion for Ticket to Ride)’, ‘West Country (UK) (fan expansion of
+Ticket to Ride)’, ‘West Indies (fan expansion for Ticket to Ride)’,
+‘Western Isles (fan expansion for Ticket to Ride)’, ‘Wild Wild West (fan
+expansion for Ticket to Ride)’, ‘Winnie-the-Pooh (fan expansion for
+Ticket to Ride)’, ‘Wsiąść do Pociągu: Polska’, ‘Zanzibar: Pemba (fan
+expansion of Ticket to Ride)’, ‘Zanzibar: Unguja (fan expansion of
+Ticket to Ride)’]
+</td>
+<td style="text-align:left;">
+[‘Les Aventuriers du Rail Express’, ‘Ticket to Ride Demo’, ‘Ticket to
+Ride: Amsterdam’, ‘Ticket to Ride: Europe’, ‘Ticket to Ride: First
+Journey (U.S.)’, ‘Ticket to Ride: Germany’, ‘Ticket to Ride: London’,
+‘Ticket to Ride: Märklin’, ‘Ticket to Ride: New York’, ‘Ticket to Ride:
+Nordic Countries’, ‘Ticket to Ride: Rails &amp; Sails’, ‘Ticket to Ride:
+The Card Game’]
+</td>
+<td style="text-align:left;">
+[‘Alan R. Moon’]
+</td>
+<td style="text-align:left;">
+[‘Cyrille Daujean’, ‘Julien Delval’]
+</td>
+<td style="text-align:left;">
+[‘Days of Wonder’, ‘ADC Blackfire Entertainment’, ‘Asmodee China’,
+‘Bandai’, ‘Bergsala Enigma (Enigma)’, ‘Boardgame Space’, ‘Edge
+Entertainment’, ‘Galápagos Jogos’, ‘Giochi Uniti’, ‘Happy Baobab’,
+‘Hobby World’, ‘Korea Boardgames Co., Ltd.’, ‘Lautapelit.fi’, ‘Nordic
+Games GmbH’, ‘Rebel Sp. z o.o.’, ‘Siam Board Games’, ‘Swan Panasia Co.,
+Ltd.’]
+</td>
+<td style="text-align:left;">
+105748
+</td>
+<td style="text-align:left;">
+930
+</td>
+<td style="text-align:left;">
+692
+</td>
+<td style="text-align:left;">
+6620
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>tb_joined</span> <span class='op'>&lt;-</span>
+  <span class='va'>ratings</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>left_join</a></span><span class='op'>(</span><span class='va'>details</span>, by <span class='op'>=</span> <span class='st'>"id"</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<p>J’aime bien avoir le nom des colonnes du dataset afin de mieux le
+visualiser.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>tb_joined</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code> [1] &quot;num.x&quot;                   &quot;id&quot;                     
+ [3] &quot;name&quot;                    &quot;year&quot;                   
+ [5] &quot;rank&quot;                    &quot;average&quot;                
+ [7] &quot;bayes_average&quot;           &quot;users_rated&quot;            
+ [9] &quot;url&quot;                     &quot;thumbnail&quot;              
+[11] &quot;num.y&quot;                   &quot;primary&quot;                
+[13] &quot;description&quot;             &quot;yearpublished&quot;          
+[15] &quot;minplayers&quot;              &quot;maxplayers&quot;             
+[17] &quot;playingtime&quot;             &quot;minplaytime&quot;            
+[19] &quot;maxplaytime&quot;             &quot;minage&quot;                 
+[21] &quot;boardgamecategory&quot;       &quot;boardgamemechanic&quot;      
+[23] &quot;boardgamefamily&quot;         &quot;boardgameexpansion&quot;     
+[25] &quot;boardgameimplementation&quot; &quot;boardgamedesigner&quot;      
+[27] &quot;boardgameartist&quot;         &quot;boardgamepublisher&quot;     
+[29] &quot;owned&quot;                   &quot;trading&quot;                
+[31] &quot;wanting&quot;                 &quot;wishing&quot;                </code></pre>
+</div>
+<h2 id="nettoyage-des-données">Nettoyage des données</h2>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/stats/quantile.html'>quantile</a></span><span class='op'>(</span><span class='va'>tb_joined</span><span class='op'>$</span><span class='va'>playingtime</span>, na.rm <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>   0%   25%   50%   75%  100% 
+    0    25    45    90 60000 </code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/stats/quantile.html'>quantile</a></span><span class='op'>(</span><span class='va'>tb_joined</span><span class='op'>$</span><span class='va'>maxplayers</span>, na.rm <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>  0%  25%  50%  75% 100% 
+   0    4    4    6  999 </code></pre>
+</div>
+<p>En regardant les quartiles, on se rend compte de l’existence de
+données extrême au sein de nos données. Nous allons donc les enlever. En
+vérifiant, on voit que les données maximales de playingtime sont
+inférieures à 1000 et ceux de maxplayers sont inférieurs à 100. Nous
+allons donc les enlever.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># définir le outline</span>
+<span class='va'>outlier</span> <span class='op'>&lt;-</span> <span class='fl'>100</span>
+<span class='va'>outlier2</span> <span class='op'>&lt;-</span> <span class='fl'>1000</span>
+
+<span class='co'>#filtrer les outllines pour créer un nouveau dataset. </span>
+<span class='va'>df_clean</span> <span class='op'>&lt;-</span> <span class='va'>tb_joined</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+                  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>maxplayers</span>, <span class='va'>playingtime</span>, <span class='va'>average</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+                 <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>maxplayers</span> <span class='op'>&lt;</span> <span class='va'>outlier</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+                <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>playingtime</span> <span class='op'>&lt;</span> <span class='va'>outlier2</span><span class='op'>)</span> 
+</code></pre>
+</div>
+</div>
+<p>En verifiant on vois que les données maximals de playingtime sont
+inférieur à 1000 et ceux de maxplayers sont unférieur à 100.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/stats/quantile.html'>quantile</a></span><span class='op'>(</span><span class='va'>df_clean</span><span class='op'>$</span><span class='va'>playingtime</span>, na.rm <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>  0%  25%  50%  75% 100% 
+   0   25   45   90  999 </code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/stats/quantile.html'>quantile</a></span><span class='op'>(</span><span class='va'>df_clean</span><span class='op'>$</span><span class='va'>maxplayers</span>, na.rm <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>  0%  25%  50%  75% 100% 
+   0    4    4    6   99 </code></pre>
+</div>
+<h1 id="statistiques">Statistiques</h1>
+<p>Voyons la distribution du temps de jeu afin d’avoir un meilleur
+aperçu des données</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>ecdf_play</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='va'>df_clean</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span><span class='va'>playingtime</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/stat_ecdf.html'>stat_ecdf</a></span><span class='op'>(</span>geom <span class='op'>=</span> <span class='st'>"step"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>ylab</a></span><span class='op'>(</span><span class='st'>"Pourcentage"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>xlab</a></span><span class='op'>(</span><span class='st'>"Temps de jeu en minutes"</span><span class='op'>)</span>
+
+<span class='va'>ecdf_play</span> <span class='op'>+</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_continuous.html'>scale_x_continuous</a></span><span class='op'>(</span>breaks<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>1000</span>,<span class='fl'>100</span><span class='op'>)</span><span class='op'>)</span> 
+</code></pre>
+</div>
+<p><img src="Board_games_files/figure-html5/unnamed-chunk-10-1.png" width="624" /></p>
+</div>
+<p>Ensuite ceux du nombre de joueurs</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>ecdf_max</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='va'>df_clean</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span><span class='va'>maxplayers</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/stat_ecdf.html'>stat_ecdf</a></span><span class='op'>(</span>geom <span class='op'>=</span> <span class='st'>"step"</span><span class='op'>)</span> <span class='op'>+</span>
+    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>ylab</a></span><span class='op'>(</span><span class='st'>"Pourcentage"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>xlab</a></span><span class='op'>(</span><span class='st'>"Nombre maximal de joueurs"</span><span class='op'>)</span>
+
+<span class='va'>ecdf_max</span> <span class='op'>+</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_continuous.html'>scale_x_continuous</a></span><span class='op'>(</span> breaks<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>100</span>,<span class='fl'>10</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="Board_games_files/figure-html5/unnamed-chunk-11-1.png" width="624" /></p>
+</div>
+<p>Enfin, la distribution des notes moyennes</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>ecdf_av</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='va'>df_clean</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span><span class='va'>average</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/stat_ecdf.html'>stat_ecdf</a></span><span class='op'>(</span>geom <span class='op'>=</span> <span class='st'>"step"</span><span class='op'>)</span><span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>ylab</a></span><span class='op'>(</span><span class='st'>"Pourcentage"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>xlab</a></span><span class='op'>(</span><span class='st'>"Notes moyennes"</span><span class='op'>)</span>
+
+<span class='va'>ecdf_av</span> <span class='op'>+</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_continuous.html'>scale_x_continuous</a></span><span class='op'>(</span> breaks<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>10</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="Board_games_files/figure-html5/unnamed-chunk-12-1.png" width="624" /></p>
+</div>
+<p>Les graphiques de distributions nous permettent de voir que plus de
+75% des jeux sont joués par un maximum de 6 ou 7 personnes, et le temps
+de jeux ne dépasse pas les 300 minutes de jeux dans 90% des cas. Pour ce
+qui est des notes, 75% des jeux ont une note supérieure à 5 sur 10.</p>
+<p>Maintenant, la question ici est de savoir, s’il existe une
+corrélation entre les notes et le nombre de joueurs.</p>
+<h1 id="corrélation">Corrélation</h1>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='va'>df_clean</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>average</span>, y <span class='op'>=</span> <span class='va'>maxplayers</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_count.html'>geom_count</a></span><span class='op'>(</span>colour <span class='op'>=</span> <span class='st'>"red"</span>, alpha <span class='op'>=</span> <span class='fl'>.2</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>xlab</a></span><span class='op'>(</span><span class='st'>"Note moyenne"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>ylab</a></span><span class='op'>(</span><span class='st'>"Nombre maximal de joueur"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>size <span class='op'>=</span> <span class='st'>"Nombre"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_continuous.html'>scale_x_continuous</a></span><span class='op'>(</span>breaks<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>10</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="Board_games_files/figure-html5/unnamed-chunk-13-1.png" width="624" /></p>
+</div>
+<p>Les jeux les plus notés ont une moyenne comprise entre 5 et 7, cette
+note concerne en grande partie les jeux qui ont un nombre d’utilisateurs
+allant de zéro à 25.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='va'>df_clean</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>average</span>, y <span class='op'>=</span> <span class='va'>playingtime</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_count.html'>geom_count</a></span><span class='op'>(</span>colour <span class='op'>=</span> <span class='st'>"red"</span>, alpha <span class='op'>=</span> <span class='fl'>.2</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>xlab</a></span><span class='op'>(</span><span class='st'>"Note moyenne"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>ylab</a></span><span class='op'>(</span><span class='st'>"Heure maximal de joueur"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>size <span class='op'>=</span> <span class='st'>"Nombre"</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="Board_games_files/figure-html5/unnamed-chunk-14-1.png" width="624" /></p>
+</div>
+<p>En ce qui concerne le temps de jeux, les jeux les mieux notés
+concernent les jeux qui comptabilisent un temps de jeux allant de zéro à
+150 minutes de jeux.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/stats/chisq.test.html'>chisq.test</a></span><span class='op'>(</span><span class='va'>df_clean</span><span class='op'>$</span><span class='va'>average</span>, <span class='va'>df_clean</span><span class='op'>$</span><span class='va'>maxplayers</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>
+    Pearson&#39;s Chi-squared test
+
+data:  df_clean$average and df_clean$maxplayers
+X-squared = 34344, df = 27676, p-value &lt; 2.2e-16</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/stats/chisq.test.html'>chisq.test</a></span><span class='op'>(</span><span class='va'>df_clean</span><span class='op'>$</span><span class='va'>average</span>, <span class='va'>df_clean</span><span class='op'>$</span><span class='va'>playingtime</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>
+    Pearson&#39;s Chi-squared test
+
+data:  df_clean$average and df_clean$playingtime
+X-squared = 62529, df = 52836, p-value &lt; 2.2e-16</code></pre>
+</div>
+<h1 id="conclusion">Conclusion</h1>
+<p>Notre analyse nous a permis de voir la distribution des données
+relatives au temps de jeux ainsi qu’au nombre de joueurs. Les tests de
+khi2 nous ont appris qu’il existe une corrélation entre :</p>
+<ul>
+<li><p>le temps de jeux ainsi que la moyenne des notes
+octroyées</p></li>
+<li><p>le nombre de joueurs ainsi que la moyenne des notes
+octroyées</p></li>
+</ul>
+<p>En effet, les tableaux démontrent que :</p>
+<ul>
+<li><p>Les jeux dont le nombre de joueurs est compris entre 0 et 13 ont
+une note comprise entre 5 et 7.</p></li>
+<li><p>Les jeux dont le nombre de minutes joué est compris entre 0 et
+250 plus le jeu est noté avec une note comprise ente 5 et 7,5 Nous
+pouvons dire en effet que plus le temps de jeux passé sur un jeu est
+élevé, plus la note octroyée est élevée.</p></li>
+</ul>
+<p>Pour répondre à la question de départ, il existe une corrélation
+entre le temps de jeux et la moyenne de note octroyée. Et il existe
+également, une corrélation entre le nombre de joueurs et la moyenne de
+note octroyée.</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<!--radix_placeholder_article_footer-->
+<!--/radix_placeholder_article_footer-->
+</div>
+
+<div class="d-appendix">
+</div>
+
+
+<!--radix_placeholder_site_after_body-->
+<!--/radix_placeholder_site_after_body-->
+<!--radix_placeholder_appendices-->
+<div class="appendix-bottom"></div>
+<!--/radix_placeholder_appendices-->
+<!--radix_placeholder_navigation_after_body-->
+<!--/radix_placeholder_navigation_after_body-->
+
+</body>
+
+</html>
