@@ -8,7 +8,7 @@ output:
     toc: true
     toc_depth: 2
     self_contained: false
-preview: Board.jpg
+preview: Selfie.jpeg
 draft: false
 categories:
   - Français
@@ -567,7 +567,7 @@ par d'autres créatrice.eurs (des mods) ou utilisent des codes triches
 pour contourner ce manque de réalisme. Cependant, ces ajouts sont
 limités par la structure initiale du jeu.
 
-# Conclusion :
+# Conclusion 
 
 Pour conclure, nous avons étudié dans cet article comment les
 youtubeuses s'expriment sur les vidéos qu'elles créent dans le jeu The
@@ -631,7 +631,7 @@ cette plateforme et la comparer à celle des autres plateformes nous
 semble être indispensable pour comprendre la dynamique autour du choix
 de sujet à aborder dans les let's play et machinima.
 
-# Bibliographies:
+# Bibliographies
 
 Albrechtslund, A.-M. (2007). Gender Values in Simulation Games : Sex and
 The Sims. 7.
