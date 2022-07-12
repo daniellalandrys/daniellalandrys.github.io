@@ -15,23 +15,20 @@ categories:
   - Statistiques
   - Jeux vidéos
 description: Dans cet article, je vais analyser des données issues de Tidy Tuesday
-  dénommé Board Games Database. Je vais tenter de répondre à la question de savoir
-  est ce que le nombre de joueurs ainsi que le temps passé à jouer influencent-ils les notes données? 
+  dénommées Board Games Database. Je vais tenter de répondre à la question de savoir
+  est ce que le nombre de joueurs ainsi que le temps passé à jouer influencent les notes données? 
 ---
 
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-Dans cet article, je vais analyser des données issues de [Tidy Tuesday](https://rpubs.com/thewiremonkey/476630)
-  dénommé Board Games Database. Je vais tenter de répondre à la question de savoir
-  est ce que le nombre de joueurs ainsi que le temps passé à jouer influencent-ils les notes données? 
   
-Pour y parvenir, je vais commencer par faire une visualisation des données pour ensuite faire des statistiques.
 
 # Les données  
-Les données sont issues de tydituesday. Plus précisément, il s'agit des données datées du 25-01-2022 provenant de Kaggle et concerne les Board Games. 
+Les données sont issues de [Tidy Tuesday](https://rpubs.com/thewiremonkey/476630). Plus précisément, il s'agit des données datées du 25-01-2022 provenant de [Kaggle](url) et concerne les Board Games. 
 
+Pour y parvenir, je vais commencer par faire une visualisation des données pour ensuite faire des statistiques.
 
 ## Visualisation des données  
 ```{r, results='hide', message=FALSE}
@@ -42,6 +39,8 @@ library(kableExtra)
 
 ## Importer le dataset 
 
+Pour importer le dataset nous allons utiliser la library readr
+
 ```{r, results='hide', message=FALSE, echo=TRUE}
 
 
@@ -50,7 +49,7 @@ details <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/ti
 
 ```
 
-Étant donné que les données contiennent deux tableurs, il est donc nécessaire de les joindre les deux afin de faciliter l'analyse.
+Nous avons donc deux datasets dénommés *ratings* et *details*. À présent nous pouvons utiliser la fonction *head* pour avoir un aperçu des datasets. De plus, étant donnée que la colonne *thumbnail* du dataset *ratings* contient l'url des images, nous allons directement afficher les images en lieu et place des urls. 
 
 ```{r layout ="l-center"}
 #ratings 
@@ -72,6 +71,8 @@ kbl(head(details), digits = 2, format = "html", row.names = TRUE, align = 'l', c
   scroll_box(width = "1000px", height = "400px") %>%
   kableExtra::kable_styling(position = "center", bootstrap_options = "striped")
 ```
+
+Étant donné que les données contiennent deux tableurs, il est donc nécessaire de les joindre les deux afin de faciliter l'analyse.
 
 ```{r}
 tb_joined <-

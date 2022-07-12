@@ -1,0 +1,50 @@
+---
+title: "Employed persons by industry, sex, race, and occupation"
+author:
+- name: Daniella Landrys
+date: '2022-05-05'
+output:
+  distill::distill_article:
+    toc: true
+    toc_depth: 2
+    self_contained: false
+preview: Board.jpg
+draft: false
+categories:
+  - Français
+  - Statistiques
+  - Salaire
+  - Emploi
+description:  
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+  
+# Les données  
+Les données sont issues de [Tidy Tuesday](https://rpubs.com/thewiremonkey/476630). Plus précisément, il s'agit des données datées du 23-02-2021 provenant de [Kaggle](url) et concerne les Board Games. 
+
+Pour y parvenir, je vais commencer par faire une visualisation des données pour ensuite faire des statistiques.
+
+## Visualisation des données  
+```{r, results='hide', message=FALSE}
+library(tidyverse)
+library(questionr)
+library(kableExtra)
+```
+
+## Importer le dataset 
+
+Pour importer le dataset nous allons utiliser la library readr
+
+```{r, results='hide', message=FALSE, echo=TRUE}
+
+
+employed <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-02-23/employed.csv')
+
+earn <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-02-23/earn.csv')
+
+
+```
