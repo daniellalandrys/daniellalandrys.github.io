@@ -1,0 +1,65 @@
+---
+title: "Communication et publication"
+about:
+  template: trestles
+---
+
+## Publications
+
+-   **How to work with immigrant fathers to foster family well-being and children development? Perspectives of immigrant fathers and practitioners**
+
+    Gervais, C., Bouchala, N., Pontbriand, A., Le Gall, J., Hernandez, S., Landrys, D. & Villeneuve, R. (soumis 2024).
+
+    ISPCAN Congress, Uppsala, Sweden, 18-21 August 2024
+
+-   **Na selva de pixels : formas de classificação e dinâmicas sociais em torno de imagens geradas por inteligência artificial**
+
+    Debora Krischke Leitao, Fitiavanjanahary Daniella Landrys (soumis 2024).
+
+    Revista Brasileira de Sociologia
+
+## Communication
+
+-   Juillet 2024 :
+
+    -   [Congrès AISLF : GT-02 Études et méthodes visuelles](https://congres2024.aislf.org/pages/25-prog.php?aac=GT02)
+
+        -   Présentation des résultats de notre recherche sur les images “Found in the Wild” (des images synthétiques qui se font passer pour des images réelles), publiées dans un groupe Facebook public. Cette présentation, réalisée par moi-même, portait sur les critères d’identification des images synthétiques ainsi que sur les dynamiques du groupe Facebook étudié(avec Débora KRISCHKE-LEITAO)
+
+    -   [Congrès AISLF : GT-01 Corps, sciences, techniques et sociétés](https://congres2024.aislf.org/pages/25-prog.php?aac=GT01)
+
+        -   Présentation des résultats du projet "stigmate de la grosseur pendant la pandémie de COVID-19". Cette présentation, réalisée par Débora KRISCHKE-LEITAO, portait sur l’expérience des femmes grosses au Québec lorsqu’elles avaient besoin de soins dans les centres de santé québécois.
+
+-   Avril 2024
+
+    -   [Colloque du SHERPA : Immigration au masculin : mieux comprendre pour mieux rejoindre](https://sherpa-recherche.com/fr/immigration-masculin-mieux-comprendre-mieux-rejoindre/#16)
+
+        -   Présentation des résultats préliminaires du projet “[Soutenir l’adaptation des pratiques pour mieux répondre aux besoins des pères immigrants](https://www.rvpaternite.org/pappa-presentation/projet-peres-immigrants/)” mené par le RVP et le Sherpa. Cette présentation, réalisée en collaboration avec Christine GERVAIS, Nabila BOUCHALA, Stephane HENANDEZ, et Laurence LEFEBVRE-BEAULIEU, a porté sur les besoins des pères immigrants et des intervenants qui les accompagnent, sur les mesures d’accompagnement mises en place pour soutenir les organismes communautaires, ainsi que sur les retombées de la recherche-action.
+
+-   Avril 2023
+
+    -   [Colloque étudiant du CELAT 2023 – Crises et recherches en milieu universitaire](https://celat.ca/activites/2023/04/24/colloque-etudiant-du-celat-2023-crises-et-recherches-en-milieu-universitaire/).
+
+        -   Membre du commité scientifique du colloque
+
+        -   Animation du panel 2 - Faire place à la crise dans la démarche de recherche
+
+## Activités académique
+
+-   Décembre 2023
+
+    -   Création et animation d'un atelier sur le logiciel Nvivo dans le cadre du cours SOC2306 - Méthodologies qualitatives
+
+-   Novembre 2023 et 2022
+
+    -   Présentation sur les machinima et let’s play du jeu *Les Sims 4*, qui porte sur l’appropriation du jeu par les créatrices YouTube, mettant en avant leur utilisation des plateformes numériques pour s’exprimer, tout en explorant les enjeux de légitimation, d’identité, et de construction de soi dans un environnement souvent marqué par des rapports de genre. Cette intervention a eu lieu dans les cours :
+
+        -   AC3130 - L’action culturelle à travers les médias
+
+        -   SOC2202 - Sociologie des médias et des industries créatives
+
+-   Novembre 2022
+
+    -   Création et animation d'un atelier sur le logiciel Zotero dans le cadre de mon mandat en tant que responsable étudiante au CELAT
+
+    -   Mise en place d'un atelier sur l'écriture inclusive dans le cadre de mon mandat en tant que responsable étudiante au CELAT

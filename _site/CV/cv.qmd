@@ -1,0 +1,7 @@
+---
+title: "Mon CV"
+---
+
+```{=html}
+<iframe src="CV/CV.pdf" width="100%" height="800px"></iframe>
+```

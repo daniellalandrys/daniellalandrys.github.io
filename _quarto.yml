@@ -1,0 +1,39 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "Daniella Landrys"
+  back-to-top-navigation: true
+  navbar:
+    right:
+      - href: index.qmd
+        text: Home
+        icon: house
+      - href: blog.qmd
+        text: Blog
+        icon: newspaper
+      - href: about.qmd
+        text: Publications et communications
+        icon: pen
+    
+format:
+  html:
+    theme: pulse
+    css: styles.css
+    toc: true
+
+editor: visual
+
+
+navbar:
+    search: true
+    background: #f2bb0e
+    foreground: #b85c1e
+    left:
+      - text: "Home"
+        href: index.qmd
+      - talks.qmd
+      - about.qmd 
+    
+

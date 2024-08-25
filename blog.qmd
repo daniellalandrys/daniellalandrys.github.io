@@ -1,0 +1,10 @@
+---
+title: "Mon Blog"
+listing:
+  contents: posts
+  sort: "date desc"
+  type: default
+  categories: true
+---
+
+Bienvenue sur mon blog !

@@ -1,0 +1,212 @@
+---
+title: "Board Game"
+author: Daniella Landrys
+date: '2022-02-21'
+image: Board.jpg
+draft: false
+categories:
+  - Français
+  - Statistiques
+  - Jeux vidéos
+description: Dans cet article, je vais analyser des données issues de Tidy Tuesday dénommées Board Games Database. Je vais tenter de répondre à la question de savoir est ce que le nombre de joueurs ainsi que le temps passé à jouer influencent les notes données? 
+---
+
+```{r}
+#| label: setup
+#| include: false
+```
+
+# Les données
+
+Les données sont issues de [Tidy Tuesday](https://rpubs.com/thewiremonkey/476630). Plus précisément, il s'agit des données datées du 25-01-2022 provenant de [Kaggle](url) et concerne les Board Games.
+
+Pour y parvenir, je vais commencer par faire une visualisation des données pour ensuite faire des statistiques.
+
+## Visualisation des données
+
+```{r}
+#| message: false
+#| results: hide
+library(tidyverse)
+library(questionr)
+library(kableExtra)
+```
+
+## Importer le dataset
+
+Pour importer le dataset nous allons utiliser la library readr
+
+```{r}
+#| message: false
+#| results: hide
+#| echo: true
+
+ratings <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-01-25/ratings.csv')
+details <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-01-25/details.csv')
+```
+
+Nous avons donc deux datasets dénommés *ratings* et *details*. À présent nous pouvons utiliser la fonction *head* pour avoir un aperçu des datasets. De plus, étant donnée que la colonne *thumbnail* du dataset *ratings* contient l'url des images, nous allons directement afficher les images en lieu et place des urls.
+
+```{r}
+#| label: fig-ratings
+#| fig-cap: "Notes des jeux vidéos"
+#| column: page
+#ratings 
+df <- head(ratings) 
+urls <- df$thumbnail 
+df <- df %>% 
+  mutate(thumbnail = "")
+kbl(df, digits = 2, format = "html", row.names = TRUE, align = 'l', caption = "Notes des jeux vidéos") %>%
+  kable_paper(full_width = F, html_font = "Cambria") %>%
+  kableExtra::kable_styling(position = "center") %>%
+  column_spec(11, image = spec_image(urls, width = 300, height = 300))
+```
+
+```{r}
+#| label: fig-details
+#| fig-cap: "Details des jeux vidéos"
+#details 
+kbl(head(details), digits = 2, format = "html", row.names = TRUE, align = 'l', caption = "Details des jeux vidéos") %>%
+  kable_paper(full_width = F, html_font = "Cambria") %>%
+  scroll_box(width = "1000px", height = "400px") %>%
+  kableExtra::kable_styling(position = "center", bootstrap_options = "striped")
+```
+
+Étant donné que les données contiennent deux tableurs, il est donc nécessaire de les joindre les deux afin de faciliter l'analyse.
+
+```{r}
+tb_joined <-
+  ratings %>%
+  left_join(details, by = "id")
+```
+
+J'aime bien avoir le nom des colonnes du dataset afin de mieux le visualiser.
+
+```{r}
+names(tb_joined)
+```
+
+## Nettoyage des données
+
+```{r}
+quantile(tb_joined$playingtime, na.rm = TRUE)
+
+quantile(tb_joined$maxplayers, na.rm = TRUE)
+```
+
+En regardant les quartiles, on se rend compte de l'existence de données extrême au sein de nos données. Nous allons donc les enlever. En vérifiant, on voit que les données maximales de playingtime sont inférieures à 1000 et ceux de maxplayers sont inférieurs à 100. Nous allons donc les enlever.
+
+```{r}
+# définir le outline
+outlier <- 100
+outlier2 <- 1000
+
+#filtrer les outllines pour créer un nouveau dataset. 
+df_clean <- tb_joined %>% 
+                  select(maxplayers, playingtime, average) %>%
+                 filter(maxplayers < outlier) %>%
+                filter(playingtime < outlier2) 
+```
+
+En verifiant on vois que les données maximals de playingtime sont inférieur à 1000 et ceux de maxplayers sont unférieur à 100.
+
+```{r}
+quantile(df_clean$playingtime, na.rm = TRUE)
+
+quantile(df_clean$maxplayers, na.rm = TRUE)
+```
+
+# Statistiques
+
+Voyons la distribution du temps de jeu afin d'avoir un meilleur aperçu des données
+
+```{r}
+#| label: fig-ecdf-play
+#| fig-cap: "Distribution du temps de jeu"
+ecdf_play <- ggplot(df_clean, aes(playingtime)) +
+  stat_ecdf(geom = "step") +
+  ylab("Pourcentage") +
+  xlab("Temps de jeu en minutes")
+
+ecdf_play + scale_x_continuous(breaks=seq(0,1000,100))
+```
+
+Ensuite ceux du nombre de joueurs
+
+```{r}
+#| label: fig-ecdf-max
+#| fig-cap: "Distribution du nombre maximal de joueurs"
+ecdf_max <- ggplot(df_clean, aes(maxplayers)) +
+  stat_ecdf(geom = "step") +
+    ylab("Pourcentage") +
+  xlab("Nombre maximal de joueurs")
+
+ecdf_max + scale_x_continuous( breaks=seq(0,100,10))
+```
+
+Enfin, la distribution des notes moyennes
+
+```{r}
+#| label: fig-ecdf-av
+#| fig-cap: "Distribution des notes moyennes"
+ecdf_av <- ggplot(df_clean, aes(average)) +
+  stat_ecdf(geom = "step")+
+  ylab("Pourcentage") +
+  xlab("Notes moyennes")
+
+ecdf_av + scale_x_continuous( breaks=seq(0,10,1))
+```
+
+Les graphiques de distributions nous permettent de voir que plus de 75% des jeux sont joués par un maximum de 6 ou 7 personnes, et le temps de jeux ne dépasse pas les 300 minutes de jeux dans 90% des cas. Pour ce qui est des notes, 75% des jeux ont une note supérieure à 5 sur 10.
+
+Maintenant, la question ici est de savoir, s'il existe une corrélation entre les notes et le nombre de joueurs.
+
+# Corrélation
+
+```{r}
+#| label: fig-correlation-players
+#| fig-cap: "Corrélation entre notes moyennes et nombre maximal de joueurs"
+ggplot(df_clean) +
+  aes(x = average, y = maxplayers) +
+  geom_count(colour = "red", alpha = .2) +
+  xlab("Note moyenne") +
+  ylab("Nombre maximal de joueur") +
+  labs(size = "Nombre") +
+  scale_x_continuous(breaks=seq(0,10,1))
+```
+
+Les jeux les plus notés ont une moyenne comprise entre 5 et 7, cette note concerne en grande partie les jeux qui ont un nombre d'utilisateurs allant de zéro à 25.
+
+```{r}
+#| label: fig-correlation-time
+#| fig-cap: "Corrélation entre notes moyennes et temps de jeu"
+ggplot(df_clean) +
+  aes(x = average, y = playingtime) +
+  geom_count(colour = "red", alpha = .2) +
+  xlab("Note moyenne") +
+  ylab("Heure maximal de joueur") +
+  labs(size = "Nombre")
+```
+
+En ce qui concerne le temps de jeux, les jeux les mieux notés concernent les jeux qui comptabilisent un temps de jeux allant de zéro à 150 minutes de jeux.
+
+```{r}
+chisq.test(df_clean$average, df_clean$maxplayers)
+chisq.test(df_clean$average, df_clean$playingtime)
+```
+
+# Conclusion
+
+Notre analyse nous a permis de voir la distribution des données relatives au temps de jeux ainsi qu'au nombre de joueurs. Les tests de khi2 nous ont appris qu'il existe une corrélation entre :
+
+-   le temps de jeux ainsi que la moyenne des notes octroyées
+
+-   le nombre de joueurs ainsi que la moyenne des notes octroyées
+
+En effet, les tableaux démontrent que :
+
+-   Les jeux dont le nombre de joueurs est compris entre 0 et 13 ont une note comprise entre 5 et 7.
+
+-   Les jeux dont le nombre de minutes joué est compris entre 0 et 250 plus le jeu est noté avec une note comprise ente 5 et 7,5 Nous pouvons dire en effet que plus le temps de jeux passé sur un jeu est élevé, plus la note octroyée est élevée.
+
+Pour répondre à la question de départ, il existe une corrélation entre le temps de jeux et la moyenne de note octroyée. Et il existe également, une corrélation entre le nombre de joueurs et la moyenne de note octroyée.

@@ -1,0 +1,33 @@
+---
+title: ""
+about:
+  template: trestles
+  image: images/pdp4.JPG
+  links:
+    - icon: github
+      href: https://github.com/daniellalandrys
+
+    - icon: twitter
+      href: https://x.com/danhye_landrys
+      rel: me
+
+    - text: "{{< fa brands linkedin-in >}}"
+      href: www.linkedin.com/in/daniellalandrys
+
+    - text: "{{< ai google-scholar >}}"
+      href: https://scholar.google.fr/citations?hl=fr&user=gdkImFAAAAAJ
+---
+
+# Bonjour et bienvenu <big>🙋🏾</big>!
+
+Je suis actuellement doctorante en sociologie à l’[UQAM](https://uqam.ca), dans le [département de sociologie](https://sociologie.uqam.ca). Mon sujet de recherche actuel vise à explorer comment l’intelligence artificielle générative, en automatisant les tâches répétitives entre autres, peut stimuler la créativité et enrichir la diversité au sein des studios de jeux indépendants québécois.
+
+Je m’intéresse particulièrement à l’équité et aux biais algorithmiques, notamment ce qui concerne la représentation des sous-groupes.
+
+Avant de commencer mon doctorat, j’ai effectué un master en sociologie à l’université [Toulouse 2 Jean Jaurès](https://www.univ-tlse2.fr/), en France. Durant ce parcours, j’ai travaillé sur les différents usages et non-usages des plateformes en ligne (médias sociaux numériques professionnels et sites diffusant des offres d’emploi et de stage) par les étudiants des universités, écoles et instituts toulousains en recherche de stage.
+
+## Affiliation et groupe de recherche
+
+-   Membre étudiante du [CELAT](https://celat.ca/)
+
+-   Membre étudiante du groupe de recherche [Homo Ludens](https://homoludens.ca/)

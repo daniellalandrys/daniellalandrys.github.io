@@ -1,0 +1,5 @@
+---
+title: "Mon CV"
+listing:
+  contents: CV
+---

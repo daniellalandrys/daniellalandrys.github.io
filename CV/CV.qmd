@@ -1,0 +1,34 @@
+---
+title: "Mon CV"
+---
+
+```{r}
+library(pdftools)
+library(magick)
+```
+
+```{r}
+#| label: pdf-to-images
+#| fig-cap: "Pages du document PDF"
+#| out-width: "100%"
+#| fig-align: "center"
+
+# Chemin vers votre fichier PDF
+pdf_path <- "CV.pdf"
+
+# Obtenir le nombre de pages dans le PDF
+n_pages <- pdf_info(pdf_path)$pages
+
+# Convertir chaque page en image
+pdf_convert(pdf_path, dpi = 300, format = "png", pages = 1:n_pages)
+
+# Afficher toutes les images converties
+image_files <- list.files(pattern = "*.png", full.names = TRUE)
+images <- lapply(image_files, image_read)
+
+# Combiner toutes les images en une seule
+combined_image <- image_join(images)
+
+# Afficher l'image combinée
+combined_image
+```
