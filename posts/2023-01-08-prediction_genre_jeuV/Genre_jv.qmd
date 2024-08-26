@@ -1,0 +1,93 @@
+---
+title: "Effets du genre sur l’appréciation des jeux"
+author: Daniella Landrys
+date: '2023-01-08'
+draft: false
+categories:
+  - Français
+  - Jeux vidéos
+  - Genre de jeu
+description: Dans cet article, je vais analyser des données issues de Tidy Tuesday 
+---
+
+# L'évolution des jeux vidéo au Canada : un phénomène culturel en mutation
+
+Dans le paysage culturel canadien en constante évolution, les jeux vidéo occupent une place de plus en plus prépondérante. Selon les données les plus récentes de l'Entertainment Software Association of Canada (ESAC), en 2022, 53% des Canadiens s'adonnent régulièrement à cette forme de divertissement interactif. Cette statistique, bien qu'en légère baisse par rapport aux 61% enregistrés en 2020, témoigne de la résilience de ce médium face aux changements sociétaux post-pandémiques.
+
+Un aspect particulièrement notable de cette évolution est la persistance d'une quasi-parité entre les genres parmi les joueurs, avec 51% de femmes et 49% d'hommes. Cette répartition équilibrée remet en question les stéréotypes longtemps associés aux jeux vidéo et soulève des interrogations sur la perception de l'identité de "joueur" ou "joueuse".
+
+En effet, malgré cette parité, on observe une disparité dans l'auto-identification en tant que "joueur", ce terme étant plus fréquemment revendiqué par la population masculine. Cette dichotomie peut s'expliquer par la définition même de ce qu'est un "joueur". Comme le soulignent Enevold & Hagström (2017), Oates (2020) et Stone (2019), l'identité de joueur reste intrinsèquement liée à la masculinité et à la perception d'une activité chronophage. Cette construction sociale tend à exclure non seulement une partie de la population féminine, mais aussi certaines catégories de jeux, notamment ceux qualifiés de "casual" ou occasionnels, souvent associés aux plateformes mobiles et considérés comme inférieurs dans la hiérarchie des jeux (Cameron, 2019).
+
+Cependant, les données récentes nuancent cette perception. Les préférences ludiques transcendent les stéréotypes de genre, avec des titres comme Fortnite, Call of Duty et The Sims 4 figurant parmi les jeux les plus prisés par les joueuses. Ces jeux, appartenant respectivement aux catégories "battle royale", "shooter" et "simulation", démontrent la diversité des goûts et des pratiques au-delà des clivages traditionnels (ESAC, 2020).
+
+L'aspect social des jeux vidéo prend également une nouvelle dimension. Plus de 70% des joueurs s'adonnent désormais à des jeux en ligne, avec 49% des adultes et 70% des adolescents jouant en ligne avec d'autres personnes. Cette tendance souligne le rôle croissant des jeux vidéo comme vecteur de socialisation et de création de communautés virtuelles.
+
+Dans ce contexte, cette étude vise à explorer la corrélation entre la légitimation d'un jeu et son genre. Nous nous interrogerons sur l'influence des catégories de jeux sur leur appréciation, tout en examinant comment la dualité homme-femme dans l'univers vidéoludique façonne ces catégories et leur réception.
+
+Pour ce faire, je m'appuierais sur une base de données fournie par Kaggle, adoptant une approche en deux temps : 1. Une analyse exploratoire pour déterminer la corrélation entre le genre du jeu et son appréciation. 2. Le développement d'un modèle prédictif pour évaluer la probabilité qu'un attribut (comme la catégorie du jeu) influence l'appréciation d'un jeu.
+
+# Jeux vidéo et genre : une perspective critique
+
+L'industrie du jeu vidéo, depuis ses débuts, a été profondément marquée par une perspective masculine dominante. Des chercheurs ont mis en lumière que les jeux vidéo sont principalement créés par et pour des hommes blancs cisgenres (Benonie-Soler, 2019; Gray, 2014; Harrisson et al., 2020; Williams et al., 2009). Cette influence masculine se manifeste à travers divers aspects du jeu, notamment dans le gameplay et la représentation des personnages féminins. La catégorisation des jeux vidéo elle-même reflète cette complexité et ce biais. Comme le soulignent Cășvean (2015) et Wulf et al. (2021), il n'existe pas de consensus sur les catégories de jeux, et les chercheurs s'appuient souvent sur des classifications établies par des médias spécialisés.
+
+Un jeu peut appartenir à plusieurs catégories, ce qui rend sa classification d'autant plus délicate. Malgré cette diversité apparente, un thème récurrent dans de nombreuses catégories de jeux est ce que Kline et Dyer-Witheford (2003) appellent la "masculinité militarisée". Ce concept englobe une variété d'éléments allant des compétences de tir et de combat aux scénarios de conquête de civilisations extraterrestres, se retrouvant dans des genres aussi variés que les "shooters", les jeux d'action, de stratégie, de rôle, et même certains jeux de sport. Dans ce contexte, malgré une participation croissante des femmes dans le monde du jeu vidéo, leur rôle reste souvent cantonné à des positions de support, tant dans la réalité que dans les jeux eux-mêmes. Des études ont mis en évidence cette tendance (Beavis & Charles, 2007; Chaulet & Soler-Benonie, 2019; Guechtouli et al., 2022; Kahn et al., 2015; Ratan et al., 2015; Taylor, 2003; Taylor & Witkowski, 2010).
+
+Dans les tournois de jeux vidéo, les femmes occupent fréquemment des rôles administratifs ou de support pour leurs partenaires masculins. De même, dans les jeux, les joueuses, qu'elles soient débutantes ou expérimentées, se voient souvent attribuer des rôles de soutien, comme celui de soigneuse. Cette répartition des rôles reflète et perpétue les stéréotypes de genre présents dans l'industrie du jeu vidéo et dans la société en général, soulignant ainsi la nécessité d'une analyse critique de ces dynamiques de genre dans l'univers vidéoludique.
+
+Dans le monde virtuel des jeux vidéo, les femmes sont généralement représentées de trois différentes manières (Bonenfant & Trépanier-Jobin, 2017; Gray et al., 2018; Trépanier-Jobin, 2017). Premièrement, la demoiselle en détresse, un personnage féminin non jouable kidnappé par un malfaiteur masculin, attendant d'être sauvée par le héros masculin qui deviendra ensuite son mari. Deuxièmement, le monstre-féminin hypersexualisé et terrifiant à éliminer pour survivre. Troisièmement, les "Serial Girls", des personnages féminins jouables, dont les corps sont basés sur un modèle de beauté standardisé - une jeune femme mince avec de longues jambes, des courbes légères, des traits du visage délicats et des lèvres charnues.
+
+Avec l'émergence de jeux considérés comme plus inclusifs, des tensions sont apparues parmi les joueurs concernant la légitimité de ce qu'est un "vrai jeu" et un "vrai joueur" (Benonie-soler, 2013). Consalvo et Christopher (2019) ont étudié les critères de légitimation d'un jeu à travers les discours publics. Ils ont déterminé qu'un "vrai gamer" est perçu comme une personne capable de démontrer sa masculinité à travers les jeux vidéo, notamment en jouant pendant de longues heures à des jeux de combat difficiles.
+
+La définition d'un "vrai jeu" s'articule autour de plusieurs caractéristiques : le fabricant du jeu, sa structure de paiement, et certains aspects du jeu lui-même, tels que sa difficulté, sa longueur et la plateforme sur laquelle il s'exécute. Un jeu est considéré comme légitime lorsqu'il est produit par une entreprise reconnue, avec un système de monétisation équitable, et une difficulté suffisamment élevée pour engager les joueurs pendant de nombreuses heures, généralement sur ordinateur. Cette définition s'oppose aux jeux dits "casual", souvent associés aux femmes, qui sont généralement courts et disponibles sur mobile, comme "Candy Crush".
+
+Cette opposition entre "vrais" et "faux" jeux fait écho à la dualité entre jeux "pour hommes" et jeux "pour femmes". L'hypothèse principale de cette recherche est que la légitimité perçue d'un jeu influence son appréciation par les joueurs qui se considèrent comme légitimes. En analysant des données issues de plateformes de distribution de jeux "légitimes" comme Steam, nous chercherons à déterminer si le genre d'un jeu influence toujours son appréciation par les joueurs.
+
+Il est important de noter que Steam ne se limite pas à un genre de jeu spécifique, mais propose également des jeux développés par des créateurs indépendants et des jeux dont le gameplay principal n'est pas centré sur un aspect militaire. C'est l'une des raisons pour lesquelles j'ai choisi d'étudier les données issues de cette plateforme, offrant ainsi un échantillon diversifié pour notre analyse.
+
+# Méthodologie
+
+Les données exploitées dans cette étude proviennent d’une base de données publiées sur le site [Kaggle](https://www.kaggle.com/datasets/nikdavis/steam-store-games). Cette base de données, obtenue par l’intermédiaire de l’API de Steam Store et de SteamSpy, contient uniquement des informations liées aux jeux vidéo revendus par la plateforme Steam. Ces données, récoltées en mai 2019 par un utilisateur du site Kaggle qui porte le pseudo de *NIK DAVIS,* contiennent un total de 27 075 observations et 18 variables*.*
+
+Par l’intermédiaire de ces données, nous allons tenter d’expliquer les nombres de votes positifs et négatifs obtenus par un jeu. Pour rappel, notre hypothèse principale est de déterminer si la légitimité (Consalvo & Christopher A., 2019) d’un jeu à une influence sur l’appréciation du jeu. Par légitimité, on entend son genre, son fabricant, sa plateforme ainsi que sa jouabilité.
+
+1.  **Variables expliquées**
+
+Dans cette catégorie nous allons travailler sur les votes octroyés par les joueurs. La base de données que l’on étude nous donne deux informations sur les votes octroyés par les joueurs. En premier lieu, le nombre de vote positive, allant de 0 à 2 644 404 votes, et le nombre de vote négative qui va de 0 à 487 076.
+
+2.  **Variables explicatives**
+
+Cette catégorie contient les variables qui nous permettront de tenter d’expliquer les votes octroyés par les joueurs. Pour ce faire, nous considérons trois grands groupes de variable.
+
+a.  Les genres de jeu vidéo
+
+Dans cette catégorie nous trouvons les variables :
+
+-   « categories » qui contient les informations relatives aux catégories du jeu. Ex : single-player, local multi-player, local co-op, shared/split screen, steam achievements, steam trading cards, partial controller support, stats, steam leaderboards
+
+-   « genres » qui est relatifs au genre du jeu défini par les développeurs. Ex : action, adventure, casual, free to play, indie, massively multiplayer, early access
+
+-   « steamspy_tags » qui contient le genre voté par la communauté. Ex : adventure, indie, casual, action, psychological horror.
+
+b.  Les fabricants du jeu vidéo
+
+Dans cette catégorie nous trouvons les variables :
+
+-   « developer » qui contient le nom de l’équipe développeur du jeu.
+
+-   « publisher » qui contient le nom de l’entreprise qui revend le jeu.
+
+c.  La plateforme et le gameplay du jeu vidéo
+
+Dans cette catégorie nous trouvons les variables :
+
+-   « platforms » qui est relatif aux plateformes sur lequel on peut jouer le jeu. Ex : Mac, Windows, Linux
+
+-   « average_playtime » et «median_playtime » qui sont des variables relatives à la moyenne et à la médiane du temps passer par les joueurs sur le jeu.
+
+-   « owners » qui est une variable relatif au nombre de titres de jeu vendu
+
+-   « price » qui donnes des informations sur le prix du jeu.
+
+# [Résultat]{.underline}
+
+Dans cette partie, nous allons explorer les données issues de la plateforme steam pour répondre à notre problématique principale qui consiste à répondre à la question selon laquelle les avis des joueurs et des joueuses ont un lien avec le genre des jeux. Pour y arriver, nous allons dans un premier temps faire état des caractéristiques de notre base de données, par la suite, nous allons mener des analyses sur r afin de déterminer s’il y a une corrélation entre le genre et les avis et enfin nous allons utiliser la library xgboost pour entrainer notre modèle afin de voir s’il arrive à prédire les avis des jeux selon leurs genres.
