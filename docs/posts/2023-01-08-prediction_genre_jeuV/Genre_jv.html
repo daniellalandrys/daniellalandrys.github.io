@@ -6,8 +6,11 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Daniella Landrys">
+<meta name="dcterms.date" content="2023-01-08">
+<meta name="description" content="Dans cet article, je vais analyser des données issues de Tidy Tuesday">
 
-<title>Mon CV – Daniella Landrys</title>
+<title>Effets du genre sur l’appréciation des jeux – Daniella Landrys</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,59 +23,25 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 </style>
 
 
-<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../">
-<script src="../site_libs/quarto-html/quarto.js"></script>
-<script src="../site_libs/quarto-html/popper.min.js"></script>
-<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -102,7 +71,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }</script>
 
 
-<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../../styles.css">
 </head>
 
 <body class="nav-fixed">
@@ -112,7 +81,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="../index.html">
+    <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">Daniella Landrys</span>
     </a>
   </div>
@@ -123,17 +92,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../index.html"> <i class="bi bi-house" role="img">
+    <a class="nav-link" href="../../index.html"> <i class="bi bi-house" role="img">
 </i> 
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../blog.html"> <i class="bi bi-newspaper" role="img">
+    <a class="nav-link" href="../../blog.html"> <i class="bi bi-newspaper" role="img">
 </i> 
 <span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../about.html"> <i class="bi bi-pen" role="img">
+    <a class="nav-link" href="../../about.html"> <i class="bi bi-pen" role="img">
 </i> 
 <span class="menu-text">Publications et communications</span></a>
   </li>  
@@ -148,22 +117,53 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#lévolution-des-jeux-vidéo-au-canada-un-phénomène-culturel-en-mutation" id="toc-lévolution-des-jeux-vidéo-au-canada-un-phénomène-culturel-en-mutation" class="nav-link active" data-scroll-target="#lévolution-des-jeux-vidéo-au-canada-un-phénomène-culturel-en-mutation">L’évolution des jeux vidéo au Canada : un phénomène culturel en mutation</a></li>
+  <li><a href="#jeux-vidéo-et-genre-une-perspective-critique" id="toc-jeux-vidéo-et-genre-une-perspective-critique" class="nav-link" data-scroll-target="#jeux-vidéo-et-genre-une-perspective-critique">Jeux vidéo et genre : une perspective critique</a></li>
+  <li><a href="#méthodologie" id="toc-méthodologie" class="nav-link" data-scroll-target="#méthodologie">Méthodologie</a></li>
+  <li><a href="#résultat" id="toc-résultat" class="nav-link" data-scroll-target="#résultat"><u>Résultat</u></a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Mon CV</h1>
-</div>
+<h1 class="title">Effets du genre sur l’appréciation des jeux</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Français</div>
+    <div class="quarto-category">Jeux vidéos</div>
+    <div class="quarto-category">Genre de jeu</div>
+  </div>
+  </div>
 
+<div>
+  <div class="description">
+    Dans cet article, je vais analyser des données issues de Tidy Tuesday
+  </div>
+</div>
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Daniella Landrys </p>
+          </div>
+  </div>
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">January 8, 2023</p>
+    </div>
+  </div>
   
     
   </div>
@@ -173,55 +173,73 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pdftools)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Using poppler version 23.04.0</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(magick)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Linking to ImageMagick 6.9.12.93
-Enabled features: cairo, fontconfig, freetype, heic, lcms, pango, raw, rsvg, webp
-Disabled features: fftw, ghostscript, x11</code></pre>
-</div>
-</div>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Chemin vers votre fichier PDF</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>pdf_path <span class="ot">&lt;-</span> <span class="st">"CV.pdf"</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Obtenir le nombre de pages dans le PDF</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>n_pages <span class="ot">&lt;-</span> <span class="fu">pdf_info</span>(pdf_path)<span class="sc">$</span>pages</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Convertir chaque page en image</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="fu">pdf_convert</span>(pdf_path, <span class="at">dpi =</span> <span class="dv">300</span>, <span class="at">format =</span> <span class="st">"png"</span>, <span class="at">pages =</span> <span class="dv">1</span><span class="sc">:</span>n_pages)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Converting page 1 to CV_1.png... done!
-Converting page 2 to CV_2.png... done!
-Converting page 3 to CV_3.png... done!</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "CV_1.png" "CV_2.png" "CV_3.png"</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Afficher toutes les images converties</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>image_files <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="at">pattern =</span> <span class="st">"*.png"</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>images <span class="ot">&lt;-</span> <span class="fu">lapply</span>(image_files, image_read)</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Combiner toutes les images en une seule</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>combined_image <span class="ot">&lt;-</span> <span class="fu">image_join</span>(images)</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Afficher l'image combinée</span></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>combined_image</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="CV_files/figure-html/pdf-to-images-1.png" class="img-fluid figure-img" style="width:100.0%"></p>
-<figcaption>Pages du document PDF</figcaption>
-</figure>
-</div>
-</div>
-</div>
+<section id="lévolution-des-jeux-vidéo-au-canada-un-phénomène-culturel-en-mutation" class="level1">
+<h1>L’évolution des jeux vidéo au Canada : un phénomène culturel en mutation</h1>
+<p>Dans le paysage culturel canadien en constante évolution, les jeux vidéo occupent une place de plus en plus prépondérante. Selon les données les plus récentes de l’Entertainment Software Association of Canada (ESAC), en 2022, 53% des Canadiens s’adonnent régulièrement à cette forme de divertissement interactif. Cette statistique, bien qu’en légère baisse par rapport aux 61% enregistrés en 2020, témoigne de la résilience de ce médium face aux changements sociétaux post-pandémiques.</p>
+<p>Un aspect particulièrement notable de cette évolution est la persistance d’une quasi-parité entre les genres parmi les joueurs, avec 51% de femmes et 49% d’hommes. Cette répartition équilibrée remet en question les stéréotypes longtemps associés aux jeux vidéo et soulève des interrogations sur la perception de l’identité de “joueur” ou “joueuse”.</p>
+<p>En effet, malgré cette parité, on observe une disparité dans l’auto-identification en tant que “joueur”, ce terme étant plus fréquemment revendiqué par la population masculine. Cette dichotomie peut s’expliquer par la définition même de ce qu’est un “joueur”. Comme le soulignent Enevold &amp; Hagström (2017), Oates (2020) et Stone (2019), l’identité de joueur reste intrinsèquement liée à la masculinité et à la perception d’une activité chronophage. Cette construction sociale tend à exclure non seulement une partie de la population féminine, mais aussi certaines catégories de jeux, notamment ceux qualifiés de “casual” ou occasionnels, souvent associés aux plateformes mobiles et considérés comme inférieurs dans la hiérarchie des jeux (Cameron, 2019).</p>
+<p>Cependant, les données récentes nuancent cette perception. Les préférences ludiques transcendent les stéréotypes de genre, avec des titres comme Fortnite, Call of Duty et The Sims 4 figurant parmi les jeux les plus prisés par les joueuses. Ces jeux, appartenant respectivement aux catégories “battle royale”, “shooter” et “simulation”, démontrent la diversité des goûts et des pratiques au-delà des clivages traditionnels (ESAC, 2020).</p>
+<p>L’aspect social des jeux vidéo prend également une nouvelle dimension. Plus de 70% des joueurs s’adonnent désormais à des jeux en ligne, avec 49% des adultes et 70% des adolescents jouant en ligne avec d’autres personnes. Cette tendance souligne le rôle croissant des jeux vidéo comme vecteur de socialisation et de création de communautés virtuelles.</p>
+<p>Dans ce contexte, cette étude vise à explorer la corrélation entre la légitimation d’un jeu et son genre. Nous nous interrogerons sur l’influence des catégories de jeux sur leur appréciation, tout en examinant comment la dualité homme-femme dans l’univers vidéoludique façonne ces catégories et leur réception.</p>
+<p>Pour ce faire, je m’appuierais sur une base de données fournie par Kaggle, adoptant une approche en deux temps : 1. Une analyse exploratoire pour déterminer la corrélation entre le genre du jeu et son appréciation. 2. Le développement d’un modèle prédictif pour évaluer la probabilité qu’un attribut (comme la catégorie du jeu) influence l’appréciation d’un jeu.</p>
+</section>
+<section id="jeux-vidéo-et-genre-une-perspective-critique" class="level1">
+<h1>Jeux vidéo et genre : une perspective critique</h1>
+<p>L’industrie du jeu vidéo, depuis ses débuts, a été profondément marquée par une perspective masculine dominante. Des chercheurs ont mis en lumière que les jeux vidéo sont principalement créés par et pour des hommes blancs cisgenres (Benonie-Soler, 2019; Gray, 2014; Harrisson et al., 2020; Williams et al., 2009). Cette influence masculine se manifeste à travers divers aspects du jeu, notamment dans le gameplay et la représentation des personnages féminins. La catégorisation des jeux vidéo elle-même reflète cette complexité et ce biais. Comme le soulignent Cășvean (2015) et Wulf et al.&nbsp;(2021), il n’existe pas de consensus sur les catégories de jeux, et les chercheurs s’appuient souvent sur des classifications établies par des médias spécialisés.</p>
+<p>Un jeu peut appartenir à plusieurs catégories, ce qui rend sa classification d’autant plus délicate. Malgré cette diversité apparente, un thème récurrent dans de nombreuses catégories de jeux est ce que Kline et Dyer-Witheford (2003) appellent la “masculinité militarisée”. Ce concept englobe une variété d’éléments allant des compétences de tir et de combat aux scénarios de conquête de civilisations extraterrestres, se retrouvant dans des genres aussi variés que les “shooters”, les jeux d’action, de stratégie, de rôle, et même certains jeux de sport. Dans ce contexte, malgré une participation croissante des femmes dans le monde du jeu vidéo, leur rôle reste souvent cantonné à des positions de support, tant dans la réalité que dans les jeux eux-mêmes. Des études ont mis en évidence cette tendance (Beavis &amp; Charles, 2007; Chaulet &amp; Soler-Benonie, 2019; Guechtouli et al., 2022; Kahn et al., 2015; Ratan et al., 2015; Taylor, 2003; Taylor &amp; Witkowski, 2010).</p>
+<p>Dans les tournois de jeux vidéo, les femmes occupent fréquemment des rôles administratifs ou de support pour leurs partenaires masculins. De même, dans les jeux, les joueuses, qu’elles soient débutantes ou expérimentées, se voient souvent attribuer des rôles de soutien, comme celui de soigneuse. Cette répartition des rôles reflète et perpétue les stéréotypes de genre présents dans l’industrie du jeu vidéo et dans la société en général, soulignant ainsi la nécessité d’une analyse critique de ces dynamiques de genre dans l’univers vidéoludique.</p>
+<p>Dans le monde virtuel des jeux vidéo, les femmes sont généralement représentées de trois différentes manières (Bonenfant &amp; Trépanier-Jobin, 2017; Gray et al., 2018; Trépanier-Jobin, 2017). Premièrement, la demoiselle en détresse, un personnage féminin non jouable kidnappé par un malfaiteur masculin, attendant d’être sauvée par le héros masculin qui deviendra ensuite son mari. Deuxièmement, le monstre-féminin hypersexualisé et terrifiant à éliminer pour survivre. Troisièmement, les “Serial Girls”, des personnages féminins jouables, dont les corps sont basés sur un modèle de beauté standardisé - une jeune femme mince avec de longues jambes, des courbes légères, des traits du visage délicats et des lèvres charnues.</p>
+<p>Avec l’émergence de jeux considérés comme plus inclusifs, des tensions sont apparues parmi les joueurs concernant la légitimité de ce qu’est un “vrai jeu” et un “vrai joueur” (Benonie-soler, 2013). Consalvo et Christopher (2019) ont étudié les critères de légitimation d’un jeu à travers les discours publics. Ils ont déterminé qu’un “vrai gamer” est perçu comme une personne capable de démontrer sa masculinité à travers les jeux vidéo, notamment en jouant pendant de longues heures à des jeux de combat difficiles.</p>
+<p>La définition d’un “vrai jeu” s’articule autour de plusieurs caractéristiques : le fabricant du jeu, sa structure de paiement, et certains aspects du jeu lui-même, tels que sa difficulté, sa longueur et la plateforme sur laquelle il s’exécute. Un jeu est considéré comme légitime lorsqu’il est produit par une entreprise reconnue, avec un système de monétisation équitable, et une difficulté suffisamment élevée pour engager les joueurs pendant de nombreuses heures, généralement sur ordinateur. Cette définition s’oppose aux jeux dits “casual”, souvent associés aux femmes, qui sont généralement courts et disponibles sur mobile, comme “Candy Crush”.</p>
+<p>Cette opposition entre “vrais” et “faux” jeux fait écho à la dualité entre jeux “pour hommes” et jeux “pour femmes”. L’hypothèse principale de cette recherche est que la légitimité perçue d’un jeu influence son appréciation par les joueurs qui se considèrent comme légitimes. En analysant des données issues de plateformes de distribution de jeux “légitimes” comme Steam, nous chercherons à déterminer si le genre d’un jeu influence toujours son appréciation par les joueurs.</p>
+<p>Il est important de noter que Steam ne se limite pas à un genre de jeu spécifique, mais propose également des jeux développés par des créateurs indépendants et des jeux dont le gameplay principal n’est pas centré sur un aspect militaire. C’est l’une des raisons pour lesquelles j’ai choisi d’étudier les données issues de cette plateforme, offrant ainsi un échantillon diversifié pour notre analyse.</p>
+</section>
+<section id="méthodologie" class="level1">
+<h1>Méthodologie</h1>
+<p>Les données exploitées dans cette étude proviennent d’une base de données publiées sur le site <a href="https://www.kaggle.com/datasets/nikdavis/steam-store-games">Kaggle</a>. Cette base de données, obtenue par l’intermédiaire de l’API de Steam Store et de SteamSpy, contient uniquement des informations liées aux jeux vidéo revendus par la plateforme Steam. Ces données, récoltées en mai 2019 par un utilisateur du site Kaggle qui porte le pseudo de <em>NIK DAVIS,</em> contiennent un total de 27 075&nbsp;observations et 18&nbsp;variables<em>.</em></p>
+<p>Par l’intermédiaire de ces données, nous allons tenter d’expliquer les nombres de votes positifs et négatifs obtenus par un jeu. Pour rappel, notre hypothèse principale est de déterminer si la légitimité (Consalvo &amp; Christopher A., 2019) d’un jeu à une influence sur l’appréciation du jeu. Par légitimité, on entend son genre, son fabricant, sa plateforme ainsi que sa jouabilité.</p>
+<ol type="1">
+<li><strong>Variables expliquées</strong></li>
+</ol>
+<p>Dans cette catégorie nous allons travailler sur les votes octroyés par les joueurs. La base de données que l’on étude nous donne deux informations sur les votes octroyés par les joueurs. En premier lieu, le nombre de vote positive, allant de 0 à 2 644 404&nbsp;votes, et le nombre de vote négative qui va de 0 à 487 076.</p>
+<ol start="2" type="1">
+<li><strong>Variables explicatives</strong></li>
+</ol>
+<p>Cette catégorie contient les variables qui nous permettront de tenter d’expliquer les votes octroyés par les joueurs. Pour ce faire, nous considérons trois grands groupes de variable.</p>
+<ol type="a">
+<li>Les genres de jeu vidéo</li>
+</ol>
+<p>Dans cette catégorie nous trouvons les variables&nbsp;:</p>
+<ul>
+<li><p>« categories »&nbsp;qui contient les informations relatives aux catégories du jeu. Ex&nbsp;: single-player, local multi-player, local co-op, shared/split screen, steam achievements, steam trading cards, partial controller support, stats, steam leaderboards</p></li>
+<li><p>« genres » qui est relatifs au genre du jeu défini par les développeurs. Ex&nbsp;: action, adventure, casual, free to play, indie, massively multiplayer, early access</p></li>
+<li><p>« steamspy_tags » qui contient le genre voté par la communauté. Ex&nbsp;: adventure, indie, casual, action, psychological horror.</p></li>
+</ul>
+<ol start="2" type="a">
+<li>Les fabricants du jeu vidéo</li>
+</ol>
+<p>Dans cette catégorie nous trouvons les variables&nbsp;:</p>
+<ul>
+<li><p>« developer » qui contient le nom de l’équipe développeur du jeu.</p></li>
+<li><p>« publisher » qui contient le nom de l’entreprise qui revend le jeu.</p></li>
+</ul>
+<ol start="3" type="a">
+<li>La plateforme et le gameplay du jeu vidéo</li>
+</ol>
+<p>Dans cette catégorie nous trouvons les variables&nbsp;:</p>
+<ul>
+<li><p>« platforms » qui est relatif aux plateformes sur lequel on peut jouer le jeu. Ex&nbsp;: Mac, Windows, Linux</p></li>
+<li><p>« average_playtime » et «median_playtime » qui sont des variables relatives à la moyenne et à la médiane du temps passer par les joueurs sur le jeu.</p></li>
+<li><p>« owners » qui est une variable relatif au nombre de titres de jeu vendu</p></li>
+<li><p>« price » qui donnes des informations sur le prix du jeu.</p></li>
+</ul>
+</section>
+<section id="résultat" class="level1">
+<h1><u>Résultat</u></h1>
+<p>Dans cette partie, nous allons explorer les données issues de la plateforme steam pour répondre à notre problématique principale qui consiste à répondre à la question selon laquelle les avis des joueurs et des joueuses ont un lien avec le genre des jeux. Pour y arriver, nous allons dans un premier temps faire état des caractéristiques de notre base de données, par la suite, nous allons mener des analyses sur r afin de déterminer s’il y a une corrélation entre le genre et les avis et enfin nous allons utiliser la library xgboost pour entrainer notre modèle afin de voir s’il arrive à prédire les avis des jeux selon leurs genres.</p>
 
 
+</section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
