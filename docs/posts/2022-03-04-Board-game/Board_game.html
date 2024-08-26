@@ -1,0 +1,1731 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.54">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Daniella Landrys">
+<meta name="dcterms.date" content="2022-02-21">
+<meta name="description" content="Dans cet article, je vais analyser des données issues de Tidy Tuesday dénommées Board Games Database. Je vais tenter de répondre à la question de savoir est ce que le nombre de joueurs ainsi que le temps passé à jouer influencent les notes données?">
+
+<title>Board Game – Daniella Landrys</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="../../site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="../../site_libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Daniella Landrys</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> <i class="bi bi-house" role="img">
+</i> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../blog.html"> <i class="bi bi-newspaper" role="img">
+</i> 
+<span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> <i class="bi bi-pen" role="img">
+</i> 
+<span class="menu-text">Publications et communications</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#les-données" id="toc-les-données" class="nav-link active" data-scroll-target="#les-données">Les données</a>
+  <ul class="collapse">
+  <li><a href="#visualisation-des-données" id="toc-visualisation-des-données" class="nav-link" data-scroll-target="#visualisation-des-données">Visualisation des données</a></li>
+  <li><a href="#importer-le-dataset" id="toc-importer-le-dataset" class="nav-link" data-scroll-target="#importer-le-dataset">Importer le dataset</a></li>
+  <li><a href="#nettoyage-des-données" id="toc-nettoyage-des-données" class="nav-link" data-scroll-target="#nettoyage-des-données">Nettoyage des données</a></li>
+  </ul></li>
+  <li><a href="#statistiques" id="toc-statistiques" class="nav-link" data-scroll-target="#statistiques">Statistiques</a></li>
+  <li><a href="#corrélation" id="toc-corrélation" class="nav-link" data-scroll-target="#corrélation">Corrélation</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content page-columns page-full" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Board Game</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Français</div>
+    <div class="quarto-category">Statistiques</div>
+    <div class="quarto-category">Jeux vidéos</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    Dans cet article, je vais analyser des données issues de Tidy Tuesday dénommées Board Games Database. Je vais tenter de répondre à la question de savoir est ce que le nombre de joueurs ainsi que le temps passé à jouer influencent les notes données?
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Daniella Landrys </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">February 21, 2022</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="les-données" class="level1 page-columns page-full">
+<h1>Les données</h1>
+<p>Les données sont issues de <a href="https://rpubs.com/thewiremonkey/476630">Tidy Tuesday</a>. Plus précisément, il s’agit des données datées du 25-01-2022 provenant de <a href="url">Kaggle</a> et concerne les Board Games.</p>
+<p>Pour y parvenir, je vais commencer par faire une visualisation des données pour ensuite faire des statistiques.</p>
+<section id="visualisation-des-données" class="level2">
+<h2 class="anchored" data-anchor-id="visualisation-des-données">Visualisation des données</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(questionr)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(kableExtra)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="importer-le-dataset" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="importer-le-dataset">Importer le dataset</h2>
+<p>Pour importer le dataset nous allons utiliser la library readr</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>ratings <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-01-25/ratings.csv'</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>details <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_csv</span>(<span class="st">'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-01-25/details.csv'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Nous avons donc deux datasets dénommés <em>ratings</em> et <em>details</em>. À présent nous pouvons utiliser la fonction <em>head</em> pour avoir un aperçu des datasets. De plus, étant donnée que la colonne <em>thumbnail</em> du dataset <em>ratings</em> contient l’url des images, nous allons directement afficher les images en lieu et place des urls.</p>
+<div class="cell column-page">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#ratings </span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">head</span>(ratings) </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>urls <span class="ot">&lt;-</span> df<span class="sc">$</span>thumbnail </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> </span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">thumbnail =</span> <span class="st">""</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="fu">kbl</span>(df, <span class="at">digits =</span> <span class="dv">2</span>, <span class="at">format =</span> <span class="st">"html"</span>, <span class="at">row.names =</span> <span class="cn">TRUE</span>, <span class="at">align =</span> <span class="st">'l'</span>, <span class="at">caption =</span> <span class="st">"Notes des jeux vidéos"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_paper</span>(<span class="at">full_width =</span> F, <span class="at">html_font =</span> <span class="st">"Cambria"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">kable_styling</span>(<span class="at">position =</span> <span class="st">"center"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column_spec</span>(<span class="dv">11</span>, <span class="at">image =</span> <span class="fu">spec_image</span>(urls, <span class="at">width =</span> <span class="dv">300</span>, <span class="at">height =</span> <span class="dv">300</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="fig-ratings" class="cell-output-display quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-ratings-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class=" lightable-paper table" style="font-family: Cambria; width: auto !important; margin-left: auto; margin-right: auto; margin-left: auto; margin-right: auto;">
+<caption>
+Notes des jeux vidéos
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:left;">
+num
+</th>
+<th style="text-align:left;">
+id
+</th>
+<th style="text-align:left;">
+name
+</th>
+<th style="text-align:left;">
+year
+</th>
+<th style="text-align:left;">
+rank
+</th>
+<th style="text-align:left;">
+average
+</th>
+<th style="text-align:left;">
+bayes_average
+</th>
+<th style="text-align:left;">
+users_rated
+</th>
+<th style="text-align:left;">
+url
+</th>
+<th style="text-align:left;">
+thumbnail
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:left;">
+105
+</td>
+<td style="text-align:left;">
+30549
+</td>
+<td style="text-align:left;">
+Pandemic
+</td>
+<td style="text-align:left;">
+2008
+</td>
+<td style="text-align:left;">
+106
+</td>
+<td style="text-align:left;">
+7.59
+</td>
+<td style="text-align:left;">
+7.49
+</td>
+<td style="text-align:left;">
+108975
+</td>
+<td style="text-align:left;">
+/boardgame/30549/pandemic
+</td>
+<td style="text-align:left;">
+
+
+<img src="https://cf.geekdo-images.com/S3ybV1LAp-8SnHIXLLjVqA__micro/img/S4tXI3Yo7BtqmBoKINLLVUFsaJ0=/fit-in/64x64/filters:strip_icc()/pic1534148.jpg" width="96" height="96" class="figure-img">
+
+
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:left;">
+189
+</td>
+<td style="text-align:left;">
+822
+</td>
+<td style="text-align:left;">
+Carcassonne
+</td>
+<td style="text-align:left;">
+2000
+</td>
+<td style="text-align:left;">
+190
+</td>
+<td style="text-align:left;">
+7.42
+</td>
+<td style="text-align:left;">
+7.31
+</td>
+<td style="text-align:left;">
+108738
+</td>
+<td style="text-align:left;">
+/boardgame/822/carcassonne
+</td>
+<td style="text-align:left;">
+
+
+<img src="https://cf.geekdo-images.com/okM0dq_bEXnbyQTOvHfwRA__micro/img/VfLoKzfk3xj26ArmDu55qZ4sysw=/fit-in/64x64/filters:strip_icc()/pic6544250.png" width="96" height="96" class="figure-img">
+
+
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+3
+</td>
+<td style="text-align:left;">
+428
+</td>
+<td style="text-align:left;">
+13
+</td>
+<td style="text-align:left;">
+Catan
+</td>
+<td style="text-align:left;">
+1995
+</td>
+<td style="text-align:left;">
+429
+</td>
+<td style="text-align:left;">
+7.14
+</td>
+<td style="text-align:left;">
+6.97
+</td>
+<td style="text-align:left;">
+108024
+</td>
+<td style="text-align:left;">
+/boardgame/13/catan
+</td>
+<td style="text-align:left;">
+
+
+<img src="https://cf.geekdo-images.com/W3Bsga_uLP9kO91gZ7H8yw__micro/img/LA4OvGfQ_TXQ-2mhaIFZp2ITWpc=/fit-in/64x64/filters:strip_icc()/pic2419375.jpg" width="96" height="96" class="figure-img">
+
+
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+4
+</td>
+<td style="text-align:left;">
+72
+</td>
+<td style="text-align:left;">
+68448
+</td>
+<td style="text-align:left;">
+7 Wonders
+</td>
+<td style="text-align:left;">
+2010
+</td>
+<td style="text-align:left;">
+73
+</td>
+<td style="text-align:left;">
+7.74
+</td>
+<td style="text-align:left;">
+7.63
+</td>
+<td style="text-align:left;">
+89982
+</td>
+<td style="text-align:left;">
+/boardgame/68448/7-wonders
+</td>
+<td style="text-align:left;">
+
+
+<img src="https://cf.geekdo-images.com/RvFVTEpnbb4NM7k0IF8V7A__micro/img/9glsOs7zoTbkVpfDt5SHWJm-kRA=/fit-in/64x64/filters:strip_icc()/pic860217.jpg" width="96" height="96" class="figure-img">
+
+
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+5
+</td>
+<td style="text-align:left;">
+103
+</td>
+<td style="text-align:left;">
+36218
+</td>
+<td style="text-align:left;">
+Dominion
+</td>
+<td style="text-align:left;">
+2008
+</td>
+<td style="text-align:left;">
+104
+</td>
+<td style="text-align:left;">
+7.61
+</td>
+<td style="text-align:left;">
+7.50
+</td>
+<td style="text-align:left;">
+81561
+</td>
+<td style="text-align:left;">
+/boardgame/36218/dominion
+</td>
+<td style="text-align:left;">
+
+
+<img src="https://cf.geekdo-images.com/j6iQpZ4XkemZP07HNCODBA__micro/img/PVxqHWOLTb3n-4xe62LJadr_M0I=/fit-in/64x64/filters:strip_icc()/pic394356.jpg" width="96" height="96" class="figure-img">
+
+
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+6
+</td>
+<td style="text-align:left;">
+191
+</td>
+<td style="text-align:left;">
+9209
+</td>
+<td style="text-align:left;">
+Ticket to Ride
+</td>
+<td style="text-align:left;">
+2004
+</td>
+<td style="text-align:left;">
+192
+</td>
+<td style="text-align:left;">
+7.41
+</td>
+<td style="text-align:left;">
+7.30
+</td>
+<td style="text-align:left;">
+76171
+</td>
+<td style="text-align:left;">
+/boardgame/9209/ticket-ride
+</td>
+<td style="text-align:left;">
+
+
+<img src="https://cf.geekdo-images.com/ZWJg0dCdrWHxVnc0eFXK8w__micro/img/79tvkijvf1wFKrKz-FWt77XdIbw=/fit-in/64x64/filters:strip_icc()/pic38668.jpg" width="96" height="96" class="figure-img">
+
+
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ratings-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Notes des jeux vidéos
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#details </span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">kbl</span>(<span class="fu">head</span>(details), <span class="at">digits =</span> <span class="dv">2</span>, <span class="at">format =</span> <span class="st">"html"</span>, <span class="at">row.names =</span> <span class="cn">TRUE</span>, <span class="at">align =</span> <span class="st">'l'</span>, <span class="at">caption =</span> <span class="st">"Details des jeux vidéos"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_paper</span>(<span class="at">full_width =</span> F, <span class="at">html_font =</span> <span class="st">"Cambria"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scroll_box</span>(<span class="at">width =</span> <span class="st">"1000px"</span>, <span class="at">height =</span> <span class="st">"400px"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  kableExtra<span class="sc">::</span><span class="fu">kable_styling</span>(<span class="at">position =</span> <span class="st">"center"</span>, <span class="at">bootstrap_options =</span> <span class="st">"striped"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="fig-details" class="cell-output-display quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-details-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:400px; overflow-x: scroll; width:1000px; ">
+<table class=" lightable-paper table table-striped" style="font-family: Cambria; width: auto !important; margin-left: auto; margin-right: auto; margin-left: auto; margin-right: auto;">
+<caption>
+Details des jeux vidéos
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+num
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+id
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+primary
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+description
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+yearpublished
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+minplayers
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+maxplayers
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+playingtime
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+minplaytime
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+maxplaytime
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+minage
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+boardgamecategory
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+boardgamemechanic
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+boardgamefamily
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+boardgameexpansion
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+boardgameimplementation
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+boardgamedesigner
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+boardgameartist
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+boardgamepublisher
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+owned
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+trading
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+wanting
+</th>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+wishing
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:left;">
+0
+</td>
+<td style="text-align:left;">
+30549
+</td>
+<td style="text-align:left;">
+Pandemic
+</td>
+<td style="text-align:left;">
+In Pandemic, several virulent diseases have broken out simultaneously all over the world! The players are disease-fighting specialists whose mission is to treat disease hotspots while researching cures for each of four plagues before they get out of hand.&amp;#10;&amp;#10;The game board depicts several major population centers on Earth. On each turn, a player can use up to four actions to travel between cities, treat infected populaces, discover a cure, or build a research station. A deck of cards provides the players with these abilities, but sprinkled throughout this deck are Epidemic! cards that accelerate and intensify the diseases’ activity. A second, separate deck of cards controls the &amp;quot;normal&amp;quot; spread of the infections.&amp;#10;&amp;#10;Taking a unique role within the team, players must plan their strategy to mesh with their specialists’ strengths in order to conquer the diseases. For example, the Operations Expert can build research stations which are needed to find cures for the diseases and which allow for greater mobility between cities; the Scientist needs only four cards of a particular disease to cure it instead of the normal five&amp;mdash;but the diseases are spreading quickly and time is running out. If one or more diseases spreads beyond recovery or if too much time elapses, the players all lose. If they cure the four diseases, they all win!&amp;#10;&amp;#10;The 2013 edition of Pandemic includes two new characters&amp;mdash;the Contingency Planner and the Quarantine Specialist&amp;mdash;not available in earlier editions of the game.&amp;#10;&amp;#10;Pandemic is the first game in the Pandemic series.&amp;#10;&amp;#10;
+</td>
+<td style="text-align:left;">
+2008
+</td>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:left;">
+4
+</td>
+<td style="text-align:left;">
+45
+</td>
+<td style="text-align:left;">
+45
+</td>
+<td style="text-align:left;">
+45
+</td>
+<td style="text-align:left;">
+8
+</td>
+<td style="text-align:left;">
+[‘Medical’]
+</td>
+<td style="text-align:left;">
+[‘Action Points’, ‘Cooperative Game’, ‘Hand Management’, ‘Point to Point Movement’, ‘Set Collection’, ‘Trading’, ‘Variable Player Powers’]
+</td>
+<td style="text-align:left;">
+[‘Components: Map (Global Scale)’, ‘Components: Multi-Use Cards’, ‘Digital Implementations: Board Game Arena’, ‘Game: Pandemic’, ‘Medical: Diseases’, ‘Occupation: Dispatcher’, ‘Occupation: Medic / Doctor / Nurses’, ‘Occupation: Researcher / Scientist’, ‘Region: The World’]
+</td>
+<td style="text-align:left;">
+[‘Pandemic: Gen Con 2016 Promos – Z-Force Team Member/Game Convention’, ‘Pandemic: In the Lab’, ‘Pandemic: On the Brink’, ‘Pandemic: Promo Roles’, ‘Pandemic: State of Emergency’, ‘Pandemic: Survival Promos – Crisis Mitigator/Relocation Specialist’, ‘Pandemie: Uitbreiding “De Generalist”’]
+</td>
+<td style="text-align:left;">
+[‘Pandemic Legacy: Season 0’, ‘Pandemic Legacy: Season 1’, ‘Pandemic Legacy: Season 2’, ‘Pandemic: Fall of Rome’, ‘Pandemic: Hot Zone – Europe’, ‘Pandemic: Hot Zone – North America’, ‘Pandemic: Iberia’, ‘Pandemic: Reign of Cthulhu’, ‘Pandemic: Rising Tide’, ‘Pandemic: The Cure’, ‘World of Warcraft: Wrath of the Lich King’]
+</td>
+<td style="text-align:left;">
+[‘Matt Leacock’]
+</td>
+<td style="text-align:left;">
+[‘Josh Cappel’, ‘Christian Hanisch’, ‘Régis Moulun’, ‘Chris Quilliams’, ‘Tom Thiel’]
+</td>
+<td style="text-align:left;">
+[‘Z-Man Games’, ‘Albi’, ‘Asmodee’, ‘Asmodee Italia’, ‘Asterion Press’, ‘Bergsala Enigma (Enigma)’, ‘Brain Games’, ‘Devir’, ‘Filosofia Éditions’, ‘Galápagos Jogos’, ‘Gém Klub Kft.’, ‘HaKubia’, ‘Hobby Japan’, ‘HomoLudicus’, ‘Jolly Thinkers’, ‘Kaissa Chess &amp; Games’, ‘Korea Boardgames Co., Ltd.’, ‘Lacerta’, ‘Lautapelit.fi’, ‘Lifestyle Boardgames Ltd’, ‘MINDOK’, ‘Nordic Games GmbH’, ‘Paladium Games’, ‘Pegasus Spiele’, ‘Quined White Goblin Games’, ‘Rebel Sp. z o.o.’, ‘Siam Board Games’, ‘Stratelibri’, ‘Wargames Club Publishing’, ‘White Goblin Games’, ‘Zhiyanjia’, ‘Ігромаг’, ‘Взрослые дети’]
+</td>
+<td style="text-align:left;">
+168364
+</td>
+<td style="text-align:left;">
+2508
+</td>
+<td style="text-align:left;">
+625
+</td>
+<td style="text-align:left;">
+9344
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:left;">
+1
+</td>
+<td style="text-align:left;">
+822
+</td>
+<td style="text-align:left;">
+Carcassonne
+</td>
+<td style="text-align:left;">
+Carcassonne is a tile-placement game in which the players draw and place a tile with a piece of southern French landscape on it. The tile might feature a city, a road, a cloister, grassland or some combination thereof, and it must be placed adjacent to tiles that have already been played, in such a way that cities are connected to cities, roads to roads, etcetera. Having placed a tile, the player can then decide to place one of their meeples on one of the areas on it: on the city as a knight, on the road as a robber, on a cloister as a monk, or on the grass as a farmer. When that area is complete, that meeple scores points for its owner.&amp;#10;&amp;#10;During a game of Carcassonne, players are faced with decisions like: &amp;quot;Is it really worth putting my last meeple there?&amp;quot; or &amp;quot;Should I use this tile to expand my city, or should I place it near my opponent instead, giving him a hard time to complete their project and score points?&amp;quot; Since players place only one tile and have the option to place one meeple on it, turns proceed quickly even if it is a game full of options and possibilities.&amp;#10;&amp;#10;First game in the Carcassonne series.&amp;#10;&amp;#10;
+</td>
+<td style="text-align:left;">
+2000
+</td>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:left;">
+5
+</td>
+<td style="text-align:left;">
+45
+</td>
+<td style="text-align:left;">
+30
+</td>
+<td style="text-align:left;">
+45
+</td>
+<td style="text-align:left;">
+7
+</td>
+<td style="text-align:left;">
+[‘City Building’, ‘Medieval’, ‘Territory Building’]
+</td>
+<td style="text-align:left;">
+[‘Area Majority / Influence’, ‘Map Addition’, ‘Tile Placement’]
+</td>
+<td style="text-align:left;">
+[‘Cities: Carcassonne (France)’, ‘Components: Meeples (Black)’, ‘Components: Meeples (Blue)’, ‘Components: Meeples (Green)’, ‘Components: Meeples (Red)’, ‘Components: Meeples (Yellow)’, ‘Components: Wooden pieces &amp; boards’, ‘Country: France’, ‘Digital Implementations: Board Game Arena’, ‘Game: Carcassonne’, ‘Region: Languedoc (France)’]
+</td>
+<td style="text-align:left;">
+[‘20 Jahre Darmstadt Spielt’, ‘Apothecaries (fan expansion for Carcassonne)’, ‘Apothecaries and Tithes (fan expansion for Carcassonne)’, ‘Die Bettler (Fan-Erweiterung für Carcassonne)’, ‘The Big Black Pig Escape (Fan expansion to Carcassonne)’, ‘Breweries (fan expansion for Carcassonne)’, ‘Carcassonne Maps: Benelux’, ‘Carcassonne Maps: Deutschland’, ‘Carcassonne Maps: France’, ‘Carcassonne Maps: Great Britain’, ‘Carcassonne Maps: Península Ibérica’, ‘Carcassonne Maps: Taiwan’, ‘Carcassonne Maps: USA East’, ‘Carcassonne Maps: USA West’, ‘Carcassonne: Bonusplättchen Spiel 2014’, ‘Carcassonne: Bonusplättchen Spiel 2015’, ‘Carcassonne: Bonusplättchen Spiel 2016’, ‘Carcassonne: Bonusplättchen Spiel 2017’, ‘Carcassonne: Bonusplättchen Spiel 2018’, ‘Carcassonne: Bonusplättchen Spiel 2019’, ‘Carcassonne: Bonusplättchen Spiel 2020’, ‘Carcassonne: Bonusplättchen Spiel 2021’, ‘Carcassonne: Castles in Germany’, ‘Carcassonne: Corn Circles II’, ‘Carcassonne: Cult, Siege &amp; Creativity’, ‘Carcassonne: CutCassonne’, ‘Carcassonne: Darmstadt’, ‘Carcassonne: Das Labyrinth’, ‘Carcassonne: Der Tunnel’, ‘Carcassonne: Die Belagerer’, ‘Carcassonne: Die Katharer’, ‘Carcassonne: Die Kornkreise’, ‘Carcassonne: Die Märkte zu Leipzig’, ‘Carcassonne: Die Wahrsagerin’, ‘Carcassonne: Die Windrosen’, ‘Carcassonne: Easter in Carcassonne’, ‘Carcassonne: Expansion 1 – Inns &amp; Cathedrals’, ‘Carcassonne: Expansion 10 – Under the Big Top’, ‘Carcassonne: Expansion 2 – Traders &amp; Builders’, ‘Carcassonne: Expansion 3 – The Princess &amp; The Dragon’, ‘Carcassonne: Expansion 4 – The Tower’, ‘Carcassonne: Expansion 5 – Abbey &amp; Mayor’, ‘Carcassonne: Expansion 6 – Count, King &amp; Robber’, ‘Carcassonne: Expansion 7 – The Catapult’, ‘Carcassonne: Expansion 8 – Bridges, Castles and Bazaars’, ‘Carcassonne: Expansion 9 – Hills &amp; Sheep’, ‘Carcassonne: German Cathedrals’, ‘Carcassonne: GQ Promo Tiles’, ‘Carcassonne: Halb so Wild’, ‘Carcassonne: Halb so wild I’, ‘Carcassonne: Halb so wild II’, ‘Carcassonne: King &amp; Scout’, ‘Carcassonne: Klöster in Deutschland’, ‘Carcassonne: Kreivi ja Kuningas’, ‘Carcassonne: La Porxada’, ‘Carcassonne: Little Buildings’, ‘Carcassonne: Mage &amp; Witch’, ‘Carcassonne: Nikolaus-Zählleiste’, ‘Carcassonne: Spiel Doch Mini Expansion’, ‘Carcassonne: Spiel Doch! Expansion’, ‘Carcassonne: The Barber-Surgeons’, ‘Carcassonne: The City Gates’, ‘Carcassonne: The Count of Carcassonne’, ‘Carcassonne: The Cult’, ‘Carcassonne: The Ferries’, ‘Carcassonne: The Festival’, ‘Carcassonne: The Flying Machines’, ‘Carcassonne: The Fruit-Bearing Trees’, ‘Carcassonne: The Gifts’, ‘Carcassonne: The Gold Mines’, ‘Carcassonne: The Land Surveyors’, ‘Carcassonne: The Messengers’, ‘Carcassonne: The Peasant Revolts’, ‘Carcassonne: The Phantom’, ‘Carcassonne: The Plague’, ‘Carcassonne: The River’, ‘Carcassonne: The River II’, ‘Carcassonne: The Robbers’, ‘Carcassonne: The School’, ‘Carcassonne: The Signposts’, ‘Carcassonne: The Tollkeepers’, ‘Carcassonne: Watchtowers’, ‘Castles in Hungary (fan expansion to Carcassonne)’, ‘Circles in the Forest (fan expansion for Carcassonne)’, ‘Cleric And Serf (fan expansion to Carcassonne)’, ‘The Coast (fan expansion for Carcassonne)’, ‘Corn Circles 3 (fan expansion to Carcassonne)’, ‘Divided Cities (fan expansion for Carcassonne)’, ‘Dragon Hunters (fan expansion to Carcassonne)’, ‘Dragon Killers (fan expansion for Carcassonne)’, ‘Dragon Rider Slayer (fan expansion for Carcassonne: The Princess &amp; The Dragon)’, ‘Drought and Pestilence (fan expansion for Carcassonne)’, ‘Eisenbahn (fan expansion for Carcassonne)’, ‘Die Eroberer (fan Expansion to Carcassonne)’, ‘Evergreen Forest (fan expansion to Carcassonne)’, ‘Family Feud (fan expansion to Carcassonne)’, ‘Fields and Vineyards (fan expansion for Carcassonne)’, ‘Fischerhütte (Fan-Erweiterung für Carcassonne)’, ‘Fisherman: Angler &amp; Fish Farm (fan expansion for Carcassonne)’, ‘Fisherman: Swan Lake (fan expansion for Carcassonne)’, ‘Fisherman: Waterfalls (fan expansion for Carcassonne)’, ‘Fishing Boats (fan expansion to Carcassonne)’, ‘Forests (fan expansion for Carcassonne)’, ‘Forests: An Apple a Day (fan expansion for Carcassonne)’, ‘Forests: Fairy Tales (fan expansion for Carcassonne)’, ‘Forests: The Forest Fire (fan expansion for Carcassonne)’, ‘Forests: Timber! (fan expansion for Carcassonne)’, ‘Friar &amp; Farmhand (fan expansion for Carcassonne)’, ‘Fruit Trader (fan expansion to Carcassonne)’, ‘The Gallows (fan expansion for Carcassonne)’, ‘Gold Mines (fan expansion for Carcassonne)’, ‘The Grim Reaple (fan expansion for Carcassonne)’, ‘Holzfäller &amp; Müller (Fan Erweiterung für Carcassonne)’, ‘In the Stocks (fan expansion for Carcassonne)’, ‘Inn &amp; Stable Owners (fan expansion to Carcassonne)’, ‘The Jester and the Minstrel (fan expansion to Carcassonne)’, ‘Jousting Tournament (fan expansion for Carcassonne)’, ‘Kettle of Fish (fan expansion to Carcassonne)’, ‘Lakelands (fan expansion for Carcassonne)’, ‘The Land Surveyors 2 (fan expansion for Carcassonne)’, ‘Landschaftskarten die Dritte (Fan-Erweiterung für Carcassonne)’, ‘Lavender Fields (fan expansion to Carcassonne)’, ‘Lord of the Manor (fan expansion for Carcassonne)’, ‘The Medieval Expansion (fan expansion for Carcassonne)’, ‘Merry Men (fan expansion to Carcassonne)’, ‘Mills and Bakeries (fan expansion for Carcassonne)’, ‘More River (fan expansion for Carcassonne)’, ‘The Mount of the Duke (fan expansion for Carcassonne)’, ‘Mountains (fan expansion for Carcassonne)’, ‘Nochmal neue Landschaftskarten (Fan-Erweiterung für Carcassonne)’, ‘The Ocean (fan expansion for Carcassonne)’, ‘The Orders of Chivalry (fan expansion for Carcassonne)’, ‘Outposts (fan expansion to Carcassonne)’, ‘Pirate Coast (fan expansion for Carcassonne)’, ‘The Pope of Avignon (fan expansion for Carcassonne)’, ‘Ramparts (fan expansion for Carcassonne)’, ‘River System (fan expansion for Carcassonne)’, ‘Spielbox-Almanach 25 Jahre Hans im Glück Beilage’, ‘Tithe barns (fan expansion to Carcassonne)’, ‘Troubadours (fan expansion for Carcassonne)’, ‘Truppenaufmarsch (Fan-Erweiterung für Carcassonne)’, ‘Upper Carcassonne (fan expansion for Carcassonne)’, ‘Wald (Fan Erweiterung für Carcassonne)’, ‘Die Wälder von Carcassonne V2 (Fan Erweiterung für Carcassonne)’, ‘Weg durch die Stadt (Fan-Erweiterung für Carcassonne)’, ‘Wells (fan expansion for Carcassonne)’, ‘Wells: Fountain of Youth (fan expansion for Carcassonne)’, ‘Wells: Wishing Wells (fan expansion for Carcassonne)’, ‘Wheat Fields (fan expansion for Carcassonne)’, ‘Wine Merchant (fan expansion to Carcassonne)’, ‘Каркассон: Дворяне и Башни’, ‘Каркассон: Наука и магия’, ‘Каркассон: Предместья и обитатели’, ‘Каркассон: Солове́й-Разбо́йник &amp; Водяной’, ‘Каркассон: тайл Избушка’]
+</td>
+<td style="text-align:left;">
+[‘The Ark of the Covenant’, ‘Carcassonne für 2’, ‘Carcassonne Junior’, ‘Carcassonne: Amazonas’, ‘Carcassonne: Demonstration’, ‘Carcassonne: Gold Rush’, ‘Carcassonne: Hunters and Gatherers’, ‘Carcassonne: Over Hill and Dale’, ‘Carcassonne: Safari’, ‘Carcassonne: South Seas’, ‘Carcassonne: Star Wars’, ‘Carcassonne: The Castle’, ‘Carcassonne: The City’, ‘Carcassonne: The Discovery’, ‘Carcassonne: Winter Edition’, ‘New World: A Carcassonne Game’, ‘Travel Carcassonne’]
+</td>
+<td style="text-align:left;">
+[‘Klaus-Jürgen Wrede’]
+</td>
+<td style="text-align:left;">
+[‘Doris Matthäus’, ‘Anne Pätzke’, ‘Chris Quilliams’, ‘Klaus-Jürgen Wrede’]
+</td>
+<td style="text-align:left;">
+[‘Hans im Glück’, ‘999 Games’, ‘Albi’, ‘Bard Centrum Gier’, ‘Bergsala Enigma (Enigma)’, ‘Brain Games’, ‘cutia.ro’, ‘Devir’, ‘Fantasmagoria’, ‘Filosofia Éditions’, ‘Giochi Uniti’, ‘Grow Jogos e Brinquedos’, ‘Hobby World’, ‘Ísöld ehf.’, ‘Kaissa Chess &amp; Games’, ‘Korea Boardgames Co., Ltd.’, ‘Lautapelit.fi’, ‘Midgaard Games’, ‘MINDOK’, ‘Möbius Games’, ‘Monkey Time’, ‘NeoTroy Games’, ‘Nordic Games ehf’, ‘Paper Iyagi’, ‘Piatnik’, ‘Ponva d.o.o.’, ‘Rio Grande Games’, ‘Schmidt Spiele’, ‘Smart Ltd’, ‘Stupor Mundi’, ‘SuperHeated Neurons’, ‘Swan Panasia Co., Ltd.’, ‘Venice Connection’, ‘Ventura Games’, ‘Z-Man Games’]
+</td>
+<td style="text-align:left;">
+161299
+</td>
+<td style="text-align:left;">
+1716
+</td>
+<td style="text-align:left;">
+582
+</td>
+<td style="text-align:left;">
+7383
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+3
+</td>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:left;">
+13
+</td>
+<td style="text-align:left;">
+Catan
+</td>
+<td style="text-align:left;">
+In CATAN (formerly The Settlers of Catan), players try to be the dominant force on the island of Catan by building settlements, cities, and roads. On each turn dice are rolled to determine what resources the island produces. Players build by spending resources (sheep, wheat, wood, brick and ore) that are depicted by these resource cards; each land type, with the exception of the unproductive desert, produces a specific resource: hills produce brick, forests produce wood, mountains produce ore, fields produce wheat, and pastures produce sheep.&amp;#10;&amp;#10;Setup includes randomly placing large hexagonal tiles (each showing a resource or the desert) in a honeycomb shape and surrounding them with water tiles, some of which contain ports of exchange. Number disks, which will correspond to die rolls (two 6-sided dice are used), are placed on each resource tile. Each player is given two settlements (think: houses) and roads (sticks) which are, in turn, placed on intersections and borders of the resource tiles. Players collect a hand of resource cards based on which hex tiles their last-placed house is adjacent to. A robber pawn is placed on the desert tile.&amp;#10;&amp;#10;A turn consists of possibly playing a development card, rolling the dice, everyone (perhaps) collecting resource cards based on the roll and position of houses (or upgraded cities&amp;mdash;think: hotels) unless a 7 is rolled, turning in resource cards (if possible and desired) for improvements, trading cards at a port, and trading resource cards with other players. If a 7 is rolled, the active player moves the robber to a new hex tile and steals resource cards from other players who have built structures adjacent to that tile.&amp;#10;&amp;#10;Points are accumulated by building settlements and cities, having the longest road and the largest army (from some of the development cards), and gathering certain development cards that simply award victory points. When a player has gathered 10 points (some of which may be held in secret), he announces his total and claims the win.&amp;#10;&amp;#10;CATAN has won multiple awards and is one of the most popular games in recent history due to its amazing ability to appeal to experienced gamers as well as those new to the hobby.&amp;#10;&amp;#10;Die Siedler von Catan was originally published by KOSMOS and has gone through multiple editions. It was licensed by Mayfair and has undergone four editions as The Settlers of Catan. In 2015, it was formally renamed CATAN to better represent itself as the core and base game of the CATAN series. It has been re-published in two travel editions, portable edition and compact edition, as a special gallery edition (replaced in 2009 with a family edition), as an anniversary wooden edition, as a deluxe 3D collector’s edition, in the basic Simply Catan, as a beginner version, and with an entirely new theme in Japan and Asia as Settlers of Catan: Rockman Edition. Numerous spin-offs and expansions have also been made for the game.&amp;#10;&amp;#10;
+</td>
+<td style="text-align:left;">
+1995
+</td>
+<td style="text-align:left;">
+3
+</td>
+<td style="text-align:left;">
+4
+</td>
+<td style="text-align:left;">
+120
+</td>
+<td style="text-align:left;">
+60
+</td>
+<td style="text-align:left;">
+120
+</td>
+<td style="text-align:left;">
+10
+</td>
+<td style="text-align:left;">
+[‘Economic’, ‘Negotiation’]
+</td>
+<td style="text-align:left;">
+[‘Dice Rolling’, ‘Hexagon Grid’, ‘Income’, ‘Modular Board’, ‘Network and Route Building’, ‘Race’, ‘Random Production’, ‘Trading’, ‘Variable Set-up’]
+</td>
+<td style="text-align:left;">
+[‘Animals: Sheep’, ‘Components: Hexagonal Tiles’, ‘Components: Wooden pieces &amp; boards’, ‘Game: Catan’, ‘Promotional: Promo Board Games’]
+</td>
+<td style="text-align:left;">
+[‘20 Jahre Darmstadt Spielt’, ‘Brettspiel Adventskalender 2015’, ‘Catan Austria / Wien meets Catan’, ‘Catan Geographies: Austria’, ‘Catan Geographies: Bayern Edition’, ‘Catan Geographies: Corsica’, ‘Catan Geographies: Georgia’, ‘Catan Geographies: Kennessee’, ‘Catan Geographies: Mallorca’, ‘Catan Geographies: North Rhine – Westphalia’, ‘Catan Geographies: Rickshaw Run’, ‘Catan Geographies: Settlers of Hesse’, ‘Catan Geographies: The Carolinas’, ‘Catan Länderszenarien: Polen’, ‘Catan Rhein-Main-Neckar’, ‘Catan Scenario: Crop Trust’, ‘Catan Scenario: Durango’, ‘Catan Scenarios: Easter Bunny’, ‘Catan Scenarios: #WeStayHome’, ‘Catan Scenarios: Big Game Big Honor’, ‘Catan Scenarios: Catanimals’, ‘Catan Scenarios: Frenemies’, ‘Catan Scenarios: Global Warming’, ‘Catan Scenarios: Helpers of Catan’, ‘Catan Scenarios: Oil Springs’, ‘Catan World Championship Berlin 2014 Special’, ‘Catan: 5-6 Player Extension’, ‘Catan: 999 Games 25 jaar Expansion’, ‘Catan: Catakatoa’, ‘Catan: Catan Day 2015 Exclusive Expansion’, ‘Catan: Cities &amp; Knights’, ‘Catan: Cities &amp; Knights – 5-6 Player Extension’, ‘Catan: Cities &amp; Knights – Legend of the Conquerors’, ‘Catan: Delmarva’, ‘Catan: Die Stoffräuber’, ‘Catan: Event Cards’, ‘Catan: Explorers &amp; Pirates’, ‘Catan: Explorers &amp; Pirates – 5-6 Player Extension’, ‘Catan: Hawaii (Szenario für Seefahrer)’, ‘Catan: High Priests of the Inkas’, ‘Catan: Indiana &amp; Ohio’, ‘Catan: New England’, ‘Catan: New York’, ‘Catan: Penn-Jersey’, ‘Catan: Playmat Desert’, ‘Catan: Playmat Gold’, ‘Catan: Seafarers’, ‘Catan: Seafarers Scenario – Legend of the Sea Robbers’, ‘Catan: Seafarers – 5-6 Player Extension’, ‘Catan: Seefahrer – 20 Jahre Jubiläums-Edition’, ‘Catan: Szenario Der Kölner Dom’, ‘Catan: Traders &amp; Barbarians’, ‘Catan: Traders &amp; Barbarians – 5-6 Player Extension’, ‘Catan: Treasures, Dragons &amp; Adventurers’, ‘Der Hafenmeister’, ‘Heroes &amp; Capitols (fan expansion for Settlers of Catan)’, ‘Hexen, Zauberer &amp; Drachen (fan expansion for Catan: Cities and Knights)’, ‘Katani pankur’, ‘Kirche, Glaube &amp; Reformation (fan expansion for Catan: Cities and Knights)’, ‘De Kolonisten van Catan: De Diamanten’, ‘De Kolonisten van Catan: De drie Handelsteden van Noord-Nederland’, ‘De Kolonisten van Catan: De Koloniën’, ‘De Kolonisten van Catan: De Specialisten’, ‘De Kolonisten van Catan: De Wereldwonderen’, ‘De Kolonisten van Catan: De Woestijnruiters’, ‘De Kolonisten van Catan: Het Grote Kanaal’, ‘Mayfair Game Variants &amp; Mini-Expansions Set #1’, ‘Die Pioniere (fan expansion for The Settlers of Catan)’, “Saggsen-Gadan: De säggs’schn Siedler / Catan-OFFENSIVE in Chemnitz”, ‘Settlers of Catan Scenario: The Jungle’, ‘Settlers of Catan Scenario: The Volcano’, ‘The Settlers of Catan: The Fishermen of Catan’, ‘The Settlers of Catan: The Great River’, ‘Settlers of New Catan (and extra modules)’, ‘Die Siedler von Catan: Atlantis – Szenarien &amp; Varianten’, ‘Die Siedler von Catan: Das Buch zum Spielen’, ‘Die Siedler von Catan: Der Schokoladenmarkt’, ‘Die Siedler von Catan: Die große Karawane’, ‘Die Siedler von Catan: Hispania Edition’, ‘Die Siedler von Catan: Historische Szenarien’, ‘Die Siedler von Catan: Historische Szenarien II’, ‘Die Siedler von Catan: Hochzeitsturm’, ‘Die Siedler von Catan: Renaissance in der Steiermark &amp; Burgbau auf Chaffenberch’, ‘Die Siedler von Catan: Rincewind und der Tourist / Die Gilden von Ankh-Morpork’, ‘Die Siedler von Catan: Thüringen Edition’, ‘Die Siedler von Luxemburg’, ‘World Wonders (fan expansion for Catan)’]
+</td>
+<td style="text-align:left;">
+[‘Baden-Württemberg Catan’, ‘Catan Geographies: Germany’, ‘Catan Histories: Merchants of Europe’, ‘Catan Histories: Rise of the Inkas’, ‘Catan Histories: Settlers of America – Trails to Rails’, ‘Catan Histories: Struggle for Rome’, ‘Catan: Ancient Egypt’, ‘Catan: Big Game Event Kit’, ‘Catan: Core + China Map’, ‘Catan: Family Edition’, ‘Catan: Portable Edition’, ‘Catan: Starfarers’, ‘Catan: Traveler – Compact Edition’, ‘The Communication in Catan’, ‘A Game of Thrones: Catan – Brotherhood of the Watch’, ‘The Kids of Catan’, ‘De Kolonisten van de Lage Landen’, ‘The Settlers of Canaan’, ‘Settlers of Catan: Gallery Edition’, ‘Settlers of Catan: Rockman Edition’, ‘The Settlers of the Stone Age’, ‘The Settlers of Zarahemla’, ‘Die Siedler von Catan: Junior’, ‘Die Siedler von Nürnberg’, ‘Simply Catan’, ‘Star Trek: Catan’, ‘The Starfarers of Catan’, ‘Das Wasser des Lebens’, ‘Wien Catan’]
+</td>
+<td style="text-align:left;">
+[‘Klaus Teuber’]
+</td>
+<td style="text-align:left;">
+[‘Volkan Baga’, ‘Tanja Donner’, ‘Pete Fenlon’, ‘Jason Hawkins’, ‘Michaela Kienle’, ‘Harald Lieske’, ‘Michael Menzel’, ‘Marion Pott’, ‘Matt Schwabel’, ‘Franz Vohwinkel’, ‘Stephen Graham Walsh’]
+</td>
+<td style="text-align:left;">
+[‘KOSMOS’, ‘999 Games’, ‘Albi’, ‘Asmodee’, ‘Astrel Games’, ‘Bergsala Enigma (Enigma)’, ‘Brädspel.se’, ‘Brain Games’, ‘Broadway Toys LTD’, ‘Capcom Co., Ltd.’, ‘Catan Studio’, ‘Competo / Marektoy’, ‘danspil’, ‘Descartes Editeur’, ‘Devir’, ‘Dexy Co’, ‘Eurogames’, ‘Filosofia Éditions’, ‘Galakta’, ‘Giochi Uniti’, ‘GP Games’, ‘Grow Jogos e Brinquedos’, ‘HaKubia’, ‘Hanayama’, ‘Hobby World’, ‘Ideal Board Games’, ‘Igroljub’, ‘IntelliGames.BG’, ‘Ísöld ehf.’, ‘Kaissa Chess &amp; Games’, ‘Korea Boardgames Co., Ltd.’, ‘L&amp;M Games’, ‘Laser plus’, ‘Lautapelit.fi’, ‘Logojogos’, ‘Mayfair Games’, ‘Ninive Games’, ‘Paper Iyagi’, ‘Piatnik’, ‘Smart Ltd’, ‘Spilbræt.dk’, ‘Stupor Mundi’, ‘SuperHeated Neurons’, ‘Swan Panasia Co., Ltd.’, ‘Tilsit’, ‘Top Toys’, ‘TRY SOFT’, ‘Vennerød Forlag AS’]
+</td>
+<td style="text-align:left;">
+167733
+</td>
+<td style="text-align:left;">
+2018
+</td>
+<td style="text-align:left;">
+485
+</td>
+<td style="text-align:left;">
+5890
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+4
+</td>
+<td style="text-align:left;">
+3
+</td>
+<td style="text-align:left;">
+68448
+</td>
+<td style="text-align:left;">
+7 Wonders
+</td>
+<td style="text-align:left;">
+You are the leader of one of the 7 great cities of the Ancient World. Gather resources, develop commercial routes, and affirm your military supremacy. Build your city and erect an architectural wonder which will transcend future times.&amp;#10;&amp;#10;7 Wonders lasts three ages. In each age, players receive seven cards from a particular deck, choose one of those cards, then pass the remainder to an adjacent player. Players reveal their cards simultaneously, paying resources if needed or collecting resources or interacting with other players in various ways. (Players have individual boards with special powers on which to organize their cards, and the boards are double-sided). Each player then chooses another card from the deck they were passed, and the process repeats until players have six cards in play from that age. After three ages, the game ends.&amp;#10;&amp;#10;In essence, 7 Wonders is a card development game. Some cards have immediate effects, while others provide bonuses or upgrades later in the game. Some cards provide discounts on future purchases. Some provide military strength to overpower your neighbors and others give nothing but victory points. Each card is played immediately after being drafted, so you’ll know which cards your neighbor is receiving and how her choices might affect what you’ve already built up. Cards are passed left-right-left over the three ages, so you need to keep an eye on the neighbors in both directions.&amp;#10;&amp;#10;Though the box of earlier editions is listed as being for 3&amp;ndash;7 players, there is an official 2-player variant included in the instructions.&amp;#10;&amp;#10;
+</td>
+<td style="text-align:left;">
+2010
+</td>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:left;">
+7
+</td>
+<td style="text-align:left;">
+30
+</td>
+<td style="text-align:left;">
+30
+</td>
+<td style="text-align:left;">
+30
+</td>
+<td style="text-align:left;">
+10
+</td>
+<td style="text-align:left;">
+[‘Ancient’, ‘Card Game’, ‘City Building’, ‘Civilization’, ‘Economic’]
+</td>
+<td style="text-align:left;">
+[‘Drafting’, ‘Hand Management’, ‘Set Collection’, ‘Simultaneous Action Selection’, ‘Variable Player Powers’]
+</td>
+<td style="text-align:left;">
+[‘Ancient: Babylon’, ‘Ancient: Egypt’, ‘Ancient: Greece’, ‘Digital Implementations: Board Game Arena’, ‘Game: 7 Wonders’, ‘Mechanism: Artificial Player’, ‘Mechanism: Tableau Building’]
+</td>
+<td style="text-align:left;">
+[‘7 Wonders: Armada’, ‘7 Wonders: Babel’, ‘7 Wonders: Catan’, ‘7 Wonders: Cities’, ‘7 Wonders: Leaders’, ‘7 Wonders: Manneken Pis’, ‘7 Wonders: Wonder Pack’, ‘Collection (fan expansion for 7 Wonders)’, ‘Empires (fan expansion for 7 Wonders)’, ‘Game Wonders (fan expansion for 7 Wonders)’, ‘Lost Wonders (fan expansion for 7 Wonders)’, ‘Modern Wonders (fan expansion for 7 Wonders)’, ‘More Wonders… (fan expansion for 7 Wonders)’, ‘Myths (fan expansion for 7 Wonders)’, ‘Ruins (fan expansion for 7 Wonders)’, ‘Sailors (fan expansion for 7 Wonders)’]
+</td>
+<td style="text-align:left;">
+[‘7 Wonders (Second Edition)’, ‘7 Wonders Duel’, ‘7 Wonders: Architects’]
+</td>
+<td style="text-align:left;">
+[‘Antoine Bauza’]
+</td>
+<td style="text-align:left;">
+[‘Dimitri Chappuis’, ‘Miguel Coimbra’, ‘Etienne Hebinger’, ‘Cyril Nouvel’]
+</td>
+<td style="text-align:left;">
+[‘Repos Production’, ‘ADC Blackfire Entertainment’, ‘Asmodee’, ‘Asterion Press’, ‘Galápagos Jogos’, ‘Gém Klub Kft.’, ‘Hobby Japan’, ‘Kaissa Chess &amp; Games’, ‘Korea Boardgames Co., Ltd.’, ‘Lautapelit.fi’, ‘Lifestyle Boardgames Ltd’, ‘NeoTroy Games’, ‘Rebel Sp. z o.o.’, ‘Siam Board Games’]
+</td>
+<td style="text-align:left;">
+120466
+</td>
+<td style="text-align:left;">
+1567
+</td>
+<td style="text-align:left;">
+1010
+</td>
+<td style="text-align:left;">
+12105
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+5
+</td>
+<td style="text-align:left;">
+4
+</td>
+<td style="text-align:left;">
+36218
+</td>
+<td style="text-align:left;">
+Dominion
+</td>
+<td style="text-align:left;">
+&amp;quot;You are a monarch, like your parents before you, a ruler of a small pleasant kingdom of rivers and evergreens. Unlike your parents, however, you have hopes and dreams! You want a bigger and more pleasant kingdom, with more rivers and a wider variety of trees. You want a Dominion! In all directions lie fiefs, freeholds, and feodums. All are small bits of land, controlled by petty lords and verging on anarchy. You will bring civilization to these people, uniting them under your banner.&amp;#10;&amp;#10;But wait! It must be something in the air; several other monarchs have had the exact same idea. You must race to get as much of the unclaimed land as possible, fending them off along the way. To do this you will hire minions, construct buildings, spruce up your castle, and fill the coffers of your treasury. Your parents wouldn’t be proud, but your grandparents, on your mother’s side, would be delighted.&amp;quot;&amp;#10;&amp;#10;&amp;mdash;description from the back of the box&amp;#10;&amp;#10;In Dominion, each player starts with an identical, very small deck of cards. In the center of the table is a selection of other cards the players can &amp;quot;buy&amp;quot; as they can afford them. Through their selection of cards to buy, and how they play their hands as they draw them, the players construct their deck on the fly, striving for the most efficient path to the precious victory points by game end.&amp;#10;&amp;#10;Dominion is not a CCG, but the play of the game is similar to the construction and play of a CCG deck. The game comes with 500 cards. You select 10 of the 25 Kingdom card types to include in any given play&amp;mdash;leading to immense variety.&amp;#10;&amp;#10;&amp;mdash;user summary&amp;#10;&amp;#10;Part of the Dominion series.&amp;#10;&amp;#10;
+</td>
+<td style="text-align:left;">
+2008
+</td>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:left;">
+4
+</td>
+<td style="text-align:left;">
+30
+</td>
+<td style="text-align:left;">
+30
+</td>
+<td style="text-align:left;">
+30
+</td>
+<td style="text-align:left;">
+13
+</td>
+<td style="text-align:left;">
+[‘Card Game’, ‘Medieval’]
+</td>
+<td style="text-align:left;">
+[‘Deck, Bag, and Pool Building’, ‘Delayed Purchase’, ‘Hand Management’, ‘Take That’, ‘Variable Set-up’]
+</td>
+<td style="text-align:left;">
+[‘Crowdfunding: Wspieram’, ‘Game: Dominion’, ‘Misc: Mensa Select’]
+</td>
+<td style="text-align:left;">
+[‘Ancient Times (fan expansion for Dominion)’, ‘Animals (fan expansion for Dominion)’, ‘The Books of Magic (fan expansion for Dominion)’, ‘Dominion: Adventures’, ‘Dominion: Alchemisten &amp; Reiche Ernte – Mixbox’, ‘Dominion: Alchemy’, ‘Dominion: Allies’, ‘Dominion: Black Market Promo Card’, ‘Dominion: Captain Promo Card’, ‘Dominion: Church Promo Card’, ‘Dominion: Cornucopia’, ‘Dominion: Dark Ages’, ‘Dominion: Die Intrige – Erweiterung’, ‘Dominion: Dismantle Promo Card’, ‘Dominion: Empires’, ‘Dominion: Envoy Promo Card’, ‘Dominion: Erweiterung – Basisspiel &amp; Die Intrige’, ‘Dominion: Fan-Edition I’, ‘Dominion: Governor Promo Card’, ‘Dominion: Guilds’, ‘Dominion: Guilds &amp; Cornucopia’, ‘Dominion: Hinterlands’, ‘Dominion: Höflinge Promo Card’, ‘Dominion: Intrigue (Second Edition)’, ‘Dominion: Intrigue – Update Pack’, ‘Dominion: Menagerie’, ‘Dominion: Nocturne’, ‘Dominion: Prince Promo Card’, ‘Dominion: Prosperity’, ‘Dominion: Renaissance’, ‘Dominion: Sauna / Avanto Promo Card’, ‘Dominion: Seaside’, ‘Dominion: Stash Promo Card’, ‘Dominion: Summon Promo Card’, ‘Dominion: Update Pack’, ‘Dominion: Walled Village Promo Card’, ‘Duel (fan expansion for Dominion)’, ‘Fairy Tale (fan expansion for Dominion)’, ‘Paradox (fan expansion for Dominion)’, “Pirate’s Life (fan expansion for Dominion)”, ‘Royal Court (fan expansion for Dominion)’, ‘Salvation (fan expansion for Dominion)’, ‘The Scrolls of Power (fan expansion for Dominion)’, ‘Stadt Land Spielt Limitierte Sonderdrucke 2015’, ‘Stadt Land Spielt Minierweiterungen 2016’, ‘Warmonger (fan expansion for Dominion)’]
+</td>
+<td style="text-align:left;">
+[‘Dominion (Second Edition)’, ‘Het Koninkrijk Dominion’]
+</td>
+<td style="text-align:left;">
+[‘Donald X. Vaccarino’]
+</td>
+<td style="text-align:left;">
+[‘Matthias Catrein’, ‘Julien Delval’, ‘Tomasz Jedruszek’, ‘Ryan Laukat’, ‘Harald Lieske’, ‘Michael Menzel’, ‘Marcel-André Casasola Merkle’, ‘Claus Stephan’, ‘Christof Tisch’]
+</td>
+<td style="text-align:left;">
+[‘Rio Grande Games’, ‘999 Games’, ‘Albi’, ‘Bard Centrum Gier’, ‘Conclave Editora’, ‘cutia.ro’, ‘Devir’, ‘Filosofia Éditions’, ‘Games Factory Publishing’, ‘Gém Klub Kft.’, ‘Hans im Glück’, ‘Hobby Japan’, ‘Hobby World’, ‘Kaissa Chess &amp; Games’, ‘Korea Boardgames Co., Ltd.’, ‘Lautapelit.fi’, ‘Martinex’, ‘Runadrake’, ‘Smart Ltd’, ‘Stupor Mundi’, ‘Swan Panasia Co., Ltd.’, ‘Vennerød Forlag AS’, ‘Ystari Games’]
+</td>
+<td style="text-align:left;">
+106956
+</td>
+<td style="text-align:left;">
+2009
+</td>
+<td style="text-align:left;">
+655
+</td>
+<td style="text-align:left;">
+8621
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+6
+</td>
+<td style="text-align:left;">
+5
+</td>
+<td style="text-align:left;">
+9209
+</td>
+<td style="text-align:left;">
+Ticket to Ride
+</td>
+<td style="text-align:left;">
+With elegantly simple gameplay, Ticket to Ride can be learned in under 15 minutes. Players collect cards of various types of train cars they then use to claim railway routes in North America. The longer the routes, the more points they earn. Additional points come to those who fulfill Destination Tickets &amp;ndash; goal cards that connect distant cities; and to the player who builds the longest continuous route.&amp;#10;&amp;#10;&amp;quot;The rules are simple enough to write on a train ticket &amp;ndash; each turn you either draw more cards, claim a route, or get additional Destination Tickets,&amp;quot; says Ticket to Ride author, Alan R. Moon. &amp;quot;The tension comes from being forced to balance greed &amp;ndash; adding more cards to your hand, and fear &amp;ndash; losing a critical route to a competitor.&amp;quot;&amp;#10;&amp;#10;Ticket to Ride continues in the tradition of Days of Wonder’s big format board games featuring high-quality illustrations and components including: an oversize board map of North America, 225 custom-molded train cars, 144 illustrated cards, and wooden scoring markers.&amp;#10;&amp;#10;Since its introduction and numerous subsequent awards, Ticket to Ride has become the BoardGameGeek epitome of a &amp;quot;gateway game&amp;quot; – simple enough to be taught in a few minutes, and with enough action and tension to keep new players involved and in the game for the duration.&amp;#10;&amp;#10;Part of the Ticket to Ride series.&amp;#10;&amp;#10;
+</td>
+<td style="text-align:left;">
+2004
+</td>
+<td style="text-align:left;">
+2
+</td>
+<td style="text-align:left;">
+5
+</td>
+<td style="text-align:left;">
+60
+</td>
+<td style="text-align:left;">
+30
+</td>
+<td style="text-align:left;">
+60
+</td>
+<td style="text-align:left;">
+8
+</td>
+<td style="text-align:left;">
+[‘Trains’]
+</td>
+<td style="text-align:left;">
+[‘Card Drafting’, ‘Contracts’, ‘End Game Bonuses’, ‘Hand Management’, ‘Network and Route Building’, ‘Push Your Luck’, ‘Set Collection’]
+</td>
+<td style="text-align:left;">
+[‘Components: Map (Continental / National scale)’, ‘Continents: North America’, ‘Country: USA’, ‘Game: Ticket to Ride (Official)’]
+</td>
+<td style="text-align:left;">
+[‘Alaska (fan expansion for Ticket to Ride)’, ‘Alice in Wonderland (fan expansion for Ticket to Ride)’, ‘Alsace (fan expansion for Ticket to Ride)’, ‘Ancient Greece (fan expansion for Ticket to Ride)’, ‘Ancient Sicily (fan expansion for Ticket to Ride)’, ‘Antarctica (fan expansion for Ticket to Ride)’, ‘Antarctica (fan expansion for Ticket to Ride)’, ‘Les Aventuriers du Rail: à Lyon (fan expansion for Ticket to Ride)’, ‘Les Aventuriers du Rail: en Belgique (fan expansion to Ticket to Ride)’, ‘Barsoom (fan expansion for Ticket to Ride)’, ‘Belarus (fan expansion for Ticket to Ride)’, ‘Biblical Israel (fan expansion for Ticket to Ride)’, ‘Borneo (fan expansion for Ticket to Ride)’, ‘Bretagne (fan expansion for Ticket to Ride)’, ‘Britain &amp; Ireland (fan expansion for Ticket to Ride: Europe)’, ‘Bulgaria (fan expansion for Ticket to Ride)’, ‘Cambodia (fan expansion for Ticket to Ride)’, ‘Canada (fan expansion for Ticket to Ride)’, ‘Canada 2017 (fan expansion for Ticket to Ride)’, ‘Canary Islands (fan expansion for Ticket to Ride)’, ‘Castilla y León (fan expansion for Ticket to Ride)’, ‘Channel Islands (fan expansion for Ticket to Ride)’, ‘China (fan expansion for Ticket to Ride)’, ‘Corsica (fan expansion for Ticket to Ride)’, ‘Cuba (fan expansion for Ticket to Ride)’, ‘Cuba: Region Occidental (fan expansion for Ticket to Ride)’, ‘Cyprus (fan expansion for Ticket to Ride)’, ‘Czech Republic (fan expansion for Ticket to Ride)’, ‘Czech Republic (fan expansion for Ticket to Ride)’, ‘Denmark (fan expansion for Ticket to Ride)’, ‘Dickensian Intrigue (fan expansion for Ticket to Ride)’, ‘East Africa (fan expansion for Ticket to Ride)’, ‘East Indies (fan expansion for Ticket to Ride)’, ‘Eastern Europe (fan expansion for Ticket to Ride)’, ‘Egypt (fan expansion for Ticket to Ride)’, ‘The Emerald City (fan expansion for Ticket to Ride)’, ‘Estonia (fan expansion for Ticket to Ride)’, ‘Eurasia (fan expansion for Ticket to Ride)’, ‘Extension France (fan expansion for Ticket to Ride)’, ‘Falkland Islands (fan expansion for Ticket to Ride)’, ‘France (fan expansion for Ticket to Ride)’, ‘The Grand Duchy of Luxembourg (fan expansion for Ticket to Ride)’, ‘Greece (fan expansion for Ticket to Ride)’, ‘Greenland (fan expansion for Ticket to Ride)’, ‘Gulf States (fan expansion for Ticket to Ride)’, “Hallowe’en (fan expansion for Ticket to Ride)”, ‘Hawaii (fan expansion for Ticket to Ride)’, ‘Hispaniola (fan expansion for Ticket to Ride)’, ‘Hokkaido (fan expansion for Ticket to Ride)’, ‘Holland (fan expansion for Ticket to Ride)’, ‘Holland Express (fan expansion for Ticket to Ride)’, ‘Hong Kong (fan expansion for Ticket to Ride)’, ‘Hungary (fan expansion for Ticket to Ride)’, ‘Iberia (fan expansion for Ticket to Ride)’, ‘Iceland (fan expansion for Ticket to Ride)’, ‘India (fan expansion for Ticket to Ride)’, ‘Indiana (fan expansion for Ticket to Ride)’, ‘Indochina (fan expansion for Ticket to Ride)’, ‘Ireland (fan expansion for Ticket to Ride)’, ‘Isle of Man (fan expansion for Ticket to Ride)’, ‘Italy (fan expansion for Ticket to Ride)’, ‘Italy (fan expansion for Ticket to Ride)’, ‘Italy (fan expansion for Ticket to Ride)’, ‘Jamaica (fan expansion for Ticket to Ride)’, ‘Japan (fan expansion for Ticket To Ride)’, ‘Komorów (fan expansion for Ticket to Ride)’, ‘Korean Peninsula (fan expansion for Ticket to Ride)’, ‘Kosovo (fan expansion for Ticket to Ride)’, ‘Latvia (fan expansion for Ticket to Ride)’, ‘Liechtenstein (fan expansion for Ticket to Ride)’, ‘Lietuva (fan expansion for Ticket to Ride)’, ‘London Underground (fan expansion for Ticket to Ride)’, ‘Macedonia (fan expansion for Ticket to Ride)’, ‘Madagascar (fan expansion for Ticket to Ride)’, ‘Madeira (fan expansion for Ticket to Ride)’, ‘Mars (fan expansion for Ticket to Ride)’, ‘Mascarene Islands (fan expansion for Ticket to Ride)’, ‘Mauritius &amp; Réunion (fan expansion for Ticket to Ride)’, ‘Mauritius (fan expansion for Ticket to Ride)’, ‘Moldova (fan expansion of Ticket to Ride)’, ‘Montenegro (fan expansion for Ticket to Ride)’, ‘Myanmar (fan expansion of Ticket to Ride)’, ‘Nepal (fan expansion for Ticket to Ride)’, ‘New China (fan expansion for Ticket to Ride)’, ‘New York (fan expansion for Ticket to Ride)’, ‘New York State (fan expansion for Ticket to Ride)’, ‘New Zealand (fan expansion for Ticket to Ride)’, ‘Niagara (fan expansion for Ticket to Ride)’, ‘North-Africa (fan expansion for Ticket to Ride)’, ‘Northamptonshire (fan expansion for Ticket to Ride)’, ‘Ohio (fan expansion for Ticket to Ride)’, “Östergötland in the 1930’s (fan expansion for Ticket to Ride)”, ‘Österreich Karte: Zug um Zug (fan expansion for Ticket to Ride)’, ‘Poland (fan expansion for Ticket to Ride)’, ‘Portugal (fan expansion for Ticket to Ride)’, “Québec et l’Est du Canada (fan expansion to Ticket to Ride)”, ‘Quebec Province (fan expansion for Ticket to Ride)’, ‘Reise durch Ägypten (fan expansion for Ticket to Ride)’, ‘Réunion &amp; Mauritius (fan expansion for Ticket to Ride)’, ‘Rivers of Africa (fan expansion for Ticket to Ride)’, ‘Rodrigues &amp; Mauritius (fan expansion of Ticket to Ride)’, ‘Roman Italy (fan expansion for Ticket to Ride)’, ‘Russian Empire 1912 (fan expansion for Ticket to Ride)’, ‘Sardinia (fan expansion for Ticket to Ride)’, ‘Scandinavia (fan expansion for Ticket to Ride)’, ‘Scandinavia (fan expansion for Ticket to Ride)’, ‘Scilly Isles (fan expansion for Ticket to Ride)’, ‘Seattle (fan expansion for Ticket to Ride)’, ‘Serbia (fan expansion for Ticket to Ride)’, ‘Skåne (fan expansion for Ticket to Ride)’, ‘Slovakia (fan expansion for Ticket to Ride)’, ‘Slovenia (fan expansion of Ticket to Ride)’, ‘South America (fan expansion for Ticket to Ride)’, ‘South Korea (fan expansion for Ticket to Ride)’, ‘South-East Sweden 1925 (fan expansion for Ticket to Ride)’, ‘Sri Lanka (fan expansion for Ticket to Ride)’, ‘Sweden (fan expansion for Ticket to Ride)’, ‘Texas (fan expansion for Ticket to Ride)’, ‘Thailand (fan expansion for Ticket to Ride)’, ‘Ticket to Finland (fan expansion for Ticket to Ride)’, ‘Ticket to Fly (fan expansion for Ticket to Ride)’, ‘Ticket to Ride Map Collection: Volume 1 – Team Asia &amp; Legendary Asia’, ‘Ticket to Ride Map Collection: Volume 2 – India &amp; Switzerland’, ‘Ticket to Ride Map Collection: Volume 3 – The Heart of Africa’, ‘Ticket to Ride Map Collection: Volume 4 – Nederland’, ‘Ticket to Ride Map Collection: Volume 5 – United Kingdom &amp; Pennsylvania’, ‘Ticket to Ride Map Collection: Volume 6 – France &amp; Old West’, ‘Ticket to Ride Map Collection: Volume 7 – Japan &amp; Italy’, ‘Ticket to Ride: Alvin &amp; Dexter’, ‘Ticket to Ride: Europa 1912’, ‘Ticket to Ride: Mystery Train Expansion’, ‘Ticket to Ride: Stay at Home’, ‘Ticket to Ride: Switzerland’, ‘Ticket to Ride: The Dice Expansion’, ‘Ticket to Ride: USA 1910’, ‘Ticket to Ryde: The Game (fan expansion for Ticket to Ride)’, ‘Transylvania (fan expansion for Ticket to Ride)’, ‘Triveneto (fan expansion for Ticket to Ride)’, ‘Turkey (fan expansion for Ticket to Ride)’, ‘UK (fan expansion for Ticket to Ride)’, ‘UK (fan expansion for Ticket to Ride)’, ‘UK Cynical Edition (fan expansion for Ticket to Ride)’, ‘UK version 2.0 (fan expansion for Ticket to Ride)’, ‘Ukraine (fan expansion for Ticket to Ride)’, ‘Ukraine (fan expansion for Ticket to Ride)’, ‘USSR (fan expansion for Ticket to Ride)’, ‘Wales (fan expansion for Ticket to Ride)’, ‘West Country (UK) (fan expansion of Ticket to Ride)’, ‘West Indies (fan expansion for Ticket to Ride)’, ‘Western Isles (fan expansion for Ticket to Ride)’, ‘Wild Wild West (fan expansion for Ticket to Ride)’, ‘Winnie-the-Pooh (fan expansion for Ticket to Ride)’, ‘Wsiąść do Pociągu: Polska’, ‘Zanzibar: Pemba (fan expansion of Ticket to Ride)’, ‘Zanzibar: Unguja (fan expansion of Ticket to Ride)’]
+</td>
+<td style="text-align:left;">
+[‘Les Aventuriers du Rail Express’, ‘Ticket to Ride Demo’, ‘Ticket to Ride: Amsterdam’, ‘Ticket to Ride: Europe’, ‘Ticket to Ride: First Journey (U.S.)’, ‘Ticket to Ride: Germany’, ‘Ticket to Ride: London’, ‘Ticket to Ride: Märklin’, ‘Ticket to Ride: New York’, ‘Ticket to Ride: Nordic Countries’, ‘Ticket to Ride: Rails &amp; Sails’, ‘Ticket to Ride: The Card Game’]
+</td>
+<td style="text-align:left;">
+[‘Alan R. Moon’]
+</td>
+<td style="text-align:left;">
+[‘Cyrille Daujean’, ‘Julien Delval’]
+</td>
+<td style="text-align:left;">
+[‘Days of Wonder’, ‘ADC Blackfire Entertainment’, ‘Asmodee China’, ‘Bandai’, ‘Bergsala Enigma (Enigma)’, ‘Boardgame Space’, ‘Edge Entertainment’, ‘Galápagos Jogos’, ‘Giochi Uniti’, ‘Happy Baobab’, ‘Hobby World’, ‘Korea Boardgames Co., Ltd.’, ‘Lautapelit.fi’, ‘Nordic Games GmbH’, ‘Rebel Sp. z o.o.’, ‘Siam Board Games’, ‘Swan Panasia Co., Ltd.’]
+</td>
+<td style="text-align:left;">
+105748
+</td>
+<td style="text-align:left;">
+930
+</td>
+<td style="text-align:left;">
+692
+</td>
+<td style="text-align:left;">
+6620
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-details-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Details des jeux vidéos
+</figcaption>
+</figure>
+</div>
+</div>
+<p>Étant donné que les données contiennent deux tableurs, il est donc nécessaire de les joindre les deux afin de faciliter l’analyse.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>tb_joined <span class="ot">&lt;-</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  ratings <span class="sc">%&gt;%</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(details, <span class="at">by =</span> <span class="st">"id"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>J’aime bien avoir le nom des colonnes du dataset afin de mieux le visualiser.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(tb_joined)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "num.x"                   "id"                     
+ [3] "name"                    "year"                   
+ [5] "rank"                    "average"                
+ [7] "bayes_average"           "users_rated"            
+ [9] "url"                     "thumbnail"              
+[11] "num.y"                   "primary"                
+[13] "description"             "yearpublished"          
+[15] "minplayers"              "maxplayers"             
+[17] "playingtime"             "minplaytime"            
+[19] "maxplaytime"             "minage"                 
+[21] "boardgamecategory"       "boardgamemechanic"      
+[23] "boardgamefamily"         "boardgameexpansion"     
+[25] "boardgameimplementation" "boardgamedesigner"      
+[27] "boardgameartist"         "boardgamepublisher"     
+[29] "owned"                   "trading"                
+[31] "wanting"                 "wishing"                </code></pre>
+</div>
+</div>
+</section>
+<section id="nettoyage-des-données" class="level2">
+<h2 class="anchored" data-anchor-id="nettoyage-des-données">Nettoyage des données</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(tb_joined<span class="sc">$</span>playingtime, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   0%   25%   50%   75%  100% 
+    0    25    45    90 60000 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(tb_joined<span class="sc">$</span>maxplayers, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  0%  25%  50%  75% 100% 
+   0    4    4    6  999 </code></pre>
+</div>
+</div>
+<p>En regardant les quartiles, on se rend compte de l’existence de données extrême au sein de nos données. Nous allons donc les enlever. En vérifiant, on voit que les données maximales de playingtime sont inférieures à 1000 et ceux de maxplayers sont inférieurs à 100. Nous allons donc les enlever.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># définir le outline</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>outlier <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>outlier2 <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co">#filtrer les outllines pour créer un nouveau dataset. </span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>df_clean <span class="ot">&lt;-</span> tb_joined <span class="sc">%&gt;%</span> </span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">select</span>(maxplayers, playingtime, average) <span class="sc">%&gt;%</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">filter</span>(maxplayers <span class="sc">&lt;</span> outlier) <span class="sc">%&gt;%</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>                <span class="fu">filter</span>(playingtime <span class="sc">&lt;</span> outlier2) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>En verifiant on vois que les données maximals de playingtime sont inférieur à 1000 et ceux de maxplayers sont unférieur à 100.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(df_clean<span class="sc">$</span>playingtime, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  0%  25%  50%  75% 100% 
+   0   25   45   90  999 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(df_clean<span class="sc">$</span>maxplayers, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  0%  25%  50%  75% 100% 
+   0    4    4    6   99 </code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="statistiques" class="level1">
+<h1>Statistiques</h1>
+<p>Voyons la distribution du temps de jeu afin d’avoir un meilleur aperçu des données</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>ecdf_play <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(df_clean, <span class="fu">aes</span>(playingtime)) <span class="sc">+</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_ecdf</span>(<span class="at">geom =</span> <span class="st">"step"</span>) <span class="sc">+</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Pourcentage"</span>) <span class="sc">+</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Temps de jeu en minutes"</span>)</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>ecdf_play <span class="sc">+</span> <span class="fu">scale_x_continuous</span>(<span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1000</span>,<span class="dv">100</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-ecdf-play" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-ecdf-play-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="Board_game_files/figure-html/fig-ecdf-play-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ecdf-play-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Distribution du temps de jeu
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Ensuite ceux du nombre de joueurs</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>ecdf_max <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(df_clean, <span class="fu">aes</span>(maxplayers)) <span class="sc">+</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_ecdf</span>(<span class="at">geom =</span> <span class="st">"step"</span>) <span class="sc">+</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ylab</span>(<span class="st">"Pourcentage"</span>) <span class="sc">+</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Nombre maximal de joueurs"</span>)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>ecdf_max <span class="sc">+</span> <span class="fu">scale_x_continuous</span>( <span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">100</span>,<span class="dv">10</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-ecdf-max" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-ecdf-max-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="Board_game_files/figure-html/fig-ecdf-max-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ecdf-max-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: Distribution du nombre maximal de joueurs
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Enfin, la distribution des notes moyennes</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>ecdf_av <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(df_clean, <span class="fu">aes</span>(average)) <span class="sc">+</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_ecdf</span>(<span class="at">geom =</span> <span class="st">"step"</span>)<span class="sc">+</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Pourcentage"</span>) <span class="sc">+</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Notes moyennes"</span>)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>ecdf_av <span class="sc">+</span> <span class="fu">scale_x_continuous</span>( <span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">10</span>,<span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-ecdf-av" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-ecdf-av-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="Board_game_files/figure-html/fig-ecdf-av-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ecdf-av-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5: Distribution des notes moyennes
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Les graphiques de distributions nous permettent de voir que plus de 75% des jeux sont joués par un maximum de 6 ou 7 personnes, et le temps de jeux ne dépasse pas les 300 minutes de jeux dans 90% des cas. Pour ce qui est des notes, 75% des jeux ont une note supérieure à 5 sur 10.</p>
+<p>Maintenant, la question ici est de savoir, s’il existe une corrélation entre les notes et le nombre de joueurs.</p>
+</section>
+<section id="corrélation" class="level1">
+<h1>Corrélation</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df_clean) <span class="sc">+</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> average, <span class="at">y =</span> maxplayers) <span class="sc">+</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_count</span>(<span class="at">colour =</span> <span class="st">"red"</span>, <span class="at">alpha =</span> .<span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Note moyenne"</span>) <span class="sc">+</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Nombre maximal de joueur"</span>) <span class="sc">+</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">size =</span> <span class="st">"Nombre"</span>) <span class="sc">+</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks=</span><span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">10</span>,<span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-correlation-players" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-correlation-players-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="Board_game_files/figure-html/fig-correlation-players-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-correlation-players-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6: Corrélation entre notes moyennes et nombre maximal de joueurs
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Les jeux les plus notés ont une moyenne comprise entre 5 et 7, cette note concerne en grande partie les jeux qui ont un nombre d’utilisateurs allant de zéro à 25.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df_clean) <span class="sc">+</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> average, <span class="at">y =</span> playingtime) <span class="sc">+</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_count</span>(<span class="at">colour =</span> <span class="st">"red"</span>, <span class="at">alpha =</span> .<span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Note moyenne"</span>) <span class="sc">+</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Heure maximal de joueur"</span>) <span class="sc">+</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">size =</span> <span class="st">"Nombre"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-correlation-time" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-correlation-time-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="Board_game_files/figure-html/fig-correlation-time-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-correlation-time-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7: Corrélation entre notes moyennes et temps de jeu
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>En ce qui concerne le temps de jeux, les jeux les mieux notés concernent les jeux qui comptabilisent un temps de jeux allant de zéro à 150 minutes de jeux.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(df_clean<span class="sc">$</span>average, df_clean<span class="sc">$</span>maxplayers)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in chisq.test(df_clean$average, df_clean$maxplayers): Chi-squared
+approximation may be incorrect</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Pearson's Chi-squared test
+
+data:  df_clean$average and df_clean$maxplayers
+X-squared = 34344, df = 27676, p-value &lt; 2.2e-16</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(df_clean<span class="sc">$</span>average, df_clean<span class="sc">$</span>playingtime)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in chisq.test(df_clean$average, df_clean$playingtime): Chi-squared
+approximation may be incorrect</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Pearson's Chi-squared test
+
+data:  df_clean$average and df_clean$playingtime
+X-squared = 62529, df = 52836, p-value &lt; 2.2e-16</code></pre>
+</div>
+</div>
+</section>
+<section id="conclusion" class="level1">
+<h1>Conclusion</h1>
+<p>Notre analyse nous a permis de voir la distribution des données relatives au temps de jeux ainsi qu’au nombre de joueurs. Les tests de khi2 nous ont appris qu’il existe une corrélation entre :</p>
+<ul>
+<li><p>le temps de jeux ainsi que la moyenne des notes octroyées</p></li>
+<li><p>le nombre de joueurs ainsi que la moyenne des notes octroyées</p></li>
+</ul>
+<p>En effet, les tableaux démontrent que :</p>
+<ul>
+<li><p>Les jeux dont le nombre de joueurs est compris entre 0 et 13 ont une note comprise entre 5 et 7.</p></li>
+<li><p>Les jeux dont le nombre de minutes joué est compris entre 0 et 250 plus le jeu est noté avec une note comprise ente 5 et 7,5 Nous pouvons dire en effet que plus le temps de jeux passé sur un jeu est élevé, plus la note octroyée est élevée.</p></li>
+</ul>
+<p>Pour répondre à la question de départ, il existe une corrélation entre le temps de jeux et la moyenne de note octroyée. Et il existe également, une corrélation entre le nombre de joueurs et la moyenne de note octroyée.</p>
+
+
+</section>
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
