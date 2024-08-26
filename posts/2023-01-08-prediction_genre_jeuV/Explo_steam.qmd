@@ -1,0 +1,499 @@
+---
+title: "Explorations des données Kaggle sur Steam"
+author: Daniella Landrys
+date: '2023-01-08'
+draft: false
+categories:
+  - Français
+  - Jeux vidéos
+  - Genre de jeu
+  - Analyse de données
+description: Dans ce blog, je vais analyser des données issues de Tidy Tuesday 
+---
+
+
+Dans ce premier document, nous allons explorer la base de données sur les ventes et les appréciations du jeu steam
+
+```{r}
+#| results: hide
+
+library(readr)
+library(tidyverse)
+library(summarytools)
+library(pander)
+library(tidytext)
+library(ggridges)
+library(wordcloud)
+library(tm)
+library(SnowballC)
+```
+
+## 1. Chargement des données
+
+```{r}
+steam <- read_csv("steam.csv")
+steam_desc <- read.csv("steam_description_data.csv")
+```
+
+```{r}
+#| echo: false
+
+#str(steam)
+
+#head(steam)
+
+#tail(steam)
+
+summary(steam)
+
+#dim(steam)
+
+#names(steam)
+```
+
+## 2. Création de données supplémentaires
+
+Pour pouvoir travailler sur les avis donnés par les utilisateurs, nous avons une variable qui permet d'avoir la proportion des avis positifs des jeux.
+
+```{r}
+steam_1 <- steam %>%
+  mutate(overall_review = (positive_ratings + negative_ratings),
+         positive_rate = (positive_ratings / overall_review)) 
+```
+
+### Position et dispersion des avis
+
+```{r}
+# avis positives 
+position_positive_ratings <- steam_1 %>% 
+  summarise(v_min = min(positive_ratings, na.rm = TRUE), 
+            v_max = max(positive_ratings, na.rm = TRUE), 
+            v_moyen = mean(positive_ratings, na.rm = TRUE), 
+            v_median = median(positive_ratings, na.rm = TRUE), 
+            v_Q1 = quantile(positive_ratings, prob = 0.25, na.rm = TRUE), 
+            v_Q3 = quantile(positive_ratings, prob = 0.75, na.rm = TRUE)
+            ) %>% 
+  mutate(Variable = "positive_ratings")
+
+position_positive_ratings 
+
+dispersion_positive_ratings <- steam_1 %>% 
+            summarise(v_etendue = max(positive_ratings, na.rm = TRUE) - 
+                        min(positive_ratings, na.rm = TRUE), 
+            v_ei = IQR(positive_ratings, na.rm = TRUE), 
+            v_ei1 = position_positive_ratings$v_Q3 - 
+              position_positive_ratings$v_Q1, 
+            v_variance = var(positive_ratings, na.rm = TRUE), 
+            v_et = sd(positive_ratings, na.rm = TRUE), 
+            v_et1 = sqrt(v_variance)) %>% 
+  mutate(Variable = "positive_ratings") 
+
+dispersion_positive_ratings
+
+dispersion_positive_ratings %>% 
+  pander
+```
+
+Les statistiques obtenues permettent de voir que la valeur maximale des avis positive est de 2644404 avec une valeur moyenne de 1000.559 et une médiane de 24.
+
+```{r}
+# avis négative 
+position_negative_ratings <- steam_1 %>% 
+  summarise(v_min = min(negative_ratings, na.rm = TRUE), 
+            v_max = max(negative_ratings, na.rm = TRUE), 
+            v_moyen = mean(negative_ratings, na.rm = TRUE), 
+            v_median = median(negative_ratings, na.rm = TRUE), 
+            v_Q1 = quantile(negative_ratings, prob = 0.25, na.rm = TRUE), 
+            v_Q3 = quantile(negative_ratings, prob = 0.75, na.rm = TRUE)
+            ) %>% 
+  mutate(Variable = "negative_ratings")
+
+position_negative_ratings 
+
+dispersion_negative_ratings <- steam_1 %>% 
+            summarise(v_etendue = max(negative_ratings, na.rm = TRUE) - 
+                        min(negative_ratings, na.rm = TRUE), 
+            v_ei = IQR(negative_ratings, na.rm = TRUE), 
+            v_ei1 = position_negative_ratings$v_Q3 - 
+              position_negative_ratings$v_Q1, 
+            v_variance = var(negative_ratings, na.rm = TRUE), 
+            v_et = sd(negative_ratings, na.rm = TRUE), 
+            v_et1 = sqrt(v_variance)) %>% 
+  mutate(Variable = "negative_ratings") 
+
+dispersion_negative_ratings
+
+dispersion_negative_ratings %>% 
+  pander
+```
+
+Pour ce qui est des valeurs des avis négatives : la valeur maximale est de 487076, la valeur moyenne de 211.0271 et la médiane est de 9.
+
+### Position et dispertion temps de jeu
+
+```{r}
+# temps de jeux
+position_average_playtime <- steam_1 %>% 
+  summarise(v_min = min(average_playtime, na.rm = TRUE), 
+            v_max = max(average_playtime, na.rm = TRUE), 
+            v_moyen = mean(average_playtime, na.rm = TRUE), 
+            v_median = median(average_playtime, na.rm = TRUE), 
+            v_Q1 = quantile(average_playtime, prob = 0.25, na.rm = TRUE), 
+            v_Q3 = quantile(average_playtime, prob = 0.75, na.rm = TRUE)
+            ) %>% 
+  mutate(Variable = "average_playtime")
+
+position_average_playtime
+
+dispersion_average_playtime <- steam_1 %>% 
+            summarise(v_etendue = max(average_playtime, na.rm = TRUE) - 
+                        min(average_playtime, na.rm = TRUE), 
+            v_ei = IQR(average_playtime, na.rm = TRUE), 
+            v_ei1 = position_average_playtime$v_Q3 - 
+              position_average_playtime$v_Q1, 
+            v_variance = var(average_playtime, na.rm = TRUE), 
+            v_et = sd(average_playtime, na.rm = TRUE), 
+            v_et1 = sqrt(v_variance)) %>% 
+  mutate(Variable = "average_playtime") 
+
+dispersion_average_playtime
+
+dispersion_average_playtime %>% 
+  pander
+```
+
+Pour ce qui est du temps de jeu : la valeur maximale est de 190625, la valeur moyenne de 149.8049 et la médiane est de 0.
+
+### Position et dispertion prix des jeux
+
+```{r}
+# avis prix des jeux 
+position_price <- steam_1 %>% 
+  summarise(v_min = min(price, na.rm = TRUE), 
+            v_max = max(price, na.rm = TRUE), 
+            v_moyen = mean(price, na.rm = TRUE), 
+            v_median = median(price, na.rm = TRUE), 
+            v_Q1 = quantile(price, prob = 0.25, na.rm = TRUE), 
+            v_Q3 = quantile(price, prob = 0.75, na.rm = TRUE)
+            ) %>% 
+  mutate(Variable = "price")
+
+position_price
+
+dispersion_price <- steam_1 %>% 
+            summarise(v_etendue = max(price, na.rm = TRUE) - 
+                        min(price, na.rm = TRUE), 
+            v_ei = IQR(price, na.rm = TRUE), 
+            v_ei1 = position_price$v_Q3 - position_price$v_Q1, 
+            v_variance = var(price, na.rm = TRUE), 
+            v_et = sd(price, na.rm = TRUE), 
+            v_et1 = sqrt(v_variance)) %>% 
+  mutate(Variable = "price") 
+
+dispersion_price
+
+dispersion_price %>% 
+  pander
+```
+
+Pour ce qui est des prix : la valeur maximale est de 421.99, la valeur moyenne de 6.078193 et la médiane est de 3.99.
+
+```{r}
+# Paramètre de position des 4 variables
+
+indicateur_position <- bind_rows(positive_ratings = position_positive_ratings,
+                                 position_negative_ratings, 
+                                 position_average_playtime, dispersion_price)
+
+indicateur_position
+
+# Paramètres de dispersion des 4 variables
+
+indicateur_dispersion <- bind_rows(dispersion_positive_ratings, 
+                                   dispersion_negative_ratings, 
+                                   dispersion_average_playtime, position_price)
+
+indicateur_dispersion
+```
+
+Grâce à ces valeurs, nous pouvons voir que nos données sont dispersées avec des valeurs aberrantes.
+
+### Exploration des plateformes
+
+```{r}
+#extraction des données
+plateform <- steam_1 %>%
+  select(appid, platforms) %>%
+  unnest_tokens("word", platforms)
+#frequence des mots
+plateform %>%
+  count(word) %>%
+  arrange(desc(n))
+# Stemming
+plateform<-plateform %>%
+  mutate_at("word", funs(wordStem((.), language="en")))
+# Document-term matrix
+plateform_DTM<-
+  plateform %>%
+  count(appid, word) %>%
+  cast_dtm(appid, word, n)
+
+#transformer le Document-term matrix en dataframe
+plat_tidy <- tidy(plateform_DTM)
+
+plat_df <- as.data.frame(plat_tidy)
+
+ggplot(plat_df, aes(x=term))+
+geom_bar() +
+  ylab("Nombre") +
+  xlab("Plateforme des jeux") +
+  ggtitle("Nombre de jeux sur chaque plateforme")
+```
+
+Le graphique des plateformes sur lequel les jeux peuvent être joués démontre la prédominance des jeux Windows
+
+### Exploration des catégories :
+
+```{r}
+#selection des données
+categories_corpus <- steam_1 %>%
+  select(appid, categories)
+
+categories_corpus <- str_replace_all(categories_corpus$categories, 
+                                     c("-" = "", " " = "", ";" = " "))
+
+# transformation en DocumentTermMatrix
+categories_DTM <- DocumentTermMatrix(categories_corpus)
+
+# transformation en matrice
+categories_DTM_matrix <- as.matrix(categories_DTM)
+
+# transformation en dataframe
+categorie_tidy <- tidy(categories_DTM)
+
+categorie_df <- as.data.frame(categorie_tidy)
+
+head(categorie_df)
+# Fréquences des mots
+frequence_categorie <- categorie_df %>%          
+  count(term) %>% 
+  arrange(desc(n))
+
+# Graphique des 10 mots les plus importants
+
+categorie_top_20 <- 
+  categorie_df %>% 
+  count(term, sort = TRUE) 
+
+categorie_top_20 <- categorie_top_20[1:20, ]    
+  
+categorie_top_20  
+
+ 
+ggplot(categorie_top_20) +
+  geom_col(aes(x = term, y = n, fill = term)) +
+  theme_bw() +
+  theme(axis.text = element_text(angle = 90, hjust = 1)) +
+  ylab("Nombre de catégories") +
+  xlab("Catégories") +
+  ggtitle("nombre de catégorie de jeu")+
+  guides(fill = FALSE) 
+```
+
+Ce graphique montre la prédominance des jeux de types "single player".
+
+### Exploration des genres
+
+```{r}
+#selection des données
+genres_corpus <- steam_1 %>%
+  select(appid, genres)
+
+genres_corpus <- str_replace(genres_corpus$genres, ";" ," ")
+
+# transformation en DocumentTermMatrix
+genres_DTM <- DocumentTermMatrix(genres_corpus)
+
+
+# transformation en matrice
+genres_DTM_matrix <- as.matrix(genres_DTM)
+
+# transformation en dataframe
+genres_tidy <- tidy(genres_DTM)
+genres_df <- as.data.frame(genres_tidy)
+
+head(genres_df)
+# Fréquences des mots
+frequence_genres <- genres_df %>%          
+  count(term) %>% 
+  arrange(desc(n))
+
+# Graphique des 10 mots les plus importants
+
+genres_top_20 <- 
+  genres_df %>% 
+  count(term, sort = TRUE) 
+
+genres_top_20 <- genres_top_20[1:20, ]    
+  
+genres_top_20  
+
+ 
+ggplot(genres_top_20) +
+  geom_col(aes(x = term, y = n, fill = term)) +
+  theme_bw() +
+  theme(axis.text = element_text(angle = 90, hjust = 1)) +
+  ylab("Nombre de genres") +
+  xlab("Genres") +
+  ggtitle("nombre de genres de jeu")+
+  guides(fill = FALSE) 
+```
+
+Le graphique ci-dessous nous permet de voir que les jeux les plus nombreux sur la plateforme sont les jeux d'action, les jeux indépendants, les jeux d'aventure, et les jeux occasionnels (casual)
+
+### Exploration des steamspy_tags
+
+```{r}
+#selection des données
+steamspy_tags_corpus <- steam_1 %>%
+  select(appid, steamspy_tags)
+
+steamspy_tags_corpus <- str_replace_all(steamspy_tags_corpus$steamspy_tags,  
+                                        c(" " = "", ";" = " "))
+
+# transformation en DocumentTermMatrix
+steamspy_tags_DTM <- DocumentTermMatrix(steamspy_tags_corpus)
+
+
+# transformation en matrice
+steamspy_tags_DTM_matrix <- as.matrix(steamspy_tags_DTM)
+
+
+# transformation en dataframe
+steamspy_tags_tidy <- tidy(steamspy_tags_DTM)
+steamspy_tags_df <- as.data.frame(steamspy_tags_tidy)
+
+head(steamspy_tags_df)
+# Fréquences des mots
+frequence_steamspy_tags <- steamspy_tags_df %>%          
+  count(term) %>% 
+  arrange(desc(n))
+
+# Graphique des 10 mots les plus importants
+
+steamspy_tags_top_20 <- 
+  steamspy_tags_df %>% 
+  count(term, sort = TRUE) 
+
+steamspy_tags_top_20 <- steamspy_tags_top_20[1:20, ]    
+  
+steamspy_tags_top_20  
+
+ 
+ggplot(steamspy_tags_top_20) +
+  geom_col(aes(x = term, y = n, fill = term)) +
+  theme_bw() +
+  theme(axis.text = element_text(angle = 90, hjust = 1)) +
+  ylab("Nombre de steamspy_tags") +
+  xlab("Steamspy_tags") +
+  ggtitle("nombre de tag de jeu")+
+  guides(fill = FALSE) 
+```
+
+Tout comme avec le graphique des genres de jeu, le graphique ici présent nous permet de voir que les jeux indépendants, les jeux d'aventure, d'action et les jeux occasionnels sont nombreux sur la plateforme.
+
+### Exploration des développeurs
+
+```{r}
+#selection des données
+developer_corpus <- steam_1 %>%
+  select(appid, developer)
+
+developer_corpus <- str_replace_all(developer_corpus$developer,  
+                                    c(" " = "", ";" = " "))
+
+# transformation en DocumentTermMatrix
+developer_DTM <- DocumentTermMatrix(developer_corpus)
+
+# transformation en matrice
+developer_DTM_matrix <- as.matrix(developer_DTM)
+
+# transformation en dataframe
+developer_tidy <- tidy(developer_DTM)
+developer_df <- as.data.frame(developer_tidy)
+
+head(developer_df)
+# Fréquences des mots
+frequence_developer <- developer_df %>%          
+  count(term) %>% 
+  arrange(desc(n))
+
+# Graphique des 20 mots les plus importants
+
+developer_top_20 <- 
+  developer_df %>% 
+  count(term, sort = TRUE) 
+
+developer_top_20 <- developer_top_20[1:20, ]    
+  
+developer_top_20  
+
+ggplot(developer_top_20) +
+  geom_col(aes(x = term, y = n, fill = term)) +
+  theme_bw() +
+  theme(axis.text = element_text(angle = 90, hjust = 1)) +
+  ylab("Nombre de développeurs") +
+  xlab("Developpeurs") +
+  ggtitle("Nombre de jeux par développeur") +
+  guides(fill = FALSE) 
+```
+
+Ici, nous pouvons voir que sur les 20 développeurs qui développent le plus de jeux sur Steam, choiceofgame est celui qui détient le plus de jeux développés.
+
+### Exploration des éditeurs (publisher)
+
+```{r}
+#selection des données
+publisher_corpus <- steam_1 %>%
+  select(appid, publisher)
+
+publisher_corpus <- str_replace_all(publisher_corpus$publisher,  
+                                    c(" " = "", ";" = " "))
+
+# transformation en DocumentTermMatrix
+publisher_DTM <- DocumentTermMatrix(publisher_corpus)
+
+# transformation en matrice
+publisher_DTM_matrix <- as.matrix(publisher_DTM)
+
+# transformation en dataframe
+publisher_tidy <- tidy(publisher_DTM)
+publisher_df <- as.data.frame(publisher_tidy)
+
+head(publisher_df)
+# Fréquences des mots
+frequence_publisher <- publisher_df %>%          
+  count(term) %>% 
+  arrange(desc(n))
+
+# Graphique des 20 mots les plus importants
+
+publisher_top_20 <- 
+  publisher_df %>% 
+  count(term, sort = TRUE) 
+
+publisher_top_20 <- publisher_top_20[1:20, ]    
+  
+publisher_top_20  
+
+ggplot(publisher_top_20) +
+  geom_col(aes(x = term, y = n, fill = term)) +
+  theme_bw() +
+  theme(axis.text = element_text(angle = 90, hjust = 1)) +
+  ylab("Nombre de jeux") +
+  xlab("Éditeur") +
+  ggtitle("Nombre de jeux par éditeur") +
+  guides(fill = FALSE) 
+```
+
+Ici, nous pouvons voir que sur les 20 éditeurs de jeux sur Steam, bigfishgames est celui qui a publié le plus de jeux.

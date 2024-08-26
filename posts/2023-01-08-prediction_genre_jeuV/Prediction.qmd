@@ -1,0 +1,229 @@
+---
+title: "Prédiction des données Kaggle sur Steam"
+author: Daniella Landrys
+date: '2023-01-08'
+draft: false
+categories:
+  - Français
+  - Jeux vidéos
+  - Genre de jeu
+  - Analyse de données
+description: Dans ce blog, je vais analyser des données issues de Tidy Tuesday 
+---
+
+Maintenant que nous avons fini d'analyser les relations entre les genres du jeu et les avis, ainsi que les sentiments véhiculent dans les textes du jeu, nous allons tenter de créer un modèle qui va prédire les notes selon le genre du jeu.
+
+## Explore data
+
+```{r}
+#| label: load-libraries-and-data
+
+library(tidyverse)
+library(readr)
+steam <- read.csv("steam.csv")
+steam_desc <- read.csv("steam_description_data.csv")
+```
+
+```{r}
+#| label: data-processing
+
+steam_1 <- steam %>%
+  mutate(overall_review = (positive_ratings + negative_ratings),
+         positive_rate = (positive_ratings / overall_review)) %>%
+  separate(platforms, c("plat1","plat2","plat3"), sep = ";", fill = "right", remove = FALSE) %>%
+  separate(categories,  c("cat1", "cat2", "cat3"), sep = ";",  fill = "right", remove = FALSE) %>%
+  separate(steamspy_tags, into = c("tag1", "tag2", "tag3"), sep = ";", extra = "drop", fill = "right", remove = FALSE)%>%
+  separate(developer, into = c("dev1", "dev2", "dev3"), sep = ";", extra = "drop", fill = "right", remove = FALSE)%>%
+  separate(publisher, into = c("pub1", "pub2", "pub3"), sep = ";", extra = "drop", fill = "right", remove = FALSE)%>%
+  separate(genres, into = c("genre1", "genre2", "genre3"), sep = ";", extra = "drop", fill = "right", remove = FALSE)
+```
+
+```{r}
+#| label: join-datasets
+
+names(steam_desc)[names(steam_desc) == "steam_appid"] <- "appid"
+
+steam_joined <-
+  steam_1 %>%
+  left_join(steam_desc, by = "appid")
+```
+
+```{r}
+#| label: create-price-class
+
+steam_joined <- steam_joined %>% 
+  mutate(price_class = case_when(price >= 0  & price <= 24.99 ~  "0-24",
+                                 price >= 25  & price <= 49.99 ~  "25-49",
+                                 price >= 50  & price <= 74.99 ~  "50-74",
+                                 price >= 75  & price <= 99.99 ~  "75-99",
+                                 price > 100  ~  "100 et plus"))
+#freq(steam_joined$price_class)
+```
+
+```{r}
+#| label: plot-price-class
+#| fig-cap: "Relation between positive rate and price class"
+
+steam_joined %>%
+  ggplot(aes(positive_rate, price_class, fill = positive_rate)) +
+  geom_point(alpha = 0.2, show.legend = FALSE)
+```
+
+## Mise en place du xgboost model
+
+Nous allons commencer notre modèle en prenant en compte les valeurs minimum et maximum des positives_ratings et des genres de jeu.
+
+```{r}
+#| label: prepare-data-for-model
+
+library(tidymodels)
+
+set.seed(123)
+steamsplit <-
+  steam_joined %>%
+  select(name, positive_rate, matches("min|max"), genres) %>%
+  na.omit() %>%
+  initial_split(strata = positive_rate)
+steam_train <- training(steamsplit)
+steam_test <- testing(steamsplit)
+
+set.seed(234)
+steam_folds <- vfold_cv(steam_train, strata = positive_rate)
+steam_folds
+```
+
+Ensuite, nettoyons les variables genres, afin d'ensuite les tokeniser
+
+```{r}
+#| label: clean-and-tokenize-genres
+
+library(textrecipes)
+
+split_category <- function(x) {
+  x %>%
+    str_split(", ") %>%
+    map(str_remove_all, "[:punct:]") %>%
+    map(str_squish) %>%
+    map(str_to_lower) %>%
+    map(str_replace_all, " ", "_")
+}
+
+steam_rec <-
+  recipe(positive_rate ~ ., data = steam_train) %>%
+  update_role(name, new_role = "id") %>%
+  step_tokenize(genres, custom_token = split_category) %>%
+  step_tokenfilter(genres, max_tokens = 30) %>%
+  step_tf(genres)
+
+# voir ça fonctionne
+steam_prep <- prep(steam_rec)
+bake(steam_prep, new_data = NULL) %>% str()
+```
+
+## Création du xgboost
+
+```{r}
+#| label: create-xgboost-model
+
+xgb_spec <-
+  boost_tree(
+    trees = tune(),
+    mtry = tune(),
+    min_n = tune(),
+    learn_rate = 0.01
+  ) %>%
+  set_engine("xgboost") %>%
+  set_mode("regression")
+
+xgb_wf <- workflow(steam_rec, xgb_spec)
+xgb_wf
+```
+
+Usage de tune_race_anova() pour éliminer les combinaisons qui ne fonctionnent pas
+
+```{r}
+#| label: tune-model
+
+library(finetune)
+doParallel::registerDoParallel()
+
+set.seed(234)
+xgb_steam_rs <-
+  tune_race_anova(
+    xgb_wf,
+    steam_folds,
+    grid = 20,
+    control = control_race(verbose_elim = TRUE)
+  )
+
+xgb_steam_rs
+```
+
+Visualisation du model
+
+```{r}
+#| label: plot-race-results
+#| fig-cap: "Race results visualization"
+
+plot_race(xgb_steam_rs)
+```
+
+```{r}
+#| label: show-best-models
+
+show_best(xgb_steam_rs)
+```
+
+Utilisation de last_fit() pour entrainer et évaluer le model final
+
+```{r}
+#| label: final-model-fit
+
+xgb_last <-
+  xgb_wf %>%
+  finalize_workflow(select_best(xgb_steam_rs, metric = "rmse")) %>%
+  last_fit(steamsplit)
+
+xgb_last
+```
+
+## Visualisation du model pour l'interpréter
+
+```{r}
+#| label: variable-importance-plot
+#| fig-cap: "Variable importance plot"
+
+library(vip)
+
+xgb_fit <- extract_fit_parsnip(xgb_last)
+vip(xgb_fit, geom = "point", num_features = 12)
+```
+
+Les jeux d'action, d'aventure et de simulation sont les variables les plus importants du modèle
+
+Utilisation du SHAPforxgboost pour interpréter le modèle
+
+```{r}
+#| label: shap-preparation
+
+library(SHAPforxgboost)
+
+steam_shap <-
+  shap.prep(
+    xgb_model = extract_fit_engine(xgb_fit),
+    X_train = bake(steam_prep,
+      has_role("predictor"),
+      new_data = NULL,
+      composition = "matrix"
+    )
+  )
+```
+
+Visualisation du SHAPforxgboost
+
+```{r}
+#| label: shap-summary-plot
+#| fig-cap: "SHAP summary plot"
+
+shap.plot.summary(steam_shap)
+```

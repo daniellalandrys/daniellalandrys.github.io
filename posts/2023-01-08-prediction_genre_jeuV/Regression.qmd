@@ -1,0 +1,170 @@
+---
+title: "Regression des données Kaggle sur Steam"
+author: Daniella Landrys
+date: '2023-01-08'
+draft: false
+categories:
+  - Français
+  - Jeux vidéos
+  - Genre de jeu
+  - Analyse de données
+description: Dans ce blog, je vais analyser des données issues de Tidy Tuesday 
+---
+
+Après avoir exploré la base de données, nous allons maintenant essayer de voir la corrélation entre les genres des jeux et les notes qu'ils obtiennent.
+
+```{r}
+#| label: setup
+#| results: hide
+
+#rm(list = ls()) 
+#library 
+library(readr)
+library(tidyverse)
+library(summarytools)
+```
+
+## Joindre les documents
+
+```{r}
+#| label: join-data
+
+steam <- read.csv("steam.csv")
+steam_desc <- read.csv("steam_description_data.csv")
+
+names(steam_desc)[names(steam_desc) == "steam_appid"] <- "appid"
+
+steam_joined <-
+  steam %>%
+  left_join(steam_desc, by = "appid")
+```
+
+## Exploration des données
+
+```{r}
+#| label: explore-data
+
+summary(steam_joined)
+```
+
+## Diviser les textes dans genres
+
+Nous allons procéder à une séparation des textes dans genre de jeu et catégorie pour pouvoir mieux travailler ces données. En effet dans ces colones les jeux ont plusieurs catégories, genres qui leur sont attribués. Dans le cadre de cette étude, nous allons prendre uniquement les premiers.
+
+```{r}
+#| label: split-data
+
+steam_joined_slip <- separate(steam_joined, col = genres, into = ("genres1"), 
+                  sep=";", fill = "right", remove = FALSE) 
+steam_joined_slip1 <-separate(steam_joined, col = categories, into = ("categories1"), 
+                  sep=";", fill = "right", remove = FALSE)
+
+steam_joined_slip2 <-
+  steam_joined_slip %>%
+  left_join(steam_joined_slip1, by = "appid")
+
+steam_joined_slip3 <-
+  steam_joined %>%
+  left_join(steam_joined_slip2, by = "appid")
+
+steam_reg <- steam_joined_slip3 %>%
+  select(appid, genres1, platforms, categories1,
+         positive_ratings, negative_ratings) %>%
+  mutate(rate = case_when(positive_ratings>negative_ratings~ 1,
+                          positive_ratings<negative_ratings~ -1,
+                         ))
+
+steam_reg_filtrer <- steam_reg %>%
+  filter(genres1 %in% c("Action","Adventure","Casual","Early Access","Education", 
+                      "Free to Play","Gore","Indie","Massively Multiplayer",
+                      "Nudity","Racing","RPG","Sexual Content","Simulation",
+                      "Sports","Strategy","Violent")) %>%
+    filter(rate %in% c("1","-1")) 
+```
+
+## Graphique
+
+À présent nous allons générer des figures pour voir la relation entre les variables genre, plateforme et catégorie avec les avis des joueurs.
+
+```{r}
+#| label: plot-data
+#| fig-cap: 
+#|   - "Représentation des avis selon le genre du jeu"
+#|   - "Représentation des avis selon la catégorie du jeu"
+#|   - "Représentation des avis selon le/les plateforme du jeu"
+
+ggplot(data=steam_reg_filtrer,aes(x=genres1,fill=rate)) + 
+  geom_bar(data=subset(steam_reg_filtrer,rate=="1"),
+           aes(y=(..count..)*(1)/sum(..count..))) + 
+  geom_bar(data=subset(steam_reg_filtrer,rate=="-1"),
+           aes(y=(..count..)*(-1)/sum(..count..))) + 
+  scale_y_continuous(breaks=seq(-0.5,0.5,0.05),labels=abs(seq(-0.5,0.5,0.05)))+
+  ylab("Genre") +
+  xlab("Nombre") +
+  ggtitle("Représentation des avis selon le genre du jeu") +
+  coord_flip()
+
+ggplot(data=steam_reg_filtrer,aes(x=categories1,fill=rate)) + 
+  geom_bar(data=subset(steam_reg_filtrer,rate=="1"),
+           aes(y=(..count..)*(1)/sum(..count..))) + 
+  geom_bar(data=subset(steam_reg_filtrer,rate=="-1"),
+           aes(y=(..count..)*(-1)/sum(..count..))) + 
+  scale_y_continuous(breaks=seq(-0.5,0.5,0.05),labels=abs(seq(-0.5,0.5,0.05)))+
+  ylab("Catégorie") +
+  xlab("Nombre") +
+  ggtitle("Représentation des avis selon la catégorie du jeu") +
+  coord_flip()
+
+ggplot(data=steam_reg_filtrer,aes(x=platforms,fill=rate)) + 
+  geom_bar(data=subset(steam_reg_filtrer,rate=="1"),
+           aes(y=(..count..)*(1)/sum(..count..))) + 
+  geom_bar(data=subset(steam_reg_filtrer,rate=="-1"),
+           aes(y=(..count..)*(-1)/sum(..count..))) + 
+  scale_y_continuous(breaks=seq(-0.5,0.5,0.05),labels=abs(seq(-0.5,0.5,0.05)))+
+  ylab("Platefrome.s") +
+  xlab("Nombre") +
+  ggtitle("Représentation des avis selon le/les plateforme du jeu") +
+  coord_flip()
+```
+
+Ces graphiques nous permettent de voir les catégories qui reçoivent le mois de vote. Parmi les genres, nous pouvons voir que les jeux d'action sont ceux qui reçoivent le plus de votes, de plus les votes (négatif et positif) sont à peu près de même nombre. Contrairement aux jeux d'aventure qui reçoit beaucoup plus de votes positifs que négatifs. Pour ce qui est des catégories nous voyons ici que les jeux single player dominent le marché, toutefois le nombre de votes est à peu près les mêmes. Et enfin, nous pouvons faire également les mêmes constatations avec les plateformes. C'est à dire, les jeux Windows dominent les marchés. Toutefois les jeux qui peuvent tourner en même temps sur Windows, mac et Linux reçoivent plus de votes positifs que négative.
+
+```{r}
+#| label: filtered-plot
+#| fig-cap: "Représentation des avis selon la catégorie du jeu (sans Single-player)"
+
+categorie_filtered <- steam_reg_filtrer %>%
+  filter(!categories1 == "Single-player")
+ggplot(data=categorie_filtered,aes(x=categories1,fill=rate)) + 
+  geom_bar(data=subset(categorie_filtered,rate=="1"),
+           aes(y=(..count..)*(1)/sum(..count..))) + 
+  geom_bar(data=subset(categorie_filtered,rate=="-1"),
+           aes(y=(..count..)*(-1)/sum(..count..))) + 
+  scale_y_continuous(breaks=seq(-0.5,0.5,0.05),labels=abs(seq(-0.5,0.5,0.05)))+
+  ylab("Catégorie") +
+  xlab("Nombre") +
+  ggtitle("Représentation des avis selon la catégorie du jeu") +
+  coord_flip()
+```
+
+Nous avons dans le cas présent enlevé la variable "single player" de la colonne catégorie afin de voir les autres variables. Ainsi nous pouvons voir qu'après les single player, ce sont les multiplayer et les online milti player qui sont le plus nombreux sur steam. Nous pouvons voir par la suite que les jeux de type co-op reçoivent beaucoup d'avis négatifs contrairement aux jeux multijoueurs locaux qui eux reçoivent beaucoup plus d'avis positifs.
+
+## Regression
+
+```{r}
+#| label: regression
+
+reg_rate_genres <- lm(rate ~ genres1, steam_reg_filtrer)
+summary(reg_rate_genres)
+reg_rate_categorie <- lm(rate ~ categories1, steam_reg_filtrer)
+summary(reg_rate_categorie)
+reg_rate_platform <- lm(rate ~ platforms, steam_reg_filtrer)
+summary(reg_rate_platform)
+```
+
+```{r}
+#| label: regression-table
+
+library(stargazer)
+stargazer(reg_rate_genres, reg_rate_categorie, reg_rate_platform, title = "Regression des avis", align = TRUE, type = "text")
+```
