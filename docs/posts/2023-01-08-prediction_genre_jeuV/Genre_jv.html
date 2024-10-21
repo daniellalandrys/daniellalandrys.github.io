@@ -126,6 +126,8 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#jeux-vidéo-et-genre-une-perspective-critique" id="toc-jeux-vidéo-et-genre-une-perspective-critique" class="nav-link" data-scroll-target="#jeux-vidéo-et-genre-une-perspective-critique">Jeux vidéo et genre : une perspective critique</a></li>
   <li><a href="#méthodologie" id="toc-méthodologie" class="nav-link" data-scroll-target="#méthodologie">Méthodologie</a></li>
   <li><a href="#résultat" id="toc-résultat" class="nav-link" data-scroll-target="#résultat"><u>Résultat</u></a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  <li><a href="#bibliographie" id="toc-bibliographie" class="nav-link" data-scroll-target="#bibliographie"><u>Bibliographie</u></a></li>
   </ul>
 </nav>
     </div>
@@ -237,6 +239,115 @@ ul.task-list li input[type="checkbox"] {
 <section id="résultat" class="level1">
 <h1><u>Résultat</u></h1>
 <p>Dans cette partie, nous allons explorer les données issues de la plateforme steam pour répondre à notre problématique principale qui consiste à répondre à la question selon laquelle les avis des joueurs et des joueuses ont un lien avec le genre des jeux. Pour y arriver, nous allons dans un premier temps faire état des caractéristiques de notre base de données, par la suite, nous allons mener des analyses sur r afin de déterminer s’il y a une corrélation entre le genre et les avis et enfin nous allons utiliser la library xgboost pour entrainer notre modèle afin de voir s’il arrive à prédire les avis des jeux selon leurs genres.</p>
+<ol type="1">
+<li>Présentation de la base de données</li>
+</ol>
+<p>a. Exploration des variables quantitatives</p>
+<p>L’analyse initiale de la base de données Steam a permis d’explorer les variables quantitatives clés : les évaluations (positives et négatives), la durée de jeu, et le coût des produits vidéoludiques. Cette exploration révèle des distributions hautement asymétriques pour ces variables, suggérant une forte hétérogénéité au sein de l’écosystème Steam.</p>
+<p>Les évaluations des utilisateurs et utilisatrices présentent une dispersion remarquable. Les valeurs extrêmes s’étendent de 0 à 2 644 404 pour les évaluations positives, et de 0 à 487 076 pour les négatives. Ces amplitudes considérables indiquent une grande variabilité dans la réception des jeux par la communauté. La divergence significative entre les moyennes (1000,56 pour les positives, 211,03 pour les négatives) et les médianes respectives (24 et 9) met en évidence une distribution fortement asymétrique. Ce phénomène suggère l’existence d’un petit nombre de titres extrêmement populaires qui influencent disproportionnellement les moyennes, tandis que la majorité des jeux reçoit un nombre d’évaluations beaucoup plus modeste.</p>
+<p>La variable du temps de jeu moyen présente également une distribution atypique. Avec une moyenne de 149,80 heures mais une médiane de 0, on observe une dichotomie marquée dans les comportements d’engagement. Cette configuration statistique indique qu’une proportion substantielle des titres n’est que peu ou pas utilisée après l’acquisition, tandis qu’un sous-ensemble de jeux captive l’attention des joueurs et joueuses sur des durées considérables.</p>
+<p>Quant à la variable du prix, elle s’étend de 0 à 421,99 unités monétaires, avec une moyenne de 6,08 et une médiane de 3,99. Cette distribution révèle une prédominance de jeux à prix modéré, ponctuée par l’existence de quelques produits premium significativement plus onéreux.</p>
+<p>b. Exploration des variables qualitatives</p>
+<p>L’analyse des variables qualitatives a permis d’explorer les dimensions catégorielles des jeux sur Steam, offrant un aperçu de la diversité du contenu et des pratiques de classification au sein de cet écosystème vidéoludique.</p>
+<ul>
+<li><p>Plateformes de jeu : L’examen de la variable “plateformes” révèle une prédominance marquée des jeux compatibles avec le système d’exploitation Windows. Cette observation souligne l’hégémonie persistante de cette plateforme dans l’écosystème du jeu sur ordinateur personnel. Néanmoins, il convient de noter que de nombreux titres sont conçus pour fonctionner sur plusieurs systèmes d’exploitation, reflétant une tendance à l’inclusivité technique dans le développement des jeux.</p></li>
+<li><p>Catégories de jeu : L’analyse des catégories met en lumière la prévalence des jeux “single player” (monojoueur), suivis par les options “full controller support” et “partial controller support”. Cette distribution suggère une forte orientation vers l’expérience de jeu individuelle, tout en soulignant l’importance croissante de l’ergonomie liée aux périphériques de contrôle. La présence notable de catégories liées à Steam (par exemple, “steam achievements”, “steam trading cards”) indique l’intégration profonde des mécanismes de la plateforme dans l’expérience ludique.</p></li>
+<li><p>Genres de jeu : L’exploration des genres révèle une prédominance des jeux d’action, indépendants, d’aventure et occasionnels (“casual”). Cette distribution reflète la diversité de l’offre sur Steam, allant des productions à gros budget aux créations indépendantes. La popularité des jeux “casual” suggère une démocratisation de l’accès au jeu vidéo, attirant potentiellement un public plus large et diversifié.</p></li>
+<li><p>Étiquettes Steam (tags) : L’analyse des étiquettes attribuées par la communauté corrobore largement les observations faites sur les genres officiels, avec une prééminence des catégories “indie”, “adventure”, “action” et “casual”. Cette concordance entre la classification officielle et celle de la communauté indique une certaine cohérence dans la perception et la catégorisation des jeux.</p></li>
+<li><p>Développeurs et éditeurs : L’examen des entités de développement et d’édition révèle une écologie complexe. Parmi les développeurs les plus prolifiques, on note la présence de “choiceofgames”, tandis que “bigfishgames” se distingue comme l’éditeur le plus actif. Cette distribution suggère l’existence de niches spécifiques au sein de l’écosystème Steam, où certaines entités se spécialisent dans la production en volume de types de jeux particuliers.</p></li>
+</ul>
+<p>Ces observations qualitatives offrent un aperçu de la structure et de la diversité de l’offre sur Steam. Elles mettent en lumière les tendances dominantes en termes de plateformes, de types de jeux et d’acteurs de l’industrie, tout en soulignant la complexité de cet écosystème vidéoludique.</p>
+<ol start="2" type="1">
+<li>Corrélation entre genres et avis</li>
+</ol>
+<p>L’analyse de la corrélation entre les genres de jeux et les évaluations des utilisateurs et utilisatrices révèle des dynamiques complexes dans la réception des différents types de jeux sur la plateforme Steam. Cette exploration a été réalisée à travers une analyse visuelle et une régression linéaire, offrant des perspectives complémentaires sur les relations entre ces variables.</p>
+<p>Analyse visuelle : Le graphique généré illustre la distribution des évaluations positives et négatives à travers les différents genres de jeux. Cette représentation visuelle met en lumière plusieurs tendances notables :</p>
+<ol type="a">
+<li><p>Prédominance des jeux d’action : Les jeux catégorisés comme “Action” reçoivent le plus grand volume d’évaluations, avec une répartition relativement équilibrée entre avis positifs et négatifs. Cette observation suggère que ce genre, bien que populaire, suscite des réactions diverses au sein de la communauté des joueurs et joueuses.</p></li>
+<li><p>Réception favorable des jeux d’aventure : Les jeux d’aventure se distinguent par une proportion nettement plus élevée d’évaluations positives par rapport aux évaluations négatives. Ce constat indique une appréciation générale positive de ce genre par la communauté Steam.</p></li>
+<li><p>Disparités d’engagement : Le graphique révèle des différences significatives dans le volume d’évaluations reçues par les différents genres. Par exemple, les jeux de sport semblent recevoir moins d’attention en termes d’évaluations comparativement aux genres plus populaires.</p></li>
+</ol>
+<p>Analyse par régression linéaire : La régression linéaire effectuée sur ces données offre une perspective quantitative sur la relation entre les genres et les évaluations. Les résultats principaux sont les suivants :</p>
+<ol type="a">
+<li><p>Genres à réception positive : Toutes choses étant égales par ailleurs, les genres RPG (coefficient : 0,09), Aventure (0,07), Massivement Multijoueur (0,07), et Stratégie (0,07) sont associés à une augmentation des évaluations positives. Cette tendance suggère une appréciation générale plus favorable de ces types de jeux par la communauté Steam.</p></li>
+<li><p>Genres à réception mitigée : Les jeux catégorisés comme “Early Access” (-0,34), Sports (-0,27), et Violents (-0,24) sont associés à une diminution des évaluations positives. Ces résultats indiquent potentiellement des attentes non satisfaites ou des réserves de la part des utilisateurs et utilisatrices envers ces catégories.</p></li>
+<li><p>Genres à faible impact : Certains genres, tels que “Free to Play” (0,01) et “Indie” (0,01), montrent un impact minimal sur les évaluations, suggérant que ces catégories en elles-mêmes n’influencent pas significativement la réception des jeux.</p></li>
+</ol>
+<p>La significativité statistique du modèle, indiquée par les valeurs F et p, confirme l’existence d’une corrélation entre les genres et les évaluations des jeux. Cependant, il est crucial de noter que cette corrélation n’implique pas nécessairement une causalité directe.</p>
+<ol start="3" type="1">
+<li>Analyse des descriptions des jeux</li>
+</ol>
+<p>L’examen des descriptions des jeux sur la plateforme Steam offre un aperçu fascinant du lexique et des sentiments véhiculés par les créateurs et créatrices pour présenter leurs produits. Cette analyse se décompose en trois parties distinctes : l’analyse des termes fréquents, l’analyse des sentiments selon le dictionnaire Bing, et l’analyse des sentiments selon le dictionnaire NRC.</p>
+<p>a. Analyse des termes fréquents</p>
+<p>L’exploration des termes les plus récurrents dans les descriptions de jeux révèle une constellation de mots-clés qui esquissent les contours de l’expérience ludique proposée sur Steam :</p>
+<ol type="1">
+<li><p>Termes dominants : “strong”, “class”, “steam”, “extra”, “steamcdn”, “player”, “play”, “world”, “level” et “featur[e]” émergent comme les vocables les plus fréquemment employés.</p></li>
+<li><p>Implications sémantiques : Cette distribution lexicale suggère une emphase sur :</p>
+<ul>
+<li><p>La robustesse ou l’intensité de l’expérience (“strong”)</p></li>
+<li><p>La diversité des options de jeu (“class”)</p></li>
+<li><p>L’intégration à l’écosystème Steam (“steam”, “steamcdn”)</p></li>
+<li><p>L’interactivité et l’engagement (“player”, “play”)</p></li>
+<li><p>La richesse de l’univers proposé (“world”)</p></li>
+<li><p>La progression et la structure du jeu (“level”)</p></li>
+<li><p>Les fonctionnalités distinctives (“extra”, “featur[e]”)</p></li>
+</ul></li>
+</ol>
+<p>Cette constellation lexicale dessine un portrait des jeux comme des expériences immersives, structurées et riches en contenu, ancrées dans l’environnement Steam.</p>
+<p>b. Analyse des sentiments avec le dictionnaire Bing</p>
+<p>L’utilisation du dictionnaire Bing pour l’analyse des sentiments révèle une prédominance générale des termes à connotation positive dans les descriptions de jeux. Cette tendance globale est nuancée par des variations significatives selon les genres :</p>
+<ol type="1">
+<li><p>Équilibre dans les jeux d’action : Les descriptions des jeux d’action présentent un équilibre relatif entre termes positifs et négatifs, reflétant potentiellement la dualité de l’expérience proposée (défi et récompense).</p></li>
+<li><p>Polarisation des jeux violents : Les jeux catégorisés comme violents montrent une prépondérance de termes à connotation négative, possiblement en lien avec la thématique même de ces jeux.</p></li>
+<li><p>Positivité des jeux de simulation : Les descriptions des jeux de simulation se distinguent par une utilisation marquée de termes positifs, suggérant une emphase sur les aspects gratifiants et constructifs de l’expérience.</p></li>
+</ol>
+<p>Il est crucial de noter que cette analyse des sentiments ne corrèle pas nécessairement avec les évaluations des utilisateurs et utilisatrices, soulignant la complexité de la réception des jeux au-delà de leur présentation marketing.</p>
+<p>c. Analyse des sentiments avec le dictionnaire NRC</p>
+<p>L’emploi du dictionnaire NRC offre une granularité plus fine dans l’analyse des sentiments, révélant une palette émotionnelle riche dans les descriptions de jeux :</p>
+<ol type="1">
+<li><p>Dominance du positif : 24% des termes analysés sont associés à des sentiments positifs, formant la catégorie la plus représentée.</p></li>
+<li><p>Spectre émotionnel : La distribution des autres catégories émotionnelles est la suivante : négatif (14%), confiance (12%), anticipation (10%), peur (10%), joie (8%), colère (6%), tristesse (5%), surprise (4%) et dégoût (2%).</p></li>
+</ol>
+<p>Cette distribution suggère une stratégie de communication visant à susciter un éventail d’émotions chez les potentiels joueurs et joueuses, avec une emphase sur les aspects positifs et stimulants de l’expérience de jeu.</p>
+</section>
+<section id="conclusion" class="level1">
+<h1>Conclusion</h1>
+<p>L’objectif principal de cette étude était d’examiner la corrélation entre les genres de jeux vidéo et les évaluations qu’ils reçoivent sur la plateforme Steam. L’analyse approfondie des données a révélé plusieurs résultats significatifs :</p>
+<ol type="1">
+<li><p>Diversité du catalogue : L’exploration des variables quantitatives a mis en évidence une grande hétérogénéité dans le catalogue Steam, avec des distributions fortement asymétriques pour les évaluations, le temps de jeu et les prix. Cette diversité reflète la coexistence de productions de niche et de blockbusters sur la plateforme.</p></li>
+<li><p>Prédominance des jeux Windows : L’analyse des variables qualitatives a révélé une forte domination des jeux compatibles avec le système d’exploitation Windows, soulignant la position centrale de cette plateforme dans l’écosystème du jeu sur PC.</p></li>
+<li><p>Genres dominants : Les jeux d’action, indépendants, d’aventure et occasionnels (“casual”) sont les plus représentés sur Steam, reflétant les tendances actuelles de l’industrie et les préférences des joueurs et joueuses.</p></li>
+<li><p>Corrélation entre genres et évaluations : L’analyse de régression a démontré une corrélation significative entre les genres de jeux et les évaluations reçues. Certains genres, comme les RPG et les jeux d’aventure, sont associés à des évaluations plus positives, tandis que d’autres, comme les jeux en accès anticipé ou les jeux de sport, tendent à recevoir des évaluations moins favorables.</p></li>
+<li><p>Analyse des descriptions : L’examen du lexique utilisé dans les descriptions de jeux a révélé une prédominance de termes positifs et évocateurs, soulignant les stratégies marketing employées par les développeurs et éditeurs.</p></li>
+</ol>
+<p>Ces résultats confirment l’existence d’une corrélation entre le genre des jeux et les évaluations qu’ils reçoivent sur Steam. Cependant, il est crucial de noter que cette corrélation n’implique pas nécessairement une causalité directe. D’autres facteurs, tels que la qualité de production, le marketing, ou les tendances du marché, peuvent également influencer la réception des jeux.</p>
+<p>En conclusion, cette recherche contribue à une meilleure compréhension des facteurs influençant la réception des jeux sur Steam. Elle souligne la complexité de l’écosystème du jeu vidéo et invite à une réflexion continue sur les interactions entre les genres de jeux, les préférences des utilisateurs et utilisatrices, et les stratégies de développement et de marketing dans l’industrie du jeu vidéo.</p>
+</section>
+<section id="bibliographie" class="level1">
+<h1><u>Bibliographie</u></h1>
+<p>Beavis, C., &amp; Charles, C. (2007). Would the ‘real’ girl gamer please stand up? Gender, LAN cafés and the reformulation of the ‘girl’ gamer. <em>Gender and Education</em>, <em>19</em>(6), 691‑705. https://doi.org/10.1080/09540250701650615</p>
+<p>Benonie-soler, J. (2013). Apprendre à faire la cuisine, apprendre à être une femme : Les jeux vidéo culinaires au regard du genre. <em>Poli - Politique de l’Image</em>, <em>7</em>.</p>
+<p>Benonie-Soler, J. (2019). <em>ÊTRE ET (RE)DEVENIR UNE GAMEUSE DE JEUX VIDÉO ’ ’ TRAJECTOIRES, ÉPREUVES ET TENSIONS DE GENRE EN TERRAIN VIDÉOLUDIQUE</em> [Sociologie]. Université Toulouse 2 Jean Jaurès.</p>
+<p>Bonenfant, M., &amp; Trépanier-Jobin, G. (2017). Bridging Game Studies and Feminist Theories. <em>KINEPHANOS</em>, 24‑53.</p>
+<p>Cameron, A. (2019). No more games : An intersectional approach to geek masculinity and marginalization in video gaming culture. <em>a journal of communication, culture &amp; technology</em>.</p>
+<p>Cășvean, T.-M. (2015). An Introduction to Videogame Genre Theory. Understanding Videogame Genre Framework. <em>Athens Journal of Mass Media and Communications</em>, <em>2</em>(1), 57‑68. https://doi.org/10.30958/ajmmc.2.1.5</p>
+<p>Chaulet, J., &amp; Soler-Benonie, J. (2019). Se réunir pour jouer : Les LAN parties entre ajustements et réaffirmation des identités genrées. <em>RESET</em>, <em>8</em>. https://doi.org/10.4000/reset.1309</p>
+<p>Consalvo, M., &amp; Christopher A., P. (2019). <em>Real games : What’s legitimate and what’s not in contemporary video games</em>. MIT Press.</p>
+<p>Enevold, J., &amp; Hagström, C. (2017). Coming out of the Gaming Closet: <em>Cultural Analysis</em>, <em>16</em>(2), 25.</p>
+<p>Gray, K. L. (2014). <em>Race, gender, and deviance in Xbox live : Theoretical perspectives from the virtual margins</em>. Anderson Publishing.</p>
+<p>Gray, K. L., Voorhees, G., &amp; Vossen, E. (Éds.). (2018). <em>Feminism in Play</em>. Springer International Publishing. https://doi.org/10.1007/978-3-319-90539-6</p>
+<p>Guechtouli, M., Scotto, M.-J., Fourrier, G., &amp; Boyer, A. (2022). La place des femmes dans l’e-sport : La lente inclusion: <em>Question(s) de management</em>, <em>n° 38</em>(1), 29‑47. https://doi.org/10.3917/qdm.218.0029</p>
+<p>Harrisson, A., Marchessault, J., Pedraça, S., Suyong Yi Jones, S., &amp; Consalvo, M. (2020). <em>The 21st Annual Conference of the Association of Internet Researchers</em>. The 21st Annual Conference of the Association of Internet Researchers. https://doi.org/10.31219/osf.io/59tm4</p>
+<p>Kahn, A. S., Shen, C., Lu, L., Ratan, R. A., Coary, S., Hou, J., Meng, J., Osborn, J., &amp; Williams, D. (2015). The Trojan Player Typology : A cross-genre, cross-cultural, behaviorally validated scale of video game play motivations. <em>Computers in Human Behavior</em>, <em>49</em>, 354‑361. https://doi.org/10.1016/j.chb.2015.03.018</p>
+<p>Kline, S., &amp; Dyer-Witheford, N. (2003). Designing Militarized Masculinity : Violence, Gender, and the Bias of Game Experience. In <em>Digital Play : The Interaction of Technology, Culture, and Marketing</em> (p.&nbsp;246‑268). McGill-Queen’s University Press.</p>
+<p>Oates, B. A. (2020). Gender Roles and Expectations as a Part of the ‘Gamer’ Identity and Experience. <em>University of Michigan. Published</em>, 7.</p>
+<p>Ratan, R. A., Taylor, N., Hogan, J., Kennedy, T., &amp; Williams, D. (2015). Stand by Your Man : An Examination of Gender Disparity in League of Legends. <em>Games and Culture</em>, <em>10</em>(5), 438‑462. https://doi.org/10.1177/1555412014567228</p>
+<p>Stone, J. A. (2019). Self-identification as a “gamer” among college students : Influencing factors and perceived characteristics. <em>New Media &amp; Society</em>, <em>21</em>(11‑12), 2607‑2627. https://doi.org/10.1177/1461444819854733</p>
+<p>Taylor, T. L. (2003). Multiple Pleasures : Women and Online Gaming. <em>Convergence: The International Journal of Research into New Media Technologies</em>, <em>9</em>(1), 21‑46. https://doi.org/10.1177/135485650300900103</p>
+<p>Taylor, T. L., &amp; Witkowski, E. (2010). This is how we play it : What a mega-LAN can teach us about games. <em>Proceedings of the Fifth International Conference on the Foundations of Digital Games - FDG ’10</em>, 195‑202. https://doi.org/10.1145/1822348.1822374</p>
+<p>Trépanier-Jobin, G. (2017). VIDEO GAME PARODIES Appropriating Video Games to Criticize Gender&nbsp;Norms. In J. Malkowski &amp; T. M. Russworm (Éds.), <em>Gaming Representation : Race, Gender, and Sexuality in Video Games</em>. Indiana University Press. https://doi.org/10.2307/j.ctt2005rgq</p>
+<p>Williams, D., Martins, N., Consalvo, M., &amp; Ivory, J. D. (2009). The virtual census : Representations of gender, race and age in video games. <em>New Media &amp; Society</em>, <em>11</em>(5), 815‑834. https://doi.org/10.1177/1461444809105354</p>
+<p>Wulf, T., Possler, D., &amp; Breuer, J. (2021). Video game genre ((Online)Games). <em>DOCA -&nbsp; Database of Variables for Content Analysis</em>. https://doi.org/10.34778/3f</p>
 
 
 </section>

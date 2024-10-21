@@ -169,6 +169,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#exploration-des-développeurs" id="toc-exploration-des-développeurs" class="nav-link" data-scroll-target="#exploration-des-développeurs">Exploration des développeurs</a></li>
   <li><a href="#exploration-des-éditeurs-publisher" id="toc-exploration-des-éditeurs-publisher" class="nav-link" data-scroll-target="#exploration-des-éditeurs-publisher">Exploration des éditeurs (publisher)</a></li>
   </ul></li>
+  <li><a href="#joindre-les-documents" id="toc-joindre-les-documents" class="nav-link" data-scroll-target="#joindre-les-documents">Joindre les documents</a></li>
+  <li><a href="#exploration-des-données" id="toc-exploration-des-données" class="nav-link" data-scroll-target="#exploration-des-données">Exploration des données</a></li>
+  <li><a href="#diviser-les-textes-dans-genres" id="toc-diviser-les-textes-dans-genres" class="nav-link" data-scroll-target="#diviser-les-textes-dans-genres">Diviser les textes dans genres</a></li>
+  <li><a href="#graphique" id="toc-graphique" class="nav-link" data-scroll-target="#graphique">Graphique</a></li>
+  <li><a href="#regression" id="toc-regression" class="nav-link" data-scroll-target="#regression">Regression</a></li>
+  <li><a href="#explore-data" id="toc-explore-data" class="nav-link" data-scroll-target="#explore-data">Explore data</a></li>
+  <li><a href="#mise-en-place-du-xgboost-model" id="toc-mise-en-place-du-xgboost-model" class="nav-link" data-scroll-target="#mise-en-place-du-xgboost-model">Mise en place du xgboost model</a></li>
+  <li><a href="#création-du-xgboost" id="toc-création-du-xgboost" class="nav-link" data-scroll-target="#création-du-xgboost">Création du xgboost</a></li>
+  <li><a href="#visualisation-du-model-pour-linterpréter" id="toc-visualisation-du-model-pour-linterpréter" class="nav-link" data-scroll-target="#visualisation-du-model-pour-linterpréter">Visualisation du model pour l’interpréter</a></li>
   </ul>
 </nav>
     </div>
@@ -1163,9 +1172,822 @@ of ggplot2 3.3.4.</code></pre>
 </div>
 </div>
 <p>Ici, nous pouvons voir que sur les 20 éditeurs de jeux sur Steam, bigfishgames est celui qui a publié le plus de jeux.</p>
-
-
+<p>Après avoir exploré la base de données, nous allons maintenant essayer de voir la corrélation entre les genres des jeux et les notes qu’ils obtiennent.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="co">#rm(list = ls()) </span></span>
+<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a><span class="co">#library </span></span>
+<span id="cb70-3"><a href="#cb70-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
+<span id="cb70-4"><a href="#cb70-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb70-5"><a href="#cb70-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(summarytools)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
+</section>
+<section id="joindre-les-documents" class="level2">
+<h2 class="anchored" data-anchor-id="joindre-les-documents">Joindre les documents</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>steam <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"steam.csv"</span>)</span>
+<span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a>steam_desc <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"steam_description_data.csv"</span>)</span>
+<span id="cb71-3"><a href="#cb71-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-4"><a href="#cb71-4" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(steam_desc)[<span class="fu">names</span>(steam_desc) <span class="sc">==</span> <span class="st">"steam_appid"</span>] <span class="ot">&lt;-</span> <span class="st">"appid"</span></span>
+<span id="cb71-5"><a href="#cb71-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-6"><a href="#cb71-6" aria-hidden="true" tabindex="-1"></a>steam_joined <span class="ot">&lt;-</span></span>
+<span id="cb71-7"><a href="#cb71-7" aria-hidden="true" tabindex="-1"></a>  steam <span class="sc">%&gt;%</span></span>
+<span id="cb71-8"><a href="#cb71-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(steam_desc, <span class="at">by =</span> <span class="st">"appid"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="exploration-des-données" class="level2">
+<h2 class="anchored" data-anchor-id="exploration-des-données">Exploration des données</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(steam_joined)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     appid             name           release_date          english      
+ Min.   :     10   Length:27075       Length:27075       Min.   :0.0000  
+ 1st Qu.: 401230   Class :character   Class :character   1st Qu.:1.0000  
+ Median : 599070   Mode  :character   Mode  :character   Median :1.0000  
+ Mean   : 596204                                         Mean   :0.9811  
+ 3rd Qu.: 798760                                         3rd Qu.:1.0000  
+ Max.   :1069460                                         Max.   :1.0000  
+  developer          publisher          platforms          required_age    
+ Length:27075       Length:27075       Length:27075       Min.   : 0.0000  
+ Class :character   Class :character   Class :character   1st Qu.: 0.0000  
+ Mode  :character   Mode  :character   Mode  :character   Median : 0.0000  
+                                                          Mean   : 0.3549  
+                                                          3rd Qu.: 0.0000  
+                                                          Max.   :18.0000  
+  categories           genres          steamspy_tags       achievements    
+ Length:27075       Length:27075       Length:27075       Min.   :   0.00  
+ Class :character   Class :character   Class :character   1st Qu.:   0.00  
+ Mode  :character   Mode  :character   Mode  :character   Median :   7.00  
+                                                          Mean   :  45.25  
+                                                          3rd Qu.:  23.00  
+                                                          Max.   :9821.00  
+ positive_ratings  negative_ratings average_playtime   median_playtime   
+ Min.   :      0   Min.   :     0   Min.   :     0.0   Min.   :     0.0  
+ 1st Qu.:      6   1st Qu.:     2   1st Qu.:     0.0   1st Qu.:     0.0  
+ Median :     24   Median :     9   Median :     0.0   Median :     0.0  
+ Mean   :   1001   Mean   :   211   Mean   :   149.8   Mean   :   146.1  
+ 3rd Qu.:    126   3rd Qu.:    42   3rd Qu.:     0.0   3rd Qu.:     0.0  
+ Max.   :2644404   Max.   :487076   Max.   :190625.0   Max.   :190625.0  
+    owners              price         detailed_description about_the_game    
+ Length:27075       Min.   :  0.000   Length:27075         Length:27075      
+ Class :character   1st Qu.:  1.690   Class :character     Class :character  
+ Mode  :character   Median :  3.990   Mode  :character     Mode  :character  
+                    Mean   :  6.078                                          
+                    3rd Qu.:  7.190                                          
+                    Max.   :421.990                                          
+ short_description 
+ Length:27075      
+ Class :character  
+ Mode  :character  
+                   
+                   
+                   </code></pre>
+</div>
+</div>
+</section>
+<section id="diviser-les-textes-dans-genres" class="level2">
+<h2 class="anchored" data-anchor-id="diviser-les-textes-dans-genres">Diviser les textes dans genres</h2>
+<p>Nous allons procéder à une séparation des textes dans genre de jeu et catégorie pour pouvoir mieux travailler ces données. En effet dans ces colones les jeux ont plusieurs catégories, genres qui leur sont attribués. Dans le cadre de cette étude, nous allons prendre uniquement les premiers.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a>steam_joined_slip <span class="ot">&lt;-</span> <span class="fu">separate</span>(steam_joined, <span class="at">col =</span> genres, <span class="at">into =</span> (<span class="st">"genres1"</span>), </span>
+<span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">sep=</span><span class="st">";"</span>, <span class="at">fill =</span> <span class="st">"right"</span>, <span class="at">remove =</span> <span class="cn">FALSE</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Expected 1 pieces. Additional pieces discarded in 23032 rows [20, 23, 24, 26,
+31, 32, 33, 42, 45, 60, 63, 71, 75, 76, 77, 78, 87, 89, 101, 107, ...].</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a>steam_joined_slip1 <span class="ot">&lt;-</span><span class="fu">separate</span>(steam_joined, <span class="at">col =</span> categories, <span class="at">into =</span> (<span class="st">"categories1"</span>), </span>
+<span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">sep=</span><span class="st">";"</span>, <span class="at">fill =</span> <span class="st">"right"</span>, <span class="at">remove =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Expected 1 pieces. Additional pieces discarded in 20744 rows [1, 2, 3, 4, 5, 6,
+7, 8, 10, 11, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, ...].</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a>steam_joined_slip2 <span class="ot">&lt;-</span></span>
+<span id="cb78-2"><a href="#cb78-2" aria-hidden="true" tabindex="-1"></a>  steam_joined_slip <span class="sc">%&gt;%</span></span>
+<span id="cb78-3"><a href="#cb78-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(steam_joined_slip1, <span class="at">by =</span> <span class="st">"appid"</span>)</span>
+<span id="cb78-4"><a href="#cb78-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb78-5"><a href="#cb78-5" aria-hidden="true" tabindex="-1"></a>steam_joined_slip3 <span class="ot">&lt;-</span></span>
+<span id="cb78-6"><a href="#cb78-6" aria-hidden="true" tabindex="-1"></a>  steam_joined <span class="sc">%&gt;%</span></span>
+<span id="cb78-7"><a href="#cb78-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(steam_joined_slip2, <span class="at">by =</span> <span class="st">"appid"</span>)</span>
+<span id="cb78-8"><a href="#cb78-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb78-9"><a href="#cb78-9" aria-hidden="true" tabindex="-1"></a>steam_reg <span class="ot">&lt;-</span> steam_joined_slip3 <span class="sc">%&gt;%</span></span>
+<span id="cb78-10"><a href="#cb78-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(appid, genres1, platforms, categories1,</span>
+<span id="cb78-11"><a href="#cb78-11" aria-hidden="true" tabindex="-1"></a>         positive_ratings, negative_ratings) <span class="sc">%&gt;%</span></span>
+<span id="cb78-12"><a href="#cb78-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rate =</span> <span class="fu">case_when</span>(positive_ratings<span class="sc">&gt;</span>negative_ratings<span class="sc">~</span> <span class="dv">1</span>,</span>
+<span id="cb78-13"><a href="#cb78-13" aria-hidden="true" tabindex="-1"></a>                          positive_ratings<span class="sc">&lt;</span>negative_ratings<span class="sc">~</span> <span class="sc">-</span><span class="dv">1</span>,</span>
+<span id="cb78-14"><a href="#cb78-14" aria-hidden="true" tabindex="-1"></a>                         ))</span>
+<span id="cb78-15"><a href="#cb78-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb78-16"><a href="#cb78-16" aria-hidden="true" tabindex="-1"></a>steam_reg_filtrer <span class="ot">&lt;-</span> steam_reg <span class="sc">%&gt;%</span></span>
+<span id="cb78-17"><a href="#cb78-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(genres1 <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Action"</span>,<span class="st">"Adventure"</span>,<span class="st">"Casual"</span>,<span class="st">"Early Access"</span>,<span class="st">"Education"</span>, </span>
+<span id="cb78-18"><a href="#cb78-18" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"Free to Play"</span>,<span class="st">"Gore"</span>,<span class="st">"Indie"</span>,<span class="st">"Massively Multiplayer"</span>,</span>
+<span id="cb78-19"><a href="#cb78-19" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"Nudity"</span>,<span class="st">"Racing"</span>,<span class="st">"RPG"</span>,<span class="st">"Sexual Content"</span>,<span class="st">"Simulation"</span>,</span>
+<span id="cb78-20"><a href="#cb78-20" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"Sports"</span>,<span class="st">"Strategy"</span>,<span class="st">"Violent"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb78-21"><a href="#cb78-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(rate <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"1"</span>,<span class="st">"-1"</span>)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="graphique" class="level2">
+<h2 class="anchored" data-anchor-id="graphique">Graphique</h2>
+<p>À présent nous allons générer des figures pour voir la relation entre les variables genre, plateforme et catégorie avec les avis des joueurs.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>steam_reg_filtrer,<span class="fu">aes</span>(<span class="at">x=</span>genres1,<span class="at">fill=</span>rate)) <span class="sc">+</span> </span>
+<span id="cb79-2"><a href="#cb79-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">data=</span><span class="fu">subset</span>(steam_reg_filtrer,rate<span class="sc">==</span><span class="st">"1"</span>),</span>
+<span id="cb79-3"><a href="#cb79-3" aria-hidden="true" tabindex="-1"></a>           <span class="fu">aes</span>(<span class="at">y=</span>(..count..)<span class="sc">*</span>(<span class="dv">1</span>)<span class="sc">/</span><span class="fu">sum</span>(..count..))) <span class="sc">+</span> </span>
+<span id="cb79-4"><a href="#cb79-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">data=</span><span class="fu">subset</span>(steam_reg_filtrer,rate<span class="sc">==</span><span class="st">"-1"</span>),</span>
+<span id="cb79-5"><a href="#cb79-5" aria-hidden="true" tabindex="-1"></a>           <span class="fu">aes</span>(<span class="at">y=</span>(..count..)<span class="sc">*</span>(<span class="sc">-</span><span class="dv">1</span>)<span class="sc">/</span><span class="fu">sum</span>(..count..))) <span class="sc">+</span> </span>
+<span id="cb79-6"><a href="#cb79-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks=</span><span class="fu">seq</span>(<span class="sc">-</span><span class="fl">0.5</span>,<span class="fl">0.5</span>,<span class="fl">0.05</span>),<span class="at">labels=</span><span class="fu">abs</span>(<span class="fu">seq</span>(<span class="sc">-</span><span class="fl">0.5</span>,<span class="fl">0.5</span>,<span class="fl">0.05</span>)))<span class="sc">+</span></span>
+<span id="cb79-7"><a href="#cb79-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Genre"</span>) <span class="sc">+</span></span>
+<span id="cb79-8"><a href="#cb79-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Nombre"</span>) <span class="sc">+</span></span>
+<span id="cb79-9"><a href="#cb79-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Représentation des avis selon le genre du jeu"</span>) <span class="sc">+</span></span>
+<span id="cb79-10"><a href="#cb79-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: The dot-dot notation (`..count..`) was deprecated in ggplot2 3.4.0.
+ℹ Please use `after_stat(count)` instead.</code></pre>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Explo_steam_files/figure-html/plot-data-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption>Représentation des avis selon le genre du jeu</figcaption>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>steam_reg_filtrer,<span class="fu">aes</span>(<span class="at">x=</span>categories1,<span class="at">fill=</span>rate)) <span class="sc">+</span> </span>
+<span id="cb81-2"><a href="#cb81-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">data=</span><span class="fu">subset</span>(steam_reg_filtrer,rate<span class="sc">==</span><span class="st">"1"</span>),</span>
+<span id="cb81-3"><a href="#cb81-3" aria-hidden="true" tabindex="-1"></a>           <span class="fu">aes</span>(<span class="at">y=</span>(..count..)<span class="sc">*</span>(<span class="dv">1</span>)<span class="sc">/</span><span class="fu">sum</span>(..count..))) <span class="sc">+</span> </span>
+<span id="cb81-4"><a href="#cb81-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">data=</span><span class="fu">subset</span>(steam_reg_filtrer,rate<span class="sc">==</span><span class="st">"-1"</span>),</span>
+<span id="cb81-5"><a href="#cb81-5" aria-hidden="true" tabindex="-1"></a>           <span class="fu">aes</span>(<span class="at">y=</span>(..count..)<span class="sc">*</span>(<span class="sc">-</span><span class="dv">1</span>)<span class="sc">/</span><span class="fu">sum</span>(..count..))) <span class="sc">+</span> </span>
+<span id="cb81-6"><a href="#cb81-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks=</span><span class="fu">seq</span>(<span class="sc">-</span><span class="fl">0.5</span>,<span class="fl">0.5</span>,<span class="fl">0.05</span>),<span class="at">labels=</span><span class="fu">abs</span>(<span class="fu">seq</span>(<span class="sc">-</span><span class="fl">0.5</span>,<span class="fl">0.5</span>,<span class="fl">0.05</span>)))<span class="sc">+</span></span>
+<span id="cb81-7"><a href="#cb81-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Catégorie"</span>) <span class="sc">+</span></span>
+<span id="cb81-8"><a href="#cb81-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Nombre"</span>) <span class="sc">+</span></span>
+<span id="cb81-9"><a href="#cb81-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Représentation des avis selon la catégorie du jeu"</span>) <span class="sc">+</span></span>
+<span id="cb81-10"><a href="#cb81-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Explo_steam_files/figure-html/plot-data-2.png" class="img-fluid figure-img" width="672"></p>
+<figcaption>Représentation des avis selon la catégorie du jeu</figcaption>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb82"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>steam_reg_filtrer,<span class="fu">aes</span>(<span class="at">x=</span>platforms,<span class="at">fill=</span>rate)) <span class="sc">+</span> </span>
+<span id="cb82-2"><a href="#cb82-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">data=</span><span class="fu">subset</span>(steam_reg_filtrer,rate<span class="sc">==</span><span class="st">"1"</span>),</span>
+<span id="cb82-3"><a href="#cb82-3" aria-hidden="true" tabindex="-1"></a>           <span class="fu">aes</span>(<span class="at">y=</span>(..count..)<span class="sc">*</span>(<span class="dv">1</span>)<span class="sc">/</span><span class="fu">sum</span>(..count..))) <span class="sc">+</span> </span>
+<span id="cb82-4"><a href="#cb82-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">data=</span><span class="fu">subset</span>(steam_reg_filtrer,rate<span class="sc">==</span><span class="st">"-1"</span>),</span>
+<span id="cb82-5"><a href="#cb82-5" aria-hidden="true" tabindex="-1"></a>           <span class="fu">aes</span>(<span class="at">y=</span>(..count..)<span class="sc">*</span>(<span class="sc">-</span><span class="dv">1</span>)<span class="sc">/</span><span class="fu">sum</span>(..count..))) <span class="sc">+</span> </span>
+<span id="cb82-6"><a href="#cb82-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks=</span><span class="fu">seq</span>(<span class="sc">-</span><span class="fl">0.5</span>,<span class="fl">0.5</span>,<span class="fl">0.05</span>),<span class="at">labels=</span><span class="fu">abs</span>(<span class="fu">seq</span>(<span class="sc">-</span><span class="fl">0.5</span>,<span class="fl">0.5</span>,<span class="fl">0.05</span>)))<span class="sc">+</span></span>
+<span id="cb82-7"><a href="#cb82-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Platefrome.s"</span>) <span class="sc">+</span></span>
+<span id="cb82-8"><a href="#cb82-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Nombre"</span>) <span class="sc">+</span></span>
+<span id="cb82-9"><a href="#cb82-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Représentation des avis selon le/les plateforme du jeu"</span>) <span class="sc">+</span></span>
+<span id="cb82-10"><a href="#cb82-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Explo_steam_files/figure-html/plot-data-3.png" class="img-fluid figure-img" width="672"></p>
+<figcaption>Représentation des avis selon le/les plateforme du jeu</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Ces graphiques nous permettent de voir les catégories qui reçoivent le mois de vote. Parmi les genres, nous pouvons voir que les jeux d’action sont ceux qui reçoivent le plus de votes, de plus les votes (négatif et positif) sont à peu près de même nombre. Contrairement aux jeux d’aventure qui reçoit beaucoup plus de votes positifs que négatifs. Pour ce qui est des catégories nous voyons ici que les jeux single player dominent le marché, toutefois le nombre de votes est à peu près les mêmes. Et enfin, nous pouvons faire également les mêmes constatations avec les plateformes. C’est à dire, les jeux Windows dominent les marchés. Toutefois les jeux qui peuvent tourner en même temps sur Windows, mac et Linux reçoivent plus de votes positifs que négative.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a>categorie_filtered <span class="ot">&lt;-</span> steam_reg_filtrer <span class="sc">%&gt;%</span></span>
+<span id="cb83-2"><a href="#cb83-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>categories1 <span class="sc">==</span> <span class="st">"Single-player"</span>)</span>
+<span id="cb83-3"><a href="#cb83-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>categorie_filtered,<span class="fu">aes</span>(<span class="at">x=</span>categories1,<span class="at">fill=</span>rate)) <span class="sc">+</span> </span>
+<span id="cb83-4"><a href="#cb83-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">data=</span><span class="fu">subset</span>(categorie_filtered,rate<span class="sc">==</span><span class="st">"1"</span>),</span>
+<span id="cb83-5"><a href="#cb83-5" aria-hidden="true" tabindex="-1"></a>           <span class="fu">aes</span>(<span class="at">y=</span>(..count..)<span class="sc">*</span>(<span class="dv">1</span>)<span class="sc">/</span><span class="fu">sum</span>(..count..))) <span class="sc">+</span> </span>
+<span id="cb83-6"><a href="#cb83-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">data=</span><span class="fu">subset</span>(categorie_filtered,rate<span class="sc">==</span><span class="st">"-1"</span>),</span>
+<span id="cb83-7"><a href="#cb83-7" aria-hidden="true" tabindex="-1"></a>           <span class="fu">aes</span>(<span class="at">y=</span>(..count..)<span class="sc">*</span>(<span class="sc">-</span><span class="dv">1</span>)<span class="sc">/</span><span class="fu">sum</span>(..count..))) <span class="sc">+</span> </span>
+<span id="cb83-8"><a href="#cb83-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks=</span><span class="fu">seq</span>(<span class="sc">-</span><span class="fl">0.5</span>,<span class="fl">0.5</span>,<span class="fl">0.05</span>),<span class="at">labels=</span><span class="fu">abs</span>(<span class="fu">seq</span>(<span class="sc">-</span><span class="fl">0.5</span>,<span class="fl">0.5</span>,<span class="fl">0.05</span>)))<span class="sc">+</span></span>
+<span id="cb83-9"><a href="#cb83-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Catégorie"</span>) <span class="sc">+</span></span>
+<span id="cb83-10"><a href="#cb83-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Nombre"</span>) <span class="sc">+</span></span>
+<span id="cb83-11"><a href="#cb83-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Représentation des avis selon la catégorie du jeu"</span>) <span class="sc">+</span></span>
+<span id="cb83-12"><a href="#cb83-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Explo_steam_files/figure-html/filtered-plot-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption>Représentation des avis selon la catégorie du jeu (sans Single-player)</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Nous avons dans le cas présent enlevé la variable “single player” de la colonne catégorie afin de voir les autres variables. Ainsi nous pouvons voir qu’après les single player, ce sont les multiplayer et les online milti player qui sont le plus nombreux sur steam. Nous pouvons voir par la suite que les jeux de type co-op reçoivent beaucoup d’avis négatifs contrairement aux jeux multijoueurs locaux qui eux reçoivent beaucoup plus d’avis positifs.</p>
+</section>
+<section id="regression" class="level2">
+<h2 class="anchored" data-anchor-id="regression">Regression</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb84"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a>reg_rate_genres <span class="ot">&lt;-</span> <span class="fu">lm</span>(rate <span class="sc">~</span> genres1, steam_reg_filtrer)</span>
+<span id="cb84-2"><a href="#cb84-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(reg_rate_genres)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = rate ~ genres1, data = steam_reg_filtrer)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-1.7711  0.2465  0.3264  0.3264  0.6667 
+
+Coefficients:
+                              Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)                   0.673639   0.007048  95.582  &lt; 2e-16 ***
+genres1Adventure              0.079899   0.012475   6.405 1.53e-10 ***
+genres1Casual                -0.023423   0.013373  -1.752 0.079858 .  
+genres1Early Access          -0.340305   0.244842  -1.390 0.164573    
+genres1Education              0.018669   0.203759   0.092 0.926998    
+genres1Free to Play           0.017461   0.038222   0.457 0.647795    
+genres1Gore                  -0.141171   0.083969  -1.681 0.092730 .  
+genres1Indie                  0.010075   0.016178   0.623 0.533460    
+genres1Massively Multiplayer  0.076361   0.183691   0.416 0.677629    
+genres1Nudity                -0.132354   0.070678  -1.873 0.061130 .  
+genres1Racing                -0.001844   0.053049  -0.035 0.972275    
+genres1RPG                    0.097506   0.037292   2.615 0.008937 ** 
+genres1Sexual Content         0.055175   0.048311   1.142 0.253429    
+genres1Simulation            -0.211726   0.030387  -6.968 3.30e-12 ***
+genres1Sports                -0.273639   0.082391  -3.321 0.000897 ***
+genres1Strategy               0.012786   0.032870   0.389 0.697291    
+genres1Violent               -0.243788   0.029228  -8.341  &lt; 2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.7342 on 25969 degrees of freedom
+Multiple R-squared:  0.008337,  Adjusted R-squared:  0.007726 
+F-statistic: 13.65 on 16 and 25969 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb86"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a>reg_rate_categorie <span class="ot">&lt;-</span> <span class="fu">lm</span>(rate <span class="sc">~</span> categories1, steam_reg_filtrer)</span>
+<span id="cb86-2"><a href="#cb86-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(reg_rate_categorie)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = rate ~ categories1, data = steam_reg_filtrer)
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+-1.687  0.321  0.321  0.321  1.000 
+
+Coefficients:
+                                        Estimate Std. Error t value Pr(&gt;|t|)  
+(Intercept)                            1.000e+00  7.369e-01   1.357    0.175  
+categories1Co-op                      -7.500e-01  7.816e-01  -0.960    0.337  
+categories1Cross-Platform Multiplayer  1.192e-11  9.025e-01   0.000    1.000  
+categories1Full controller support     1.223e-11  8.239e-01   0.000    1.000  
+categories1In-App Purchases            1.206e-11  1.042e+00   0.000    1.000  
+categories1Local Co-op                -4.000e-01  8.073e-01  -0.496    0.620  
+categories1Local Multi-Player         -3.133e-01  7.413e-01  -0.423    0.673  
+categories1MMO                        -4.545e-01  7.452e-01  -0.610    0.542  
+categories1Multi-player               -3.730e-01  7.374e-01  -0.506    0.613  
+categories1Online Co-op               -5.000e-01  8.239e-01  -0.607    0.544  
+categories1Online Multi-Player        -4.275e-01  7.383e-01  -0.579    0.563  
+categories1Partial Controller Support  1.206e-11  7.960e-01   0.000    1.000  
+categories1Shared/Split Screen        -4.615e-01  7.647e-01  -0.604    0.546  
+categories1Single-player              -3.210e-01  7.369e-01  -0.436    0.663  
+categories1Steam Achievements         -6.250e-01  7.596e-01  -0.823    0.411  
+categories1Steam Leaderboards          1.209e-11  1.042e+00   0.000    1.000  
+categories1Steam Trading Cards        -1.000e+00  8.239e-01  -1.214    0.225  
+categories1Steam Workshop             -2.000e+00  1.042e+00  -1.919    0.055 .
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.7369 on 25968 degrees of freedom
+Multiple R-squared:  0.001071,  Adjusted R-squared:  0.0004171 
+F-statistic: 1.638 on 17 and 25968 DF,  p-value: 0.0469</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb88"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb88-1"><a href="#cb88-1" aria-hidden="true" tabindex="-1"></a>reg_rate_platform <span class="ot">&lt;-</span> <span class="fu">lm</span>(rate <span class="sc">~</span> platforms, steam_reg_filtrer)</span>
+<span id="cb88-2"><a href="#cb88-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(reg_rate_platform)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = rate ~ platforms, data = steam_reg_filtrer)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-1.8255  0.1745  0.3781  0.3781  0.3781 
+
+Coefficients:
+                             Estimate Std. Error t value Pr(&gt;|t|)
+(Intercept)                 1.000e+00  7.326e-01   1.365    0.172
+platformsmac                5.001e-12  8.460e-01   0.000    1.000
+platformsmac;linux          5.481e-12  1.036e+00   0.000    1.000
+platformswindows           -3.781e-01  7.327e-01  -0.516    0.606
+platformswindows;linux     -2.010e-01  7.333e-01  -0.274    0.784
+platformswindows;mac       -2.672e-01  7.327e-01  -0.365    0.715
+platformswindows;mac;linux -1.745e-01  7.327e-01  -0.238    0.812
+
+Residual standard error: 0.7326 on 25979 degrees of freedom
+Multiple R-squared:  0.01224,   Adjusted R-squared:  0.01201 
+F-statistic: 53.65 on 6 and 25979 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb90"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stargazer)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Please cite as: </code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code> Hlavac, Marek (2022). stargazer: Well-Formatted Regression and Summary Statistics Tables.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code> R package version 5.2.3. https://CRAN.R-project.org/package=stargazer </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb94"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb94-1"><a href="#cb94-1" aria-hidden="true" tabindex="-1"></a><span class="fu">stargazer</span>(reg_rate_genres, reg_rate_categorie, reg_rate_platform, <span class="at">title =</span> <span class="st">"Regression des avis"</span>, <span class="at">align =</span> <span class="cn">TRUE</span>, <span class="at">type =</span> <span class="st">"text"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Regression des avis
+===================================================================================================================
+                                                                   Dependent variable:                             
+                                      -----------------------------------------------------------------------------
+                                                                          rate                                     
+                                                 (1)                       (2)                       (3)           
+-------------------------------------------------------------------------------------------------------------------
+genres1Adventure                               0.080***                                                            
+                                               (0.012)                                                             
+                                                                                                                   
+genres1Casual                                  -0.023*                                                             
+                                               (0.013)                                                             
+                                                                                                                   
+genres1Early Access                             -0.340                                                             
+                                               (0.245)                                                             
+                                                                                                                   
+genres1Education                                0.019                                                              
+                                               (0.204)                                                             
+                                                                                                                   
+genres1Free to Play                             0.017                                                              
+                                               (0.038)                                                             
+                                                                                                                   
+genres1Gore                                    -0.141*                                                             
+                                               (0.084)                                                             
+                                                                                                                   
+genres1Indie                                    0.010                                                              
+                                               (0.016)                                                             
+                                                                                                                   
+genres1Massively Multiplayer                    0.076                                                              
+                                               (0.184)                                                             
+                                                                                                                   
+genres1Nudity                                  -0.132*                                                             
+                                               (0.071)                                                             
+                                                                                                                   
+genres1Racing                                   -0.002                                                             
+                                               (0.053)                                                             
+                                                                                                                   
+genres1RPG                                     0.098***                                                            
+                                               (0.037)                                                             
+                                                                                                                   
+genres1Sexual Content                           0.055                                                              
+                                               (0.048)                                                             
+                                                                                                                   
+genres1Simulation                             -0.212***                                                            
+                                               (0.030)                                                             
+                                                                                                                   
+genres1Sports                                 -0.274***                                                            
+                                               (0.082)                                                             
+                                                                                                                   
+genres1Strategy                                 0.013                                                              
+                                               (0.033)                                                             
+                                                                                                                   
+genres1Violent                                -0.244***                                                            
+                                               (0.029)                                                             
+                                                                                                                   
+categories1Co-op                                                          -0.750                                   
+                                                                         (0.782)                                   
+                                                                                                                   
+categories1Cross-Platform Multiplayer                                     0.000                                    
+                                                                         (0.903)                                   
+                                                                                                                   
+categories1Full controller support                                        0.000                                    
+                                                                         (0.824)                                   
+                                                                                                                   
+categories1In-App Purchases                                               0.000                                    
+                                                                         (1.042)                                   
+                                                                                                                   
+categories1Local Co-op                                                    -0.400                                   
+                                                                         (0.807)                                   
+                                                                                                                   
+categories1Local Multi-Player                                             -0.313                                   
+                                                                         (0.741)                                   
+                                                                                                                   
+categories1MMO                                                            -0.455                                   
+                                                                         (0.745)                                   
+                                                                                                                   
+categories1Multi-player                                                   -0.373                                   
+                                                                         (0.737)                                   
+                                                                                                                   
+categories1Online Co-op                                                   -0.500                                   
+                                                                         (0.824)                                   
+                                                                                                                   
+categories1Online Multi-Player                                            -0.427                                   
+                                                                         (0.738)                                   
+                                                                                                                   
+categories1Partial Controller Support                                     0.000                                    
+                                                                         (0.796)                                   
+                                                                                                                   
+categories1Shared/Split Screen                                            -0.462                                   
+                                                                         (0.765)                                   
+                                                                                                                   
+categories1Single-player                                                  -0.321                                   
+                                                                         (0.737)                                   
+                                                                                                                   
+categories1Steam Achievements                                             -0.625                                   
+                                                                         (0.760)                                   
+                                                                                                                   
+categories1Steam Leaderboards                                             0.000                                    
+                                                                         (1.042)                                   
+                                                                                                                   
+categories1Steam Trading Cards                                            -1.000                                   
+                                                                         (0.824)                                   
+                                                                                                                   
+categories1Steam Workshop                                                -2.000*                                   
+                                                                         (1.042)                                   
+                                                                                                                   
+platformsmac                                                                                        0.000          
+                                                                                                   (0.846)         
+                                                                                                                   
+platformsmac;linux                                                                                  0.000          
+                                                                                                   (1.036)         
+                                                                                                                   
+platformswindows                                                                                   -0.378          
+                                                                                                   (0.733)         
+                                                                                                                   
+platformswindows;linux                                                                             -0.201          
+                                                                                                   (0.733)         
+                                                                                                                   
+platformswindows;mac                                                                               -0.267          
+                                                                                                   (0.733)         
+                                                                                                                   
+platformswindows;mac;linux                                                                         -0.175          
+                                                                                                   (0.733)         
+                                                                                                                   
+Constant                                       0.674***                   1.000                     1.000          
+                                               (0.007)                   (0.737)                   (0.733)         
+                                                                                                                   
+-------------------------------------------------------------------------------------------------------------------
+Observations                                    25,986                    25,986                   25,986          
+R2                                              0.008                     0.001                     0.012          
+Adjusted R2                                     0.008                     0.0004                    0.012          
+Residual Std. Error                       0.734 (df = 25969)        0.737 (df = 25968)       0.733 (df = 25979)    
+F Statistic                           13.646*** (df = 16; 25969) 1.638** (df = 17; 25968) 53.651*** (df = 6; 25979)
+===================================================================================================================
+Note:                                                                                   *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01</code></pre>
+</div>
+</div>
+<p>Maintenant que nous avons fini d’analyser les relations entre les genres du jeu et les avis, ainsi que les sentiments véhiculent dans les textes du jeu, nous allons tenter de créer un modèle qui va prédire les notes selon le genre du jeu.</p>
+</section>
+<section id="explore-data" class="level2">
+<h2 class="anchored" data-anchor-id="explore-data">Explore data</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb96"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb96-2"><a href="#cb96-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
+<span id="cb96-3"><a href="#cb96-3" aria-hidden="true" tabindex="-1"></a>steam <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"steam.csv"</span>)</span>
+<span id="cb96-4"><a href="#cb96-4" aria-hidden="true" tabindex="-1"></a>steam_desc <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"steam_description_data.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb97"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb97-1"><a href="#cb97-1" aria-hidden="true" tabindex="-1"></a>steam_1 <span class="ot">&lt;-</span> steam <span class="sc">%&gt;%</span></span>
+<span id="cb97-2"><a href="#cb97-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">overall_review =</span> (positive_ratings <span class="sc">+</span> negative_ratings),</span>
+<span id="cb97-3"><a href="#cb97-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">positive_rate =</span> (positive_ratings <span class="sc">/</span> overall_review)) <span class="sc">%&gt;%</span></span>
+<span id="cb97-4"><a href="#cb97-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(platforms, <span class="fu">c</span>(<span class="st">"plat1"</span>,<span class="st">"plat2"</span>,<span class="st">"plat3"</span>), <span class="at">sep =</span> <span class="st">";"</span>, <span class="at">fill =</span> <span class="st">"right"</span>, <span class="at">remove =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb97-5"><a href="#cb97-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(categories,  <span class="fu">c</span>(<span class="st">"cat1"</span>, <span class="st">"cat2"</span>, <span class="st">"cat3"</span>), <span class="at">sep =</span> <span class="st">";"</span>,  <span class="at">fill =</span> <span class="st">"right"</span>, <span class="at">remove =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb97-6"><a href="#cb97-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(steamspy_tags, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"tag1"</span>, <span class="st">"tag2"</span>, <span class="st">"tag3"</span>), <span class="at">sep =</span> <span class="st">";"</span>, <span class="at">extra =</span> <span class="st">"drop"</span>, <span class="at">fill =</span> <span class="st">"right"</span>, <span class="at">remove =</span> <span class="cn">FALSE</span>)<span class="sc">%&gt;%</span></span>
+<span id="cb97-7"><a href="#cb97-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(developer, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"dev1"</span>, <span class="st">"dev2"</span>, <span class="st">"dev3"</span>), <span class="at">sep =</span> <span class="st">";"</span>, <span class="at">extra =</span> <span class="st">"drop"</span>, <span class="at">fill =</span> <span class="st">"right"</span>, <span class="at">remove =</span> <span class="cn">FALSE</span>)<span class="sc">%&gt;%</span></span>
+<span id="cb97-8"><a href="#cb97-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(publisher, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"pub1"</span>, <span class="st">"pub2"</span>, <span class="st">"pub3"</span>), <span class="at">sep =</span> <span class="st">";"</span>, <span class="at">extra =</span> <span class="st">"drop"</span>, <span class="at">fill =</span> <span class="st">"right"</span>, <span class="at">remove =</span> <span class="cn">FALSE</span>)<span class="sc">%&gt;%</span></span>
+<span id="cb97-9"><a href="#cb97-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(genres, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"genre1"</span>, <span class="st">"genre2"</span>, <span class="st">"genre3"</span>), <span class="at">sep =</span> <span class="st">";"</span>, <span class="at">extra =</span> <span class="st">"drop"</span>, <span class="at">fill =</span> <span class="st">"right"</span>, <span class="at">remove =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Expected 3 pieces. Additional pieces discarded in 10452 rows [1, 2, 4, 7, 10,
+11, 13, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 29, 43, 44, ...].</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb99"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb99-1"><a href="#cb99-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(steam_desc)[<span class="fu">names</span>(steam_desc) <span class="sc">==</span> <span class="st">"steam_appid"</span>] <span class="ot">&lt;-</span> <span class="st">"appid"</span></span>
+<span id="cb99-2"><a href="#cb99-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb99-3"><a href="#cb99-3" aria-hidden="true" tabindex="-1"></a>steam_joined <span class="ot">&lt;-</span></span>
+<span id="cb99-4"><a href="#cb99-4" aria-hidden="true" tabindex="-1"></a>  steam_1 <span class="sc">%&gt;%</span></span>
+<span id="cb99-5"><a href="#cb99-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(steam_desc, <span class="at">by =</span> <span class="st">"appid"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb100"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb100-1"><a href="#cb100-1" aria-hidden="true" tabindex="-1"></a>steam_joined <span class="ot">&lt;-</span> steam_joined <span class="sc">%&gt;%</span> </span>
+<span id="cb100-2"><a href="#cb100-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">price_class =</span> <span class="fu">case_when</span>(price <span class="sc">&gt;=</span> <span class="dv">0</span>  <span class="sc">&amp;</span> price <span class="sc">&lt;=</span> <span class="fl">24.99</span> <span class="sc">~</span>  <span class="st">"0-24"</span>,</span>
+<span id="cb100-3"><a href="#cb100-3" aria-hidden="true" tabindex="-1"></a>                                 price <span class="sc">&gt;=</span> <span class="dv">25</span>  <span class="sc">&amp;</span> price <span class="sc">&lt;=</span> <span class="fl">49.99</span> <span class="sc">~</span>  <span class="st">"25-49"</span>,</span>
+<span id="cb100-4"><a href="#cb100-4" aria-hidden="true" tabindex="-1"></a>                                 price <span class="sc">&gt;=</span> <span class="dv">50</span>  <span class="sc">&amp;</span> price <span class="sc">&lt;=</span> <span class="fl">74.99</span> <span class="sc">~</span>  <span class="st">"50-74"</span>,</span>
+<span id="cb100-5"><a href="#cb100-5" aria-hidden="true" tabindex="-1"></a>                                 price <span class="sc">&gt;=</span> <span class="dv">75</span>  <span class="sc">&amp;</span> price <span class="sc">&lt;=</span> <span class="fl">99.99</span> <span class="sc">~</span>  <span class="st">"75-99"</span>,</span>
+<span id="cb100-6"><a href="#cb100-6" aria-hidden="true" tabindex="-1"></a>                                 price <span class="sc">&gt;</span> <span class="dv">100</span>  <span class="sc">~</span>  <span class="st">"100 et plus"</span>))</span>
+<span id="cb100-7"><a href="#cb100-7" aria-hidden="true" tabindex="-1"></a><span class="co">#freq(steam_joined$price_class)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb101"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb101-1"><a href="#cb101-1" aria-hidden="true" tabindex="-1"></a>steam_joined <span class="sc">%&gt;%</span></span>
+<span id="cb101-2"><a href="#cb101-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(positive_rate, price_class, <span class="at">fill =</span> positive_rate)) <span class="sc">+</span></span>
+<span id="cb101-3"><a href="#cb101-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.2</span>, <span class="at">show.legend =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Explo_steam_files/figure-html/plot-price-class-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption>Relation between positive rate and price class</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="mise-en-place-du-xgboost-model" class="level2">
+<h2 class="anchored" data-anchor-id="mise-en-place-du-xgboost-model">Mise en place du xgboost model</h2>
+<p>Nous allons commencer notre modèle en prenant en compte les valeurs minimum et maximum des positives_ratings et des genres de jeu.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb102"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb102-1"><a href="#cb102-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidymodels)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching packages ────────────────────────────────────── tidymodels 1.2.0 ──</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>✔ broom        1.0.6     ✔ rsample      1.2.1
+✔ dials        1.3.0     ✔ tune         1.2.1
+✔ infer        1.0.7     ✔ workflows    1.1.4
+✔ modeldata    1.4.0     ✔ workflowsets 1.1.0
+✔ parsnip      1.2.1     ✔ yardstick    1.3.1
+✔ recipes      1.1.0     </code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Conflicts ───────────────────────────────────────── tidymodels_conflicts() ──
+✖ NLP::annotate()      masks ggplot2::annotate()
+✖ scales::discard()    masks purrr::discard()
+✖ dplyr::filter()      masks stats::filter()
+✖ recipes::fixed()     masks stringr::fixed()
+✖ dplyr::lag()         masks stats::lag()
+✖ yardstick::spec()    masks readr::spec()
+✖ recipes::step()      masks stats::step()
+✖ summarytools::view() masks tibble::view()
+• Learn how to get started at https://www.tidymodels.org/start/</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb106"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb106-1"><a href="#cb106-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb106-2"><a href="#cb106-2" aria-hidden="true" tabindex="-1"></a>steamsplit <span class="ot">&lt;-</span></span>
+<span id="cb106-3"><a href="#cb106-3" aria-hidden="true" tabindex="-1"></a>  steam_joined <span class="sc">%&gt;%</span></span>
+<span id="cb106-4"><a href="#cb106-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(name, positive_rate, <span class="fu">matches</span>(<span class="st">"min|max"</span>), genres) <span class="sc">%&gt;%</span></span>
+<span id="cb106-5"><a href="#cb106-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">na.omit</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb106-6"><a href="#cb106-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">initial_split</span>(<span class="at">strata =</span> positive_rate)</span>
+<span id="cb106-7"><a href="#cb106-7" aria-hidden="true" tabindex="-1"></a>steam_train <span class="ot">&lt;-</span> <span class="fu">training</span>(steamsplit)</span>
+<span id="cb106-8"><a href="#cb106-8" aria-hidden="true" tabindex="-1"></a>steam_test <span class="ot">&lt;-</span> <span class="fu">testing</span>(steamsplit)</span>
+<span id="cb106-9"><a href="#cb106-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb106-10"><a href="#cb106-10" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">234</span>)</span>
+<span id="cb106-11"><a href="#cb106-11" aria-hidden="true" tabindex="-1"></a>steam_folds <span class="ot">&lt;-</span> <span class="fu">vfold_cv</span>(steam_train, <span class="at">strata =</span> positive_rate)</span>
+<span id="cb106-12"><a href="#cb106-12" aria-hidden="true" tabindex="-1"></a>steam_folds</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#  10-fold cross-validation using stratification 
+# A tibble: 10 × 2
+   splits               id    
+   &lt;list&gt;               &lt;chr&gt; 
+ 1 &lt;split [18273/2032]&gt; Fold01
+ 2 &lt;split [18273/2032]&gt; Fold02
+ 3 &lt;split [18273/2032]&gt; Fold03
+ 4 &lt;split [18273/2032]&gt; Fold04
+ 5 &lt;split [18273/2032]&gt; Fold05
+ 6 &lt;split [18274/2031]&gt; Fold06
+ 7 &lt;split [18276/2029]&gt; Fold07
+ 8 &lt;split [18276/2029]&gt; Fold08
+ 9 &lt;split [18277/2028]&gt; Fold09
+10 &lt;split [18277/2028]&gt; Fold10</code></pre>
+</div>
+</div>
+<p>Ensuite, nettoyons les variables genres, afin d’ensuite les tokeniser</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb108"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb108-1"><a href="#cb108-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(textrecipes)</span>
+<span id="cb108-2"><a href="#cb108-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb108-3"><a href="#cb108-3" aria-hidden="true" tabindex="-1"></a>split_category <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb108-4"><a href="#cb108-4" aria-hidden="true" tabindex="-1"></a>  x <span class="sc">%&gt;%</span></span>
+<span id="cb108-5"><a href="#cb108-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">str_split</span>(<span class="st">", "</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb108-6"><a href="#cb108-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">map</span>(str_remove_all, <span class="st">"[:punct:]"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb108-7"><a href="#cb108-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">map</span>(str_squish) <span class="sc">%&gt;%</span></span>
+<span id="cb108-8"><a href="#cb108-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">map</span>(str_to_lower) <span class="sc">%&gt;%</span></span>
+<span id="cb108-9"><a href="#cb108-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">map</span>(str_replace_all, <span class="st">" "</span>, <span class="st">"_"</span>)</span>
+<span id="cb108-10"><a href="#cb108-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb108-11"><a href="#cb108-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb108-12"><a href="#cb108-12" aria-hidden="true" tabindex="-1"></a>steam_rec <span class="ot">&lt;-</span></span>
+<span id="cb108-13"><a href="#cb108-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">recipe</span>(positive_rate <span class="sc">~</span> ., <span class="at">data =</span> steam_train) <span class="sc">%&gt;%</span></span>
+<span id="cb108-14"><a href="#cb108-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">update_role</span>(name, <span class="at">new_role =</span> <span class="st">"id"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb108-15"><a href="#cb108-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_tokenize</span>(genres, <span class="at">custom_token =</span> split_category) <span class="sc">%&gt;%</span></span>
+<span id="cb108-16"><a href="#cb108-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_tokenfilter</span>(genres, <span class="at">max_tokens =</span> <span class="dv">30</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb108-17"><a href="#cb108-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_tf</span>(genres)</span>
+<span id="cb108-18"><a href="#cb108-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb108-19"><a href="#cb108-19" aria-hidden="true" tabindex="-1"></a><span class="co"># voir ça fonctionne</span></span>
+<span id="cb108-20"><a href="#cb108-20" aria-hidden="true" tabindex="-1"></a>steam_prep <span class="ot">&lt;-</span> <span class="fu">prep</span>(steam_rec)</span>
+<span id="cb108-21"><a href="#cb108-21" aria-hidden="true" tabindex="-1"></a><span class="fu">bake</span>(steam_prep, <span class="at">new_data =</span> <span class="cn">NULL</span>) <span class="sc">%&gt;%</span> <span class="fu">str</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tibble [20,305 × 32] (S3: tbl_df/tbl/data.frame)
+ $ name                                   : Factor w/ 20282 levels " Fieldrunners 2",..: 8637 7394 6914 14536 4611 19644 3496 2281 2282 6607 ...
+ $ positive_rate                          : num [1:20305] 0.573 0.531 0.242 0.443 0.582 ...
+ $ tf_genres_action                       : int [1:20305] 0 0 0 0 1 0 1 0 0 0 ...
+ $ tf_genres_actionadventure              : int [1:20305] 0 0 0 0 0 0 0 0 0 0 ...
+ $ tf_genres_actionadventurecasualindie   : int [1:20305] 0 0 0 0 0 0 0 0 0 0 ...
+ $ tf_genres_actionadventureindie         : int [1:20305] 0 0 0 0 0 0 0 0 0 0 ...
+ $ tf_genres_actionadventureindierpg      : int [1:20305] 0 0 0 0 0 0 0 0 0 0 ...
+ $ tf_genres_actioncasualindie            : int [1:20305] 0 0 0 0 0 0 0 0 0 0 ...
+ $ tf_genres_actionindie                  : int [1:20305] 0 0 0 0 0 0 0 0 0 0 ...
+ $ tf_genres_actionindieearly_access      : int [1:20305] 0 0 0 0 0 0 0 0 0 0 ...
+ $ tf_genres_actionindierpg               : int [1:20305] 0 0 0 0 0 0 0 0 0 0 ...
+ $ tf_genres_actionindiestrategy          : int [1:20305] 0 0 0 0 0 0 0 0 0 0 ...
+ $ tf_genres_adventure                    : int [1:20305] 0 0 0 0 0 0 0 1 1 0 ...
+ $ tf_genres_adventurecasual              : int [1:20305] 0 0 0 0 0 0 0 0 0 0 ...
+ $ tf_genres_adventurecasualindie         : int [1:20305] 0 0 0 0 0 0 0 0 0 0 ...
+ $ tf_genres_adventurecasualindierpg      : int [1:20305] 0 0 0 0 0 0 0 0 0 0 ...
+ $ tf_genres_adventureindie               : int [1:20305] 0 0 0 0 0 0 0 0 0 0 ...
+ $ tf_genres_adventureindierpg            : int [1:20305] 0 0 0 0 0 0 0 0 0 0 ...
+ $ tf_genres_casual                       : int [1:20305] 0 0 0 0 0 0 0 0 0 0 ...
+ $ tf_genres_casualindie                  : int [1:20305] 0 1 0 0 0 0 0 0 0 0 ...
+ $ tf_genres_casualindiesimulation        : int [1:20305] 0 0 0 0 0 0 0 0 0 0 ...
+ $ tf_genres_casualindiesimulationstrategy: int [1:20305] 0 0 0 0 0 0 0 0 0 0 ...
+ $ tf_genres_casualindiestrategy          : int [1:20305] 0 0 0 0 0 0 0 0 0 0 ...
+ $ tf_genres_indie                        : int [1:20305] 0 0 0 0 0 0 0 0 0 0 ...
+ $ tf_genres_indierpg                     : int [1:20305] 0 0 0 0 0 0 0 0 0 0 ...
+ $ tf_genres_indiesimulation              : int [1:20305] 0 0 0 0 0 0 0 0 0 0 ...
+ $ tf_genres_indiesimulationstrategy      : int [1:20305] 0 0 0 0 0 0 0 0 0 0 ...
+ $ tf_genres_indiestrategy                : int [1:20305] 0 0 0 0 0 0 0 0 0 0 ...
+ $ tf_genres_rpg                          : int [1:20305] 0 0 0 0 0 0 0 0 0 0 ...
+ $ tf_genres_simulation                   : int [1:20305] 0 0 0 0 0 0 0 0 0 0 ...
+ $ tf_genres_simulationstrategy           : int [1:20305] 0 0 0 0 0 0 0 0 0 0 ...
+ $ tf_genres_strategy                     : int [1:20305] 1 0 1 1 0 1 0 0 0 0 ...</code></pre>
+</div>
+</div>
+</section>
+<section id="création-du-xgboost" class="level2">
+<h2 class="anchored" data-anchor-id="création-du-xgboost">Création du xgboost</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb110"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb110-1"><a href="#cb110-1" aria-hidden="true" tabindex="-1"></a>xgb_spec <span class="ot">&lt;-</span></span>
+<span id="cb110-2"><a href="#cb110-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">boost_tree</span>(</span>
+<span id="cb110-3"><a href="#cb110-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">trees =</span> <span class="fu">tune</span>(),</span>
+<span id="cb110-4"><a href="#cb110-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">mtry =</span> <span class="fu">tune</span>(),</span>
+<span id="cb110-5"><a href="#cb110-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">min_n =</span> <span class="fu">tune</span>(),</span>
+<span id="cb110-6"><a href="#cb110-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">learn_rate =</span> <span class="fl">0.01</span></span>
+<span id="cb110-7"><a href="#cb110-7" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb110-8"><a href="#cb110-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"xgboost"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb110-9"><a href="#cb110-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_mode</span>(<span class="st">"regression"</span>)</span>
+<span id="cb110-10"><a href="#cb110-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb110-11"><a href="#cb110-11" aria-hidden="true" tabindex="-1"></a>xgb_wf <span class="ot">&lt;-</span> <span class="fu">workflow</span>(steam_rec, xgb_spec)</span>
+<span id="cb110-12"><a href="#cb110-12" aria-hidden="true" tabindex="-1"></a>xgb_wf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>══ Workflow ════════════════════════════════════════════════════════════════════
+Preprocessor: Recipe
+Model: boost_tree()
+
+── Preprocessor ────────────────────────────────────────────────────────────────
+3 Recipe Steps
+
+• step_tokenize()
+• step_tokenfilter()
+• step_tf()
+
+── Model ───────────────────────────────────────────────────────────────────────
+Boosted Tree Model Specification (regression)
+
+Main Arguments:
+  mtry = tune()
+  trees = tune()
+  min_n = tune()
+  learn_rate = 0.01
+
+Computational engine: xgboost </code></pre>
+</div>
+</div>
+<p>Usage de tune_race_anova() pour éliminer les combinaisons qui ne fonctionnent pas</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb112"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb112-1"><a href="#cb112-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(finetune)</span>
+<span id="cb112-2"><a href="#cb112-2" aria-hidden="true" tabindex="-1"></a>doParallel<span class="sc">::</span><span class="fu">registerDoParallel</span>()</span>
+<span id="cb112-3"><a href="#cb112-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb112-4"><a href="#cb112-4" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">234</span>)</span>
+<span id="cb112-5"><a href="#cb112-5" aria-hidden="true" tabindex="-1"></a>xgb_steam_rs <span class="ot">&lt;-</span></span>
+<span id="cb112-6"><a href="#cb112-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tune_race_anova</span>(</span>
+<span id="cb112-7"><a href="#cb112-7" aria-hidden="true" tabindex="-1"></a>    xgb_wf,</span>
+<span id="cb112-8"><a href="#cb112-8" aria-hidden="true" tabindex="-1"></a>    steam_folds,</span>
+<span id="cb112-9"><a href="#cb112-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">grid =</span> <span class="dv">20</span>,</span>
+<span id="cb112-10"><a href="#cb112-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">control =</span> <span class="fu">control_race</span>(<span class="at">verbose_elim =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb112-11"><a href="#cb112-11" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>ℹ Evaluating against the initial 3 burn-in resamples.
+i Creating pre-processing data to finalize unknown parameter: mtry
+
+ℹ Racing will minimize the rmse metric.
+ℹ Resamples are analyzed in a random order.
+ℹ Fold10: 6 eliminated; 14 candidates remain.
+
+ℹ Fold06: 8 eliminated; 6 candidates remain.
+
+ℹ Fold08: 3 eliminated; 3 candidates remain.
+
+ℹ Fold01: 1 eliminated; 2 candidates remain.
+
+ℹ Fold04: 0 eliminated; 2 candidates remain.
+
+ℹ Fold02: 0 eliminated; 2 candidates remain.
+
+ℹ Fold09: 0 eliminated; 2 candidates remain.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb114"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb114-1"><a href="#cb114-1" aria-hidden="true" tabindex="-1"></a>xgb_steam_rs</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># Tuning results
+# 10-fold cross-validation using stratification 
+# A tibble: 10 × 5
+   splits               id     .order .metrics          .notes          
+   &lt;list&gt;               &lt;chr&gt;   &lt;int&gt; &lt;list&gt;            &lt;list&gt;          
+ 1 &lt;split [18273/2032]&gt; Fold03      1 &lt;tibble [40 × 7]&gt; &lt;tibble [0 × 3]&gt;
+ 2 &lt;split [18273/2032]&gt; Fold05      2 &lt;tibble [40 × 7]&gt; &lt;tibble [0 × 3]&gt;
+ 3 &lt;split [18277/2028]&gt; Fold10      3 &lt;tibble [40 × 7]&gt; &lt;tibble [0 × 3]&gt;
+ 4 &lt;split [18274/2031]&gt; Fold06      4 &lt;tibble [28 × 7]&gt; &lt;tibble [0 × 3]&gt;
+ 5 &lt;split [18276/2029]&gt; Fold08      5 &lt;tibble [12 × 7]&gt; &lt;tibble [0 × 3]&gt;
+ 6 &lt;split [18273/2032]&gt; Fold01      6 &lt;tibble [6 × 7]&gt;  &lt;tibble [0 × 3]&gt;
+ 7 &lt;split [18273/2032]&gt; Fold04      7 &lt;tibble [4 × 7]&gt;  &lt;tibble [0 × 3]&gt;
+ 8 &lt;split [18273/2032]&gt; Fold02      8 &lt;tibble [4 × 7]&gt;  &lt;tibble [0 × 3]&gt;
+ 9 &lt;split [18277/2028]&gt; Fold09      9 &lt;tibble [4 × 7]&gt;  &lt;tibble [0 × 3]&gt;
+10 &lt;split [18276/2029]&gt; Fold07     10 &lt;tibble [4 × 7]&gt;  &lt;tibble [0 × 3]&gt;</code></pre>
+</div>
+</div>
+<p>Visualisation du model</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb116"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb116-1"><a href="#cb116-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_race</span>(xgb_steam_rs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Explo_steam_files/figure-html/plot-race-results-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption>Race results visualization</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb117"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb117-1"><a href="#cb117-1" aria-hidden="true" tabindex="-1"></a><span class="fu">show_best</span>(xgb_steam_rs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in show_best(xgb_steam_rs): No value of `metric` was given; "rmse" will
+be used.</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 9
+   mtry trees min_n .metric .estimator  mean     n std_err .config              
+  &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;                
+1    21  1941    22 rmse    standard   0.230    10 0.00165 Preprocessor1_Model14
+2    27  1892    37 rmse    standard   0.230    10 0.00165 Preprocessor1_Model19</code></pre>
+</div>
+</div>
+<p>Utilisation de last_fit() pour entrainer et évaluer le model final</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb120"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb120-1"><a href="#cb120-1" aria-hidden="true" tabindex="-1"></a>xgb_last <span class="ot">&lt;-</span></span>
+<span id="cb120-2"><a href="#cb120-2" aria-hidden="true" tabindex="-1"></a>  xgb_wf <span class="sc">%&gt;%</span></span>
+<span id="cb120-3"><a href="#cb120-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">finalize_workflow</span>(<span class="fu">select_best</span>(xgb_steam_rs, <span class="at">metric =</span> <span class="st">"rmse"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb120-4"><a href="#cb120-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">last_fit</span>(steamsplit)</span>
+<span id="cb120-5"><a href="#cb120-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb120-6"><a href="#cb120-6" aria-hidden="true" tabindex="-1"></a>xgb_last</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># Resampling results
+# Manual resampling 
+# A tibble: 1 × 6
+  splits               id              .metrics .notes   .predictions .workflow 
+  &lt;list&gt;               &lt;chr&gt;           &lt;list&gt;   &lt;list&gt;   &lt;list&gt;       &lt;list&gt;    
+1 &lt;split [20305/6770]&gt; train/test spl… &lt;tibble&gt; &lt;tibble&gt; &lt;tibble&gt;     &lt;workflow&gt;</code></pre>
+</div>
+</div>
+</section>
+<section id="visualisation-du-model-pour-linterpréter" class="level2">
+<h2 class="anchored" data-anchor-id="visualisation-du-model-pour-linterpréter">Visualisation du model pour l’interpréter</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb122"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb122-1"><a href="#cb122-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(vip)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'vip'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:utils':
+
+    vi</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb125"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb125-1"><a href="#cb125-1" aria-hidden="true" tabindex="-1"></a>xgb_fit <span class="ot">&lt;-</span> <span class="fu">extract_fit_parsnip</span>(xgb_last)</span>
+<span id="cb125-2"><a href="#cb125-2" aria-hidden="true" tabindex="-1"></a><span class="fu">vip</span>(xgb_fit, <span class="at">geom =</span> <span class="st">"point"</span>, <span class="at">num_features =</span> <span class="dv">12</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Explo_steam_files/figure-html/variable-importance-plot-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption>Variable importance plot</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Les jeux d’action, d’aventure et de simulation sont les variables les plus importants du modèle</p>
+<p>Utilisation du SHAPforxgboost pour interpréter le modèle</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb126"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb126-1"><a href="#cb126-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(SHAPforxgboost)</span>
+<span id="cb126-2"><a href="#cb126-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb126-3"><a href="#cb126-3" aria-hidden="true" tabindex="-1"></a>steam_shap <span class="ot">&lt;-</span></span>
+<span id="cb126-4"><a href="#cb126-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">shap.prep</span>(</span>
+<span id="cb126-5"><a href="#cb126-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">xgb_model =</span> <span class="fu">extract_fit_engine</span>(xgb_fit),</span>
+<span id="cb126-6"><a href="#cb126-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">X_train =</span> <span class="fu">bake</span>(steam_prep,</span>
+<span id="cb126-7"><a href="#cb126-7" aria-hidden="true" tabindex="-1"></a>      <span class="fu">has_role</span>(<span class="st">"predictor"</span>),</span>
+<span id="cb126-8"><a href="#cb126-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">new_data =</span> <span class="cn">NULL</span>,</span>
+<span id="cb126-9"><a href="#cb126-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">composition =</span> <span class="st">"matrix"</span></span>
+<span id="cb126-10"><a href="#cb126-10" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb126-11"><a href="#cb126-11" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Visualisation du SHAPforxgboost</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb127"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb127-1"><a href="#cb127-1" aria-hidden="true" tabindex="-1"></a><span class="fu">shap.plot.summary</span>(steam_shap)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Explo_steam_files/figure-html/shap-summary-plot-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption>SHAP summary plot</figcaption>
+</figure>
+</div>
+</div>
+</div>
+
+
 </section>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
