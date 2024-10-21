@@ -2,6 +2,7 @@
 title: "Explorations des données Kaggle sur Steam"
 author: Daniella Landrys
 date: '2023-01-08'
+image: Steam.jpeg
 draft: false
 categories:
   - Français
@@ -11,7 +12,11 @@ categories:
 description: Dans ce blog, je vais analyser des données issues de Tidy Tuesday 
 ---
 
+
+
 Dans ce premier document, nous allons explorer la base de données sur les ventes et les appréciations du jeu steam
+
+
 
 ```{r}
 #| results: hide
@@ -27,7 +32,11 @@ library(tm)
 library(SnowballC)
 ```
 
+
+
 ## 1. Chargement des données
+
+
 
 ```{r}
 steam <- read_csv("steam.csv")
@@ -50,9 +59,13 @@ summary(steam)
 #names(steam)
 ```
 
+
+
 ## 2. Création de données supplémentaires
 
 Pour pouvoir travailler sur les avis donnés par les utilisateurs, nous avons une variable qui permet d'avoir la proportion des avis positifs des jeux.
+
+
 
 ```{r}
 steam_1 <- steam %>%
@@ -60,7 +73,11 @@ steam_1 <- steam %>%
          positive_rate = (positive_ratings / overall_review)) 
 ```
 
+
+
 ### Position et dispersion des avis
+
+
 
 ```{r}
 # avis positives 
@@ -93,7 +110,11 @@ dispersion_positive_ratings %>%
   pander
 ```
 
+
+
 Les statistiques obtenues permettent de voir que la valeur maximale des avis positive est de 2644404 avec une valeur moyenne de 1000.559 et une médiane de 24.
+
+
 
 ```{r}
 # avis négative 
@@ -126,9 +147,13 @@ dispersion_negative_ratings %>%
   pander
 ```
 
+
+
 Pour ce qui est des valeurs des avis négatives : la valeur maximale est de 487076, la valeur moyenne de 211.0271 et la médiane est de 9.
 
 ### Position et dispertion temps de jeu
+
+
 
 ```{r}
 # temps de jeux
@@ -161,9 +186,13 @@ dispersion_average_playtime %>%
   pander
 ```
 
+
+
 Pour ce qui est du temps de jeu : la valeur maximale est de 190625, la valeur moyenne de 149.8049 et la médiane est de 0.
 
 ### Position et dispertion prix des jeux
+
+
 
 ```{r}
 # avis prix des jeux 
@@ -195,7 +224,11 @@ dispersion_price %>%
   pander
 ```
 
+
+
 Pour ce qui est des prix : la valeur maximale est de 421.99, la valeur moyenne de 6.078193 et la médiane est de 3.99.
+
+
 
 ```{r}
 # Paramètre de position des 4 variables
@@ -215,9 +248,13 @@ indicateur_dispersion <- bind_rows(dispersion_positive_ratings,
 indicateur_dispersion
 ```
 
+
+
 Grâce à ces valeurs, nous pouvons voir que nos données sont dispersées avec des valeurs aberrantes.
 
 ### Exploration des plateformes
+
+
 
 ```{r}
 #extraction des données
@@ -249,9 +286,13 @@ geom_bar() +
   ggtitle("Nombre de jeux sur chaque plateforme")
 ```
 
+
+
 Le graphique des plateformes sur lequel les jeux peuvent être joués démontre la prédominance des jeux Windows
 
 ### Exploration des catégories :
+
+
 
 ```{r}
 #selection des données
@@ -299,9 +340,13 @@ ggplot(categorie_top_20) +
   guides(fill = FALSE) 
 ```
 
+
+
 Ce graphique montre la prédominance des jeux de types "single player".
 
 ### Exploration des genres
+
+
 
 ```{r}
 #selection des données
@@ -348,9 +393,13 @@ ggplot(genres_top_20) +
   guides(fill = FALSE) 
 ```
 
+
+
 Le graphique ci-dessous nous permet de voir que les jeux les plus nombreux sur la plateforme sont les jeux d'action, les jeux indépendants, les jeux d'aventure, et les jeux occasionnels (casual)
 
 ### Exploration des steamspy_tags
+
+
 
 ```{r}
 #selection des données
@@ -399,9 +448,13 @@ ggplot(steamspy_tags_top_20) +
   guides(fill = FALSE) 
 ```
 
+
+
 Tout comme avec le graphique des genres de jeu, le graphique ici présent nous permet de voir que les jeux indépendants, les jeux d'aventure, d'action et les jeux occasionnels sont nombreux sur la plateforme.
 
 ### Exploration des développeurs
+
+
 
 ```{r}
 #selection des données
@@ -447,9 +500,13 @@ ggplot(developer_top_20) +
   guides(fill = FALSE) 
 ```
 
+
+
 Ici, nous pouvons voir que sur les 20 développeurs qui développent le plus de jeux sur Steam, choiceofgame est celui qui détient le plus de jeux développés.
 
 ### Exploration des éditeurs (publisher)
+
+
 
 ```{r}
 #selection des données
@@ -495,9 +552,15 @@ ggplot(publisher_top_20) +
   guides(fill = FALSE) 
 ```
 
+
+
 Ici, nous pouvons voir que sur les 20 éditeurs de jeux sur Steam, bigfishgames est celui qui a publié le plus de jeux.
 
+## 3. Correlation entre genre et notes
+
 Après avoir exploré la base de données, nous allons maintenant essayer de voir la corrélation entre les genres des jeux et les notes qu'ils obtiennent.
+
+
 
 ```{r}
 #| label: setup
@@ -510,7 +573,11 @@ library(tidyverse)
 library(summarytools)
 ```
 
-## Joindre les documents
+
+
+### Joindre les documents
+
+
 
 ```{r}
 #| label: join-data
@@ -525,7 +592,11 @@ steam_joined <-
   left_join(steam_desc, by = "appid")
 ```
 
-## Exploration des données
+
+
+### Exploration des données
+
+
 
 ```{r}
 #| label: explore-data
@@ -533,9 +604,13 @@ steam_joined <-
 summary(steam_joined)
 ```
 
-## Diviser les textes dans genres
+
+
+### Diviser les textes dans genres
 
 Nous allons procéder à une séparation des textes dans genre de jeu et catégorie pour pouvoir mieux travailler ces données. En effet dans ces colones les jeux ont plusieurs catégories, genres qui leur sont attribués. Dans le cadre de cette étude, nous allons prendre uniquement les premiers.
+
+
 
 ```{r}
 #| label: split-data
@@ -568,9 +643,13 @@ steam_reg_filtrer <- steam_reg %>%
     filter(rate %in% c("1","-1")) 
 ```
 
+
+
 ## Graphique
 
 À présent nous allons générer des figures pour voir la relation entre les variables genre, plateforme et catégorie avec les avis des joueurs.
+
+
 
 ```{r}
 #| label: plot-data
@@ -613,7 +692,11 @@ ggplot(data=steam_reg_filtrer,aes(x=platforms,fill=rate)) +
   coord_flip()
 ```
 
+
+
 Ces graphiques nous permettent de voir les catégories qui reçoivent le mois de vote. Parmi les genres, nous pouvons voir que les jeux d'action sont ceux qui reçoivent le plus de votes, de plus les votes (négatif et positif) sont à peu près de même nombre. Contrairement aux jeux d'aventure qui reçoit beaucoup plus de votes positifs que négatifs. Pour ce qui est des catégories nous voyons ici que les jeux single player dominent le marché, toutefois le nombre de votes est à peu près les mêmes. Et enfin, nous pouvons faire également les mêmes constatations avec les plateformes. C'est à dire, les jeux Windows dominent les marchés. Toutefois les jeux qui peuvent tourner en même temps sur Windows, mac et Linux reçoivent plus de votes positifs que négative.
+
+
 
 ```{r}
 #| label: filtered-plot
@@ -633,9 +716,13 @@ ggplot(data=categorie_filtered,aes(x=categories1,fill=rate)) +
   coord_flip()
 ```
 
+
+
 Nous avons dans le cas présent enlevé la variable "single player" de la colonne catégorie afin de voir les autres variables. Ainsi nous pouvons voir qu'après les single player, ce sont les multiplayer et les online milti player qui sont le plus nombreux sur steam. Nous pouvons voir par la suite que les jeux de type co-op reçoivent beaucoup d'avis négatifs contrairement aux jeux multijoueurs locaux qui eux reçoivent beaucoup plus d'avis positifs.
 
-## Regression
+## 4.Regression
+
+
 
 ```{r}
 #| label: regression
@@ -655,9 +742,13 @@ library(stargazer)
 stargazer(reg_rate_genres, reg_rate_categorie, reg_rate_platform, title = "Regression des avis", align = TRUE, type = "text")
 ```
 
+
+
 Maintenant que nous avons fini d'analyser les relations entre les genres du jeu et les avis, ainsi que les sentiments véhiculent dans les textes du jeu, nous allons tenter de créer un modèle qui va prédire les notes selon le genre du jeu.
 
-## Explore data
+## 5. Création et prédiction de modèle
+
+
 
 ```{r}
 #| label: load-libraries-and-data
@@ -713,9 +804,13 @@ steam_joined %>%
   geom_point(alpha = 0.2, show.legend = FALSE)
 ```
 
-## Mise en place du xgboost model
+
+
+### Mise en place du xgboost model
 
 Nous allons commencer notre modèle en prenant en compte les valeurs minimum et maximum des positives_ratings et des genres de jeu.
+
+
 
 ```{r}
 #| label: prepare-data-for-model
@@ -736,7 +831,11 @@ steam_folds <- vfold_cv(steam_train, strata = positive_rate)
 steam_folds
 ```
 
+
+
 Ensuite, nettoyons les variables genres, afin d'ensuite les tokeniser
+
+
 
 ```{r}
 #| label: clean-and-tokenize-genres
@@ -764,7 +863,11 @@ steam_prep <- prep(steam_rec)
 bake(steam_prep, new_data = NULL) %>% str()
 ```
 
-## Création du xgboost
+
+
+### Création du xgboost
+
+
 
 ```{r}
 #| label: create-xgboost-model
@@ -783,7 +886,11 @@ xgb_wf <- workflow(steam_rec, xgb_spec)
 xgb_wf
 ```
 
+
+
 Usage de tune_race_anova() pour éliminer les combinaisons qui ne fonctionnent pas
+
+
 
 ```{r}
 #| label: tune-model
@@ -803,7 +910,11 @@ xgb_steam_rs <-
 xgb_steam_rs
 ```
 
-Visualisation du model
+
+
+### Visualisation du model
+
+
 
 ```{r}
 #| label: plot-race-results
@@ -818,7 +929,11 @@ plot_race(xgb_steam_rs)
 show_best(xgb_steam_rs)
 ```
 
+
+
 Utilisation de last_fit() pour entrainer et évaluer le model final
+
+
 
 ```{r}
 #| label: final-model-fit
@@ -831,7 +946,11 @@ xgb_last <-
 xgb_last
 ```
 
-## Visualisation du model pour l'interpréter
+
+
+### Visualisation du model pour l'interpréter
+
+
 
 ```{r}
 #| label: variable-importance-plot
@@ -843,9 +962,13 @@ xgb_fit <- extract_fit_parsnip(xgb_last)
 vip(xgb_fit, geom = "point", num_features = 12)
 ```
 
+
+
 Les jeux d'action, d'aventure et de simulation sont les variables les plus importants du modèle
 
 Utilisation du SHAPforxgboost pour interpréter le modèle
+
+
 
 ```{r}
 #| label: shap-preparation
@@ -863,7 +986,11 @@ steam_shap <-
   )
 ```
 
+
+
 Visualisation du SHAPforxgboost
+
+
 
 ```{r}
 #| label: shap-summary-plot
@@ -871,3 +998,4 @@ Visualisation du SHAPforxgboost
 
 shap.plot.summary(steam_shap)
 ```
+
