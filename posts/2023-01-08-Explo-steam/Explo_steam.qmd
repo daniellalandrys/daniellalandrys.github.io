@@ -2,7 +2,7 @@
 title: "Explorations des données Kaggle sur Steam"
 author: Daniella Landrys
 date: '2023-01-08'
-image: Steam.jpeg
+image: Steam.png
 draft: false
 categories:
   - Français

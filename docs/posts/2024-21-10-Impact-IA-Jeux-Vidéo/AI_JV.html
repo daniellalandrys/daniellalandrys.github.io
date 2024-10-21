@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.54">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Daniella Landrys">
+<meta name="dcterms.date" content="2024-10-21">
+<meta name="description" content="Dans ce blog, nous allons explorer comment l’intelligence artificielle transforme le développement des jeux vidéo, en permettant aux développeurs de créer plus rapidement des personnages et des environnements. À travers des outils comme MidJourney ou Nvidia ACE, l’IA permet d’accélérer la production, comme le montre le jeu Echos of Somewhere. Cependant, ces innovations posent également des défis éthiques, notamment en raison des biais algorithmiques qui peuvent influencer la diversité et la représentation dans les jeux.">
+
+<title>Impact de l’IA dans les Jeux Vidéo : Entre Créativité et Défis Éthiques – Daniella Landrys</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Daniella Landrys</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> <i class="bi bi-house" role="img">
+</i> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../blog.html"> <i class="bi bi-newspaper" role="img">
+</i> 
+<span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> <i class="bi bi-pen" role="img">
+</i> 
+<span class="menu-text">Publications et communications</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#lia-a-toujours-fait-partie-des-jv" id="toc-lia-a-toujours-fait-partie-des-jv" class="nav-link active" data-scroll-target="#lia-a-toujours-fait-partie-des-jv">1. L’IA a toujours fait partie des JV</a>
+  <ul class="collapse">
+  <li><a href="#quest-ce-quun-algorithme" id="toc-quest-ce-quun-algorithme" class="nav-link" data-scroll-target="#quest-ce-quun-algorithme">1.1&nbsp; Qu’est-ce qu’un algorithme</a></li>
+  <li><a href="#algorithme-avec-des-instructions-complexe-lapprentissage-machine" id="toc-algorithme-avec-des-instructions-complexe-lapprentissage-machine" class="nav-link" data-scroll-target="#algorithme-avec-des-instructions-complexe-lapprentissage-machine"><strong>1.2</strong> Algorithme avec des instructions complexe : l’apprentissage machine</a></li>
+  <li><a href="#évolution-des-algorithmes-et-des-modèles-dapprentissages" id="toc-évolution-des-algorithmes-et-des-modèles-dapprentissages" class="nav-link" data-scroll-target="#évolution-des-algorithmes-et-des-modèles-dapprentissages">1.3. Évolution des algorithmes et des modèles d’apprentissages</a></li>
+  </ul></li>
+  <li><a href="#biais-dans-les-modèles-de-fondation" id="toc-biais-dans-les-modèles-de-fondation" class="nav-link" data-scroll-target="#biais-dans-les-modèles-de-fondation">2.&nbsp; Biais dans les modèles de fondation :&nbsp;</a>
+  <ul class="collapse">
+  <li><a href="#influence-du-biais-historique-sur-les-modèles-dapprentissage-automatique" id="toc-influence-du-biais-historique-sur-les-modèles-dapprentissage-automatique" class="nav-link" data-scroll-target="#influence-du-biais-historique-sur-les-modèles-dapprentissage-automatique">2.1 Influence du biais historique sur les modèles d’apprentissage automatique</a></li>
+  <li><a href="#impact-du-biais-de-représentation-sur-la-généralisation-des-modèles-dia" id="toc-impact-du-biais-de-représentation-sur-la-généralisation-des-modèles-dia" class="nav-link" data-scroll-target="#impact-du-biais-de-représentation-sur-la-généralisation-des-modèles-dia">2.2&nbsp; Impact du biais de représentation sur la généralisation des modèles d’IA</a></li>
+  <li><a href="#conséquences-des-choix-de-mesures-dans-lapprentissage-automatique" id="toc-conséquences-des-choix-de-mesures-dans-lapprentissage-automatique" class="nav-link" data-scroll-target="#conséquences-des-choix-de-mesures-dans-lapprentissage-automatique">2.3&nbsp; Conséquences des choix de mesures dans l’apprentissage automatique</a></li>
+  </ul></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  <li><a href="#bibliographie" id="toc-bibliographie" class="nav-link" data-scroll-target="#bibliographie"><strong>Bibliographie&nbsp;:</strong></a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Impact de l’IA dans les Jeux Vidéo : Entre Créativité et Défis Éthiques</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Français</div>
+    <div class="quarto-category">IA générative</div>
+    <div class="quarto-category">Jeux vidéos</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    Dans ce blog, nous allons explorer comment l’intelligence artificielle transforme le développement des jeux vidéo, en permettant aux développeurs de créer plus rapidement des personnages et des environnements. À travers des outils comme MidJourney ou Nvidia ACE, l’IA permet d’accélérer la production, comme le montre le jeu Echos of Somewhere. Cependant, ces innovations posent également des défis éthiques, notamment en raison des biais algorithmiques qui peuvent influencer la diversité et la représentation dans les jeux.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Daniella Landrys </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">October 21, 2024</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>En décembre 2022, un jeu vidéo appelé <em>Echos of Somewhere</em> a suscité beaucoup d’intérêt dans la communauté du jeu. Ce projet a commencé lorsque Jussi Kemppainen, un artiste spécialisé en effets visuels et en développement de jeux, a décidé de créer un jeu d’aventure pendant son temps libre. Son objectif initial était de simplifier le processus en utilisant des graphismes 3D simples pour réduire la charge de travail. Cependant, il s’est vite rendu compte que créer manuellement des éléments du jeu, comme modéliser des environnements et des personnages, prenait énormément de temps. Par exemple, il lui a fallu plusieurs semaines pour modéliser un simple bateau, ce qui a ralenti considérablement son projet.</p>
+<p>Après avoir abandonné cette première idée, Kemppainen a découvert les outils d’intelligence artificielle générative, comme MidJourney et DALL-E. Bien que ces outils ne soient pas parfaits pour générer des personnages ou des décors directement utilisables, il a vu leur potentiel et a commencé à expérimenter en combinant des fragments d’images pour créer des personnages hybrides et des environnements visuels abstraits. Il a même changé l’histoire de son jeu pour adopter un thème cyberpunk, qui justifiait les éléments visuels étranges produits par l’IA, tels que des personnages aux caractéristiques incohérentes.</p>
+<p>Au fur et à mesure, il a amélioré son utilisation de ces outils, notamment en générant des environnements en quelques heures, là où il aurait mis des semaines en utilisant des méthodes classiques. L’IA l’a également aidé à concevoir les textures de ses personnages en projetant des images générées directement sur des modèles 3D, ce qui a encore réduit son temps de travail. En un week-end, il a produit une première démo jouable avec des personnages et des environnements générés par IA, ce qui a rapidement attiré l’attention des médias, dont <em>PC Gamer</em> (Litchfield, 2023), qui a salué ce projet innovant. Aujourd’hui, <em>Echos of Somewhere</em> est devenu une série d’épisodes autonomes, chacun racontant une histoire différente dans un univers dystopique. Ce projet montre comment l’utilisation de l’IA dans la création d’un jeu vidéo peut non seulement accélérer la production, mais aussi transformer le processus créatif, soulevant ainsi des questions éthiques sur l’automatisation des tâches créatives (Games Now!, 2023).</p>
+<p>L’histoire d’<em>Echos of Somewhere</em> illustre parfaitement le thème de ce texte, qui explore l’impact et le potentiel de l’intelligence artificielle générative dans le développement des jeux vidéo.</p>
+<p>Aujourd’hui, en effet, l’adoption de l’IA générative connaît une forte croissance dans l’industrie du jeu vidéo. Selon une étude publiée par le MIT Press, 87 % des studios de jeux vidéo utilisent désormais des outils d’IA générative tels que ChatGPT, Midjourney ou Stable Diffusion. Cette adoption massive a permis la création d’outils comme l’ACE (Avatar Cloud Engine) de Nvidia, qui utilise l’intelligence artificielle pour créer des personnages intelligents, des avatars interactifs et des humains numériques en temps réel.</p>
+<p>Les algorithmes et l’IA sont aujourd’hui employés pour diverses tâches dans les jeux vidéo, comme générer des mondes ou contrôler les personnages non joueurs (PNJ) (Lee et Lee, 2023 ; Nguyen, 2023 ; Sun et al., 2023). L’IA générative permet ainsi de gagner beaucoup de temps et de ressources tout en offrant des possibilités presque infinies pour créer des expériences de jeu plus riches et plus personnalisées. Par exemple, des modèles d’IA peuvent être utilisés pour créer des dialogues, des scénarios ou même des mondes entiers, comme avec l’outil Ghostwriter. De même, des modèles d’IA basés sur des images permettent de générer des environnements de jeu ou des personnages, comme c’est le cas avec l’outil ACE de Nvidia.</p>
+<section id="lia-a-toujours-fait-partie-des-jv" class="level2">
+<h2 class="anchored" data-anchor-id="lia-a-toujours-fait-partie-des-jv">1. L’IA a toujours fait partie des JV</h2>
+<p>L’adoption des nouvelles technologies dans les jeux vidéo n’a rien de nouveau. En fait, l’intelligence artificielle et les jeux vidéo évoluent main dans la main, comme les deux faces d’une même pièce. Les outils d’IA, comme on a pu le voir avec AlphaGo, utilisent les jeux vidéo pour tester et affiner leurs innovations. De leur côté, les jeux vidéo intègrent rapidement ces avancées, profitant des dernières technologies pour améliorer l’expérience des joueurs. Mais avant de discuter plus spécifiquement de comment l’IA générative affecte l’industrie du jeux vidéo, j’aimerais rappeler brièvement ce que sont un algorithme et l’IA.</p>
+<section id="quest-ce-quun-algorithme" class="level3">
+<h3 class="anchored" data-anchor-id="quest-ce-quun-algorithme">1.1&nbsp; Qu’est-ce qu’un algorithme</h3>
+<p>Un algorithme peut être interprété comme une recette de cuisine qui nécessite des entrées (les ingrédients et le matériel) et des instructions de base (telles que frire, flamber, rissoler, braiser, blanchir), accompagnées de durées et de quantités spécifiques. L’exécution de ces instructions dans un ordre déterminé conduit au résultat attendu : le plat préparé (Cazals et Cazals, 2020, Chapitre 5). À titre d’exemple, lorsqu’une requête est saisie sur Google, ce moteur de recherche collecte les sites web correspondant aux mots-clés spécifiés. Pour évaluer la pertinence des sites récupérés, Google les examine en fonction d’une série de critères établis, tels que la structure du site et sa popularité, avant de les classer par ordre de pertinence pour les afficher dans les résultats de recherche. Dans ce cas, les entrées comprennent les mots-clés et les sites Internet existants, tandis que les instructions impliquent d’évaluer et de classer les sites selon des critères prédéfinis, aboutissant à la présentation d’une liste de sites web pertinents.</p>
+<p>Dans l’univers du jeu vidéo, les algorithmes jouent un rôle essentiel en créant des expériences interactives et dynamiques pour les joueurs. Prenons l’exemple du jeu emblématique “Pac-Man”, où chaque fantôme poursuivant Pac-Man suit un ensemble d’instructions simples, ou une “recette”, qui définit son comportement unique. Blinky, le fantôme rouge, suit Pac-Man de près, ajustant sa trajectoire en fonction de la position actuelle de Pac-Man, à la manière d’un chef qui modifie sa recette selon les goûts. Pinky, le fantôme rose, tente de prévoir la direction prise par Pac-Man et de se positionner en conséquence, équivalent à un chef anticipant les préférences de ses convives et ajustant les ingrédients du plat. Ces instructions, bien que simples et adaptées à chaque fantôme, permettent de créer un environnement de jeu complexe et imprévisible. Les fantômes ne suivent pas un itinéraire fixe, mais adaptent constamment leur comportement à l’environnement du jeu et aux actions du joueur, offrant un défi permanent. Chaque fantôme utilise sa propre “recette” pour tenter d’attraper Pac-Man, exploitant des éléments tels que la position et la direction de Pac-Man pour élaborer en temps réel une stratégie d’interception (García-Sánchez, 2019, part. 1).</p>
+<p>De cette manière, tout comme un algorithme de recherche sur Internet filtre et classe les informations à l’aide de mots-clés et de critères définis, les algorithmes dans “Pac-Man” recourent à des instructions simples et à des réactions adaptatives pour générer un jeu captivant et dynamique.</p>
+</section>
+<section id="algorithme-avec-des-instructions-complexe-lapprentissage-machine" class="level3">
+<h3 class="anchored" data-anchor-id="algorithme-avec-des-instructions-complexe-lapprentissage-machine"><strong>1.2</strong> Algorithme avec des instructions complexe : l’apprentissage machine</h3>
+<p>En informatique, les algorithmes permettent d’effectuer différentes tâches, allant du plus simple au plus complexe. Ces algorithmes peuvent reposer sur des règles logiques et ne nécessitent aucune intelligence comme le cas de l’algorithme expliqué ci-dessus, mais ils peuvent aussi reposer sur des règles complexes nécessitant un apprentissage des machines. Cette catégorie d’algorithme, qui apprend, est le fondement de ce que l’on appelle l’apprentissage machine. L’apprentissage machine est un champ d’études de l’IA qui se fonde sur des approches mathématiques et statistiques pour donner aux ordinateurs la capacité d’apprendre à partir des données, c’est-à-dire de résoudre explicitement des tâches sans être programmé spécifiquement pour elles. Dans ce contexte, le terme “apprendre” est expliqué par (Mitchell, 1997) à l’aide du trio expérience - tâche - performance. En d’autres termes, on dit qu’un programme apprend à résoudre une tâche donnée à partir d’une certaine expérience si sa performance s’améliore grâce à cette expérience. Prenons l’exemple d’un programme informatique dont l’objectif est de distinguer un message normal d’un spam. La tâche dans ce cas est d’établir la nature d’un message. Sa performance peut être évaluée grâce aux taux de réussite des prédictions correctes obtenues. Et enfin, le processus d’apprentissage peut se faire en utilisant une collection de messages qui aurait été explicitement labellisée comme étant normale ou spam. Dans le même esprit, l’apprentissage machine trouve également des applications dans le domaine des jeux vidéo. Imaginons un programme d’apprentissage machine conçu pour jouer à “Mario Kart”, un jeu de course populaire. Ici, la tâche est de piloter un personnage à travers divers circuits de course et d’atteindre la ligne d’arrivée en un minimum de temps. La performance est mesurée par le temps mis pour terminer la course. Pour acquérir de l’expérience, ce programme participe à de nombreuses courses, recueillant des données sur ses actions et les conséquences de ces actions sur son temps de course. Au début, le programme pourrait faire des erreurs courantes, comme prendre des virages trop larges ou manquer des opportunités d’utiliser des objets de manière stratégique. Cependant, à mesure qu’il participe à davantage de courses, il commence à analyser et à apprendre de ses erreurs. Il ajuste sa stratégie, par exemple en optimisant la manière dont il prend les virages ou en utilisant des objets de manière plus efficace pour gagner un avantage. Avec le temps, le programme voit une amélioration notable de sa performance, réduisant son temps de course et devenant un concurrent de plus en plus redoutable (Collet, 2018).</p>
+<p>Ainsi, tout comme un algorithme de filtrage de spam apprend à distinguer les messages normaux des indésirables en s’adaptant à une collection de messages labellisés, notre programme de “Mario Kart” apprend à devenir un meilleur pilote en s’adaptant aux défis et aux opportunités des différents circuits de course. Dans les deux cas, l’amélioration de la performance est le résultat direct de l’expérience acquise, incarnant parfaitement le trio expérience - tâche - performance décrit par Mitchell.</p>
+</section>
+<section id="évolution-des-algorithmes-et-des-modèles-dapprentissages" class="level3">
+<h3 class="anchored" data-anchor-id="évolution-des-algorithmes-et-des-modèles-dapprentissages">1.3. Évolution des algorithmes et des modèles d’apprentissages</h3>
+<p>Les paradigmes d’apprentissage machine ont connu une évolution remarquable, passant de l’apprentissage supervisé et non supervisé à des formes plus avancées comme l’apprentissage profond. Dans l’apprentissage supervisé, la machine apprend à établir des correspondances entre des prédicteurs et des étiquettes, ce qui est utile pour des tâches comme la classification sociale basée sur le niveau d’éducation ou l’origine ethnique. L’apprentissage non supervisé, quant à lui, permet à la machine de découvrir des structures dans les données sans intervention humaine, comme dans le cas de Netflix qui apprend les préférences de visionnage de ses utilisateurs. L’apprentissage profond a marqué un tournant dans la manière dont les machines apprennent. Contrairement aux méthodes traditionnelles qui nécessitaient une ingénierie minutieuse pour extraire des caractéristiques des données, l’apprentissage profond permet à la machine d’apprendre ces caractéristiques directement à partir des données. Cela a ouvert la voie à des applications plus larges, allant de la recherche sur Google à la détection précoce des maladies.</p>
+<p>Mais la véritable révolution vient des modèles de fondations, qui représentent la nouvelle frontière de l’apprentissage machine. Ces modèles sont formés sur des ensembles de données massifs qui englobent une variété de formes d’information, c’est-à-dire du texte, des images, des audios, et même des signaux. Ce qui distingue ces modèles, c’est leur adaptabilité à une multitude d’applications sans nécessiter de réentraînement complet. Ils peuvent être utilisés pour des tâches aussi diverses que les systèmes de question-réponse, l’analyse de sentiment, l’extraction d’information, la reconnaissance d’image et d’objet, et même la navigation GPS. Cette polyvalence et cette capacité à apprendre à partir de données hétérogènes font des modèles de fondations la prochaine étape logique dans l’évolution des systèmes d’intelligence artificielle, comme le soulignent (Bommasani <em>et al.</em>, 2022). D’ailleurs, l’IA générative utilise ces modèles de fondation comme point de départ pour générer de nouvelles données qui ressemblent à celles sur lesquelles le modèle a été formé. En d’autres termes, les modèles de fondation fournissent le cadre général et les capacités d’apprentissage, tandis que l’IA générative exploite ces capacités pour créer de nouvelles données adaptées à des besoins spécifiques (Ejzenberg et Choury, 2023).</p>
+<p>Au fil des années, l’industrie du jeu vidéo a connu des progrès majeurs grâce à l’évolution des algorithmes. Par exemple, au début, des jeux utilisaient des algorithmes simples, comme l’algorithme A*, pour aider les personnages à se déplacer de manière logique dans des environnements complexes, un peu comme dans <em>StarCraft</em>, où les unités trouvent leur chemin. Ces algorithmes se sont ensuite améliorés, permettant aux personnages contrôlés par l’ordinateur (PNJ) de réagir de façon plus intelligente et réaliste, enrichissant ainsi l’expérience de jeu. Des techniques plus avancées, comme le GOAP, utilisé dans <em>F.E.A.R.</em>, ou le modèle BDI, qui inspire le comportement des personnages dans <em>The Sims</em>, permettent à ces personnages de prendre des décisions basées sur des objectifs, leurs croyances ou leurs envies, ce qui les rend plus crédibles. En parallèle, des techniques comme la génération procédurale, utilisée dans <em>No Man’s Sky</em>, permettent de créer des mondes de jeu gigantesques et variés, offrant ainsi aux joueurs des expériences toujours nouvelles à chaque partie.</p>
+<p>L’introduction des <em>modèles de fondation</em> dans le développement de jeux vidéo représente un tournant majeur. Ces modèles, entraînés sur d’énormes ensembles de données, sont extrêmement polyvalents. Par exemple, l’outil Altered AI, utilisé dans des jeux comme <em>The Ascent</em>, exploite ces modèles pour générer des dialogues réalistes et dynamiques, permettant aux développeurs de créer des interactions plus riches et variées sans avoir à tout écrire manuellement. Un autre exemple marquant est le projet de sandbox d’EA, présenté en 2024, qui permet aux joueurs de créer des mondes entiers en temps réel grâce à des commandes en langage naturel. Ce projet repose sur des bases de données massives d’éléments 3D et d’événements de jeu, offrant aux utilisateurs une liberté créative sans précédent sans nécessiter de compétences en codage. Ces innovations réduisent considérablement le temps et les ressources nécessaires au développement tout en enrichissant l’expérience des joueurs.</p>
+<p>En somme, l’évolution des algorithmes dans les jeux vidéo est en phase avec les avancées dans le domaine de l’apprentissage machine. Des systèmes de navigation basiques aux comportements complexes des personnages non joueurs (PNJ), en passant par la génération automatique de mondes et l’interaction en temps réel, chaque nouvelle génération d’algorithmes et d’outils élargit les possibilités créatives.</p>
+</section>
+</section>
+<section id="biais-dans-les-modèles-de-fondation" class="level2">
+<h2 class="anchored" data-anchor-id="biais-dans-les-modèles-de-fondation">2.&nbsp; Biais dans les modèles de fondation :&nbsp;</h2>
+<p>Malgré les promesses et possibilités offertes par l’IA générative, <strong>l</strong>es algorithmes d’intelligence artificielle, en particulier ceux basés sur l’apprentissage automatique, affichent souvent des variations dans leur efficacité en fonction des groupes démographiques. Ces variations peuvent mener à des conséquences indésirables, surtout dans les situations où les décisions sont d’une importance capitale (Ntoutsi <em>et al.</em>, 2020&nbsp;; Suresh et Guttag, 2021).&nbsp; Par exemple, dans l’évaluation des risques juridiques avant un procès, il a été constaté que le système était défavorable envers les personnes de couleur noire (Angwin <em>et al.</em>, 2016). De même, les technologies de reconnaissance faciale commerciale tendent à être moins précises lorsqu’elles sont utilisées sur les femmes à peau foncée (Buolamwini et Gebru, 2018). L’inégalité résultant de ces systèmes d’apprentissage automatique est généralement due à divers types de biais présents dans les données utilisées pour leur formation, dans les choix de conception et dans les différentes manières d’utiliser la technologie. Ces biais peuvent être historiques, liés à la représentation ou à la mesure, et peuvent également résulter des choix de conception du modèle lui-même (Suresh &amp; Guttag, 2021).</p>
+<section id="influence-du-biais-historique-sur-les-modèles-dapprentissage-automatique" class="level3">
+<h3 class="anchored" data-anchor-id="influence-du-biais-historique-sur-les-modèles-dapprentissage-automatique">2.1 Influence du biais historique sur les modèles d’apprentissage automatique</h3>
+<p>Considérons d’abord le biais historique. Il a une influence significative sur les divers usages du modèle. Ce biais, issu des préjugés inhérents aux données d’entraînement du modèle et à la période de leur collecte, permet au modèle formé de perpétuer ces préjugés, potentiellement néfastes pour certains groupes de population, malgré sa précision par rapport à la réalité. Pour mieux comprendre ce biais, prenons l’exemple des modèles de traduction automatique. Les mots, vecteurs de sens, peuvent selon le contexte, véhiculer une signification acceptable à une époque, mais être source de préjudice aujourd’hui. Dans les modèles dont les données d’entraînement proviennent de corpus de textes d’une certaine époque, on retrouve les préjugés du monde réel envers les femmes et les minorités ethniques. Marzi (2021) a mis en lumière cette problématique dans son étude sur les biais de genre dans les logiciels de traduction automatique. Elle a démontré que le manque de diversité dans les données d’entraînement génère des traductions erronées en termes de genre. Un exemple frappant de biais historique est le système de recrutement d’Amazon, développé en 2014. Ce système s’appuyait sur des CV et des décisions de candidature prises sur une période de 10 ans précédant la création du modèle. Or, la tendance du recrutement pendant cette période était favorable aux hommes. Une fois déployé, le modèle considérait systématiquement que les hommes étaient plus adaptés aux postes techniques, écartant de facto les femmes. Amazon a depuis abandonné ce modèle.</p>
+</section>
+<section id="impact-du-biais-de-représentation-sur-la-généralisation-des-modèles-dia" class="level3">
+<h3 class="anchored" data-anchor-id="impact-du-biais-de-représentation-sur-la-généralisation-des-modèles-dia">2.2&nbsp; Impact du biais de représentation sur la généralisation des modèles d’IA</h3>
+<p>Le biais de représentation se produit quant à lui lorsque les données d’entraînement sous-représentent une partie de la population. Tout comme le biais historique, ce biais peut entraîner des préjudices pour ces utilisateurs. En effet, ce biais affecte la capacité du modèle à être généralisable à un sous-ensemble de la population d’utilisation. C’est-à-dire que lorsqu’un groupe est sous-représenté au sein de la population cible, le modèle risque de ne pas être assez robuste et généralisable à l’ensemble de la population cible. C’est par exemple le cas des données médicales où le pourcentage de femmes enceintes est faible. Un modèle développé sur les patients en général ne sera pas suffisamment robuste pour les femmes enceintes. De ce fait, si un modèle est créé pour détecter les maladies graves à partir de données d’entraînement représentant uniquement des adultes, le modèle ne sera pas assez précis pour détecter les maladies chez les enfants.</p>
+</section>
+<section id="conséquences-des-choix-de-mesures-dans-lapprentissage-automatique" class="level3">
+<h3 class="anchored" data-anchor-id="conséquences-des-choix-de-mesures-dans-lapprentissage-automatique">2.3&nbsp; Conséquences des choix de mesures dans l’apprentissage automatique</h3>
+<p>Cependant, les biais ne se limitent pas uniquement à la période et à la représentativité. Le choix des mesures effectué par les développeurs a aussi une influence sur les modèles. C’est particulièrement problématique dans les situations où les données collectées pour prédire certains résultats sont choisies de manière inappropriée. En effet, le choix inapproprié de mesures peut avoir des impacts disproportionnés sur différents groupes de population. Par exemple, dans le domaine de la surveillance policière, une surveillance excessive d’un groupe spécifique basée sur les taux de criminalité peut créer une distorsion. Cela peut engendrer un cercle vicieux, où la surveillance excessive augmente les statistiques de criminalité pour ce groupe, alimentant davantage la surveillance. L’outil de prédiction du crime, PredPol, utilisé à Los Angeles a manifesté ce problème, en amplifiant les préjugés raciaux existants et la criminalisation de la pauvreté&nbsp; (D’Ignazio et Klein, 2020). La précision des prédictions varie également en fonction des groupes. Dans le contexte de la justice pénale, l’outil d’évaluation des risques COMPASS, qui prévoit la probabilité qu’un accusé récidive, a montré un biais. Les modèles de données de COMPASS incluent des variables indirectes, comme “l’arrestation”, pour estimer le “crime” ou une idée latente de “risque”. Étant donné que les groupes minoritaires sont plus surveillés, ces variables sont mesurées de manière biaisée, conduisant à des taux de faux positifs nettement plus élevés pour les accusés noirs par rapport aux blancs (Dika, 2020, Chapitre 2).</p>
+</section>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>L’impact et le potentiel de l’intelligence artificielle générative dans le développement des jeux vidéo marquent une évolution significative dans l’industrie. Ces technologies, illustrées par des outils tels que ChatGPT, Midjourney, et l’Avatar Cloud Engine de Nvidia, facilitent une création plus rapide et diversifiée de contenus, tout en offrant des possibilités d’innovation sans précédent. Les exemples concrets de leur application, comme le témoignage de Jussi-Petteri Kemppainen, soulignent non seulement une économie de temps substantielle, mais aussi une augmentation de la diversité dans les ressources visuelles et narratives.</p>
+<p>Toutefois, cette transition vers une plus grande intégration de l’IA générative soulève également des questions sur l’authenticité de la représentation culturelle et des identités, compte tenu des risques de distorsions introduites par les biais algorithmiques. Les studios de jeux vidéo doivent donc naviguer entre les avantages de ces outils et les défis liés à leur juste application, en particulier dans la représentation des diverses cultures et identités dans les jeux vidéo.</p>
+</section>
+<section id="bibliographie" class="level2">
+<h2 class="anchored" data-anchor-id="bibliographie"><strong>Bibliographie&nbsp;:</strong></h2>
+<p>Angwin, J., Larson, J., Mattu, S., &amp; Kirchner, L. (2016). <em>Machine Bias</em>. ProPublica. https://www.propublica.org/article/machine-bias-risk-assessments-in-criminal-sentencing</p>
+<p>Bommasani, R., et al.&nbsp;(2022). On the opportunities and risks of foundation models. <em>Stanford University</em>. https://arxiv.org/abs/2108.07258</p>
+<p>Buolamwini, J., &amp; Gebru, T. (2018). Gender shades: Intersectional accuracy disparities in commercial gender classification. <em>Proceedings of Machine Learning Research</em>, 81, 1-15.</p>
+<p>Cazals, P., &amp; Cazals, P. (2020). <em>L’algorithmique pour les débutants : Comprendre en cuisinant</em>. Éditions Ellipses.</p>
+<p>Collet, C. (2018). <em>Introduction to artificial intelligence and machine learning</em>. Pearson.</p>
+<p>Dika, L. (2020). Algorithms and justice: COMPASS and the challenges of bias. <em>Journal of Law and AI</em>, 4(2), 45-67.</p>
+<p>D’Ignazio, C., &amp; Klein, L. F. (2020). <em>Data feminism</em>. MIT Press.</p>
+<p>Ejzenberg, C., &amp; Choury, G. (2023). L’IA générative et la création de contenu. <em>Revue des Sciences Informatiques</em>, 12(3), 120-134.</p>
+<p>Elish, M. C., &amp; Boyd, D. (2018). Situating methods in the magic of big data and AI: Turning machine learning fairness tools into a sociotechnical infrastructure. In M. Dubber, F. Pasquale, &amp; S. Das (Eds.), <em>The Oxford handbook of ethics of AI</em> (pp.&nbsp;200-220). Oxford University Press.</p>
+<p>García-Sánchez, J. (2019). Advanced game AI: Realistic behavior and learning. <em>Game AI Review</em>, 3(1), 22-35.</p>
+<p>Games Now! (2023). <em>Echos of somewhere and the future of game development</em>. Helsinki Game Industry Webinar.</p>
+<p>Litchfield, T. (2023). <em>Echos of Somewhere - AI in game development</em>. <em>PC Gamer</em>. https://www.pcgamer.com</p>
+<p>Lee, J., &amp; Lee, S. (2023). AI in game development: Challenges and opportunities. <em>Journal of Game Studies</em>, 17(2), 45-59.</p>
+<p>Marzi, M. (2021). Gender bias in machine translation: A study of algorithmic errors. <em>AI Ethics and Gender Review</em>, 2(4), 78-90.</p>
+<p>Mitchell, T. (1997). <em>Machine learning</em>. McGraw-Hill.</p>
+<p>Nguyen, T. (2023). Generative AI in games: A new frontier. <em>Digital Creators Quarterly</em>, 34, 27-40.</p>
+<p>Ntoutsi, E., Fafalios, P., Gadiraju, U., et al.&nbsp;(2020). Bias in data-driven AI systems: An interdisciplinary survey. <em>ACM Computing Surveys</em>, 53(6), 1-35.</p>
+<p>Suresh, H., &amp; Guttag, J. V. (2021). A framework for understanding unintended consequences of machine learning. <em>Communications of the ACM</em>, 64(7), 62-71.</p>
+<p>Sun, Z., Chen, H., &amp; Zhao, W. (2023). Exploring AI’s role in non-player character (NPC) design. <em>Interactive Media Journal</em>, 22(1), 14-29.</p>
+
+
+</section>
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
